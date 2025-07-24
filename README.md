@@ -106,3 +106,4 @@ https://hub.kaito.ai/api/v1/gateway/ai/kol/mindshare/top-leaderboard
 ## 📄 许可证
 
 MIT License
+# kaito-leaderboard

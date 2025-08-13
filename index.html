@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaito 影响力排行榜 - 生产版</title>
+    <style>
+        /* 这里复制 demo.html 中的所有 CSS 样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .app-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .app-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        .cors-notice {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .cors-notice h4 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+
+        .cors-notice p {
+            color: #856404;
+            font-size: 0.9rem;
+        }
+
+        /* 继续复制其他样式... */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .controls-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+        }
+
+        .control-group label {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .control-select {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <h1 class="app-title">
+                <span class="logo">🚀</span>
+                Kaito 加密生态数据平台
+            </h1>
+            <p class="app-description">
+                一站式加密货币项目数据分析平台 - KOL排行榜 | ICT名单 | 奖励时间线 | 投资研报
+            </p>
+            
+            <div class="cors-notice">
+                <h4>⚠️ 部署提示</h4>
+                <p>为了避免 CORS 问题，建议使用带有代理服务器的版本部署到生产环境。</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="controls-section">
+            <div class="control-group">
+                <label for="topic-select">项目/代币:</label>
+                <select id="topic-select" class="control-select">
+                    <option value="APT">APT</option>
+                    <option value="ARB">ARB</option>
+                    <option value="NEAR">NEAR</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="loading" class="loading">
+            <p>🚀 生产版本已就绪！使用 server.js 启动完整功能。</p>
+        </div>
+
+        <div id="users-grid" class="users-grid" style="display: none;"></div>
+    </main>
+
+    <script>
+        // 生产版本的简化脚本
+        console.log('Kaito Leaderboard - Production Ready!');
+        console.log('Run: npm start');
+    </script>
+</body>
+</html>

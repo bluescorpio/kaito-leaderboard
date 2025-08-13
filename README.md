@@ -4,10 +4,83 @@
 
 ## ✨ 功能特性
 
+# 🚀 Kaito 影响力排行榜
+
+一个现代化的 Web 应用，用于展示加密货币领域最具影响力的 KOL 和思想领袖。
+
+## ✨ 功能特性
+
 - 🏆 **实时排行榜**: 调用真实的 Kaito API 获取最新数据
 - 📊 **项目分类**: 支持 Pre TGE 和 Post TGE 项目分类
 - ⏰ **多时间范围**: 7天、30天、3个月、6个月、12个月
 - 🎯 **灵活显示**: Top 10/25/50/100 可选
+- 📱 **响应式设计**: 完美适配移动端和桌面端
+- 🚀 **实时数据更新**: 通过代理服务器避免 CORS 问题
+
+## 🛠 技术栈
+
+- **前端**: HTML5, CSS3, Vanilla JavaScript
+- **后端**: Node.js, Express
+- **API**: Kaito AI Hub API
+- **部署**: 支持 Vercel, Netlify, Heroku 等平台
+
+## 🚀 快速开始
+
+### 本地开发
+
+1. **安装依赖**
+```bash
+npm install
+```
+
+2. **启动开发服务器**
+```bash
+npm run dev
+```
+
+3. **启动生产服务器**
+```bash
+npm start
+```
+
+访问 http://localhost:3000 查看应用。
+
+## 📦 部署到生产环境
+
+### Vercel 部署 (推荐)
+1. Fork 此仓库到你的 GitHub
+2. 在 Vercel 中导入项目
+3. 自动部署完成
+
+### Netlify 部署
+1. 连接到 GitHub 仓库
+2. 构建命令: `npm install`
+3. 发布目录: `.`
+4. 添加重定向规则支持 SPA
+
+### Heroku 部署
+1. 创建 Heroku 应用
+2. 连接到 GitHub 仓库
+3. 启用自动部署
+
+### 传统服务器部署
+1. 上传文件到服务器
+2. 运行 `npm install`
+3. 使用 PM2 管理进程:
+```bash
+npm install -g pm2
+pm2 start server.js --name kaito-app
+```
+
+## ⚙️ 环境变量
+
+- `PORT`: 服务器端口 (默认: 3000)
+
+## 🔧 API 说明
+
+应用通过代理服务器调用 Kaito AI API，解决浏览器 CORS 限制：
+- 原始 API: `https://hub.kaito.ai/api/v1/gateway/ai/kol/mindshare/top-leaderboard`
+- 代理端点: `/api/kol/mindshare/top-leaderboard`
 - 📱 **响应式设计**: 完美适配桌面和移动设备
 - 🔄 **智能降级**: API 失败时自动使用模拟数据
 

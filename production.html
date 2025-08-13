@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaito 影响力排行榜 - 演示版</title>
+    <title>Kaito 影响力排行榜</title>
     <style>
         * {
             margin: 0;
@@ -121,6 +121,11 @@
             display: block;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .section-header {
             text-align: center;
             margin-bottom: 40px;
@@ -216,7 +221,7 @@
             margin-bottom: 32px;
         }
 
-        .leaderboard-header h2 {
+        .leaderboard-header h3 {
             font-size: 2.5rem;
             font-weight: 700;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -404,6 +409,28 @@
             font-weight: 600;
         }
 
+        .cors-notice {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .cors-notice h4 {
+            color: #856404;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .cors-notice p {
+            color: #856404;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
         @media (max-width: 768px) {
             .app-title {
                 font-size: 2rem;
@@ -464,6 +491,11 @@
             <p class="app-description">
                 一站式加密货币项目数据分析平台 - KOL排行榜 | ICT名单 | 奖励时间线 | 投资研报
             </p>
+            
+            <div class="cors-notice">
+                <h4>🌟 实时数据版本</h4>
+                <p>本版本直接调用 Kaito API 获取实时数据。由于浏览器安全策略，某些环境下可能显示模拟数据。</p>
+            </div>
         </div>
 
         <!-- 导航菜单 -->
@@ -537,28 +569,6 @@
                         <option value="100">Top 100</option>
                     </select>
                 </div>
-                <div class="control-group">
-                    <label for="community-tier-select">社区等级:</label>
-                    <select id="community-tier-select" class="control-select">
-                        <option value="tier1">Tier 1</option>
-                        <option value="tier2">Tier 2</option>
-                        <option value="tier3">Tier 3</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="customized-community-select">定制化社区:</label>
-                    <select id="customized-community-select" class="control-select">
-                        <option value="customized">定制化</option>
-                        <option value="standard">标准</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="community-yaps-select">社区讨论:</label>
-                    <select id="community-yaps-select" class="control-select">
-                        <option value="true">包含</option>
-                        <option value="false">不包含</option>
-                    </select>
-                </div>
             </div>
 
             <div class="leaderboard-header">
@@ -627,21 +637,20 @@
         const projectCategories = {
             'pre_tge': {
                 label: 'Pre TGE 项目',
-                topics: ["0G", "ALLORA", "ANOMA", "BLS", "BOUNDLESS", "CAMP", "CYSIC", "FOGO", "HANAHANA",
+                topics: ["0G", "ALLORA", "ANOMA", "BILLIONS", "BLS", "BOUNDLESS", "CAMP", "CYSIC", "FALCON", "FOGO", "HANAHANA",
                         "GOATNETWORK", "INFINEX", "INFINIT", "IRYS", "KAT", "LOMBARD", "LUMITERRA", "MEGAETH",
-                        "MEMEX", "MIRA", "MITOSIS", "MONAD", "MULTIBANK", "MULTIPLI", "NYT", "NOYA",
-                        "OPENLEDGER", "PARADEX", "PORTALPORTAL", "PUFFPAW", "SATLAYER", "SIDEKICK", "SOMNIA",
-                        "SO", "SUCCINCT", "SURF", "SYMPHONY", "THEORIQ", "THRIVE", "TURTLECLUB", "UNION",
-                        "WARP", "YEET"]
+                        "MEMEX", "MIRA", "MITOSIS", "MOMENTUM", "MONAD", "MULTIBANK", "MULTIPLI", "NYT", "NOYA", "OPENLEDGER",
+                        "PARADEX", "PORTALPORTAL", "PUFFPAW", "SAPIEN", "SOMNIA", "SO",
+                        "SURF", "SYMPHONY", "THEORIQ", "THRIVE", "TURTLECLUB", "UNION", "WARP", "YEET"]
             },
             'post_tge': {
                 label: 'Post TGE 项目',
-                topics: ["KAITO", "ANIME", "APT", "ARB", "BERA", "BOOPBOOPFUN", "BYBITTRADFI", "CALDERA",
+                topics: ["KAITO", "ANIME", "APT", "ARB", "BERA", "BLUE", "BOOPBOOPFUN", "BYBITTRADFI", "CALDERA",
                         "CORN", "CREATORBID", "DEFIAPP", "DYDX", "ECLIPSE", "FRAX", "FUEL", "HUMAFINANCE",
-                        "HUMANITY", "INITIA", "INJ", "IQ", "KAIA", "KINTO", "MNT", "MAPLESTORYUNIVERSE",
-                        "MOVEMENT", "NEAR", "NEWTON", "ORDERLYNETWORK", "PEAQ", "PENGU", "DOT", "PYTH",
-                        "QUAI", "SEI", "SKATE", "S", "SOON", "SOPHON", "STARKNET", "STORYPROTOCOL",
-                        "UXLINK", "VIRTUALECOSYSTEM", "WAYFINDER", "XION", "ZEC"]
+                        "HUMANITY", "INITIA", "INJ", "IQ", "KAIA", "KINTO", "MNT", "OM", "MAPLESTORYUNIVERSE",
+                        "MOVEMENT", "NEAR", "NEWTON", "ORDERLYNETWORK", "PEAQ", "PENGU", "DOT", "POL", "PYTH",
+                        "QUAI", "SATLAYER", "SEI", "SIDEKICK", "SKATE", "S", "SOON", "SOPHON", "STARKNET", "STORYPROTOCOL", "SUCCINCT", "UXLINK",
+                        "VIRTUALECOSYSTEM", "WAL", "WAYFINDER", "XION", "ZEC"]
             }
         };
 
@@ -753,27 +762,35 @@
             });
         }
 
-        // 调用代理 API
-        async function fetchKaitoData(duration, topic_id, top_n, community_tier, customized_community, community_yaps) {
-            const url = "/api/kol/mindshare/top-leaderboard";
+        // 尝试调用真实的 Kaito API，如果失败则使用模拟数据
+        async function fetchKaitoData(duration, topic_id, top_n) {
+            const url = "https://hub.kaito.ai/api/v1/gateway/ai/kol/mindshare/top-leaderboard";
             const params = new URLSearchParams({
                 duration: duration,
                 topic_id: topic_id,
                 top_n: top_n.toString(),
-                community_tier: community_tier,
-                customized_community: customized_community,
-                community_yaps: community_yaps
+                community_tier: 'tier1',
+                customized_community: 'customized',
+                community_yaps: 'true'
             });
 
             try {
-                const response = await fetch(`${url}?${params}`);
+                const response = await fetch(`${url}?${params}`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                });
+                
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                
                 const data = await response.json();
 
                 // 处理 API 返回的数据，确保格式正确
-                if (Array.isArray(data)) {
+                if (Array.isArray(data) && data.length > 0) {
                     return data.map((user, index) => ({
                         user_id: user.user_id || `user-${index}`,
                         name: user.name || 'Unknown User',
@@ -788,11 +805,10 @@
                         twitter_user_url: user.twitter_user_url || '#'
                     }));
                 } else {
-                    console.warn('Unexpected API response format:', data);
-                    return generateMockData(topic_id, top_n);
+                    throw new Error('Empty or invalid API response');
                 }
             } catch (error) {
-                console.error('Error fetching Kaito data:', error);
+                console.warn('API调用失败，使用模拟数据:', error.message);
                 // 如果 API 调用失败，使用模拟数据
                 return generateMockData(topic_id, top_n);
             }
@@ -804,23 +820,25 @@
             const topic = document.getElementById('topic-select').value;
             const duration = document.getElementById('duration-select').value;
             const topN = parseInt(document.getElementById('top-n-select').value);
-            const communityTier = document.getElementById('community-tier-select').value;
-            const customizedCommunity = document.getElementById('customized-community-select').value;
-            const communityYaps = document.getElementById('community-yaps-select').value;
 
             // 显示加载状态
             document.getElementById('loading').style.display = 'block';
             document.getElementById('users-grid').style.display = 'none';
 
             try {
-                // 调用真实的 Kaito API
-                currentData = await fetchKaitoData(duration, topic, topN, communityTier, customizedCommunity, communityYaps);
+                // 尝试调用真实的 Kaito API
+                currentData = await fetchKaitoData(duration, topic, topN);
                 renderUsers(currentData);
                 updateLabels();
             } catch (error) {
                 console.error('Failed to load data:', error);
                 // 如果出错，显示错误信息
-                document.getElementById('loading').innerHTML = '<p style="color: red;">加载数据失败，请稍后重试</p>';
+                document.getElementById('loading').innerHTML = '<p style="color: red;">加载数据失败，显示模拟数据</p>';
+                setTimeout(() => {
+                    currentData = generateMockData(topic, topN);
+                    renderUsers(currentData);
+                    updateLabels();
+                }, 1000);
             }
         }
 
@@ -878,9 +896,6 @@
         document.getElementById('topic-select').addEventListener('change', loadData);
         document.getElementById('duration-select').addEventListener('change', loadData);
         document.getElementById('top-n-select').addEventListener('change', loadData);
-        document.getElementById('community-tier-select').addEventListener('change', loadData);
-        document.getElementById('customized-community-select').addEventListener('change', loadData);
-        document.getElementById('community-yaps-select').addEventListener('change', loadData);
 
         // 初始化
         updateTopicSelect('post_tge');

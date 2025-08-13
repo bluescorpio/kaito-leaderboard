@@ -24,6 +24,37 @@
             color: white;
             padding: 60px 20px;
             text-align: center;
+            position: relative;
+        }
+
+        /* 语言切换按钮样式 */
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
         }
 
         .app-title {
@@ -640,23 +671,41 @@
                 max-width: 180px;
                 max-height: 180px;
             }
+
+            .language-switcher {
+                top: 15px;
+                right: 15px;
+            }
+
+            .lang-btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
     <header class="app-header">
+        <!-- 语言切换按钮 -->
+        <div class="language-switcher">
+            <button id="lang-btn" class="lang-btn" onclick="toggleLanguage()">
+                <span id="lang-icon">🇺🇸</span>
+                <span id="lang-text">EN</span>
+            </button>
+        </div>
+
         <div class="header-content">
             <h1 class="app-title">
                 <span class="logo">🚀</span>
-                Kaito 加密生态数据平台
+                <span data-i18n="app-title">Kaito 加密生态数据平台</span>
             </h1>
-            <p class="app-description">
+            <p class="app-description" data-i18n="app-description">
                 一站式加密货币项目数据分析平台 - KOL排行榜 | ICT名单 | 奖励时间线 | 投资研报
             </p>
             
             <div class="cors-notice">
-                <h4>🌟 实时数据版本</h4>
-                <p>本版本直接调用 Kaito API 获取实时数据。由于浏览器安全策略，某些环境下可能显示模拟数据。</p>
+                <h4 data-i18n="cors-notice-title">🌟 实时数据版本</h4>
+                <p data-i18n="cors-notice-desc">本版本直接调用 Kaito API 获取实时数据。由于浏览器安全策略，某些环境下可能显示模拟数据。</p>
             </div>
         </div>
 
@@ -665,31 +714,31 @@
             <div class="nav-container">
                 <button class="nav-item active" data-section="kol-leaderboard">
                     <span class="nav-icon">🏆</span>
-                    <span class="nav-text">KOL 排行榜</span>
+                    <span class="nav-text" data-i18n="nav-kol">KOL 排行榜</span>
                 </button>
                 <button class="nav-item" data-section="ict-list">
                     <span class="nav-icon">📋</span>
-                    <span class="nav-text">ICT 名单</span>
+                    <span class="nav-text" data-i18n="nav-ict">ICT 名单</span>
                 </button>
                 <button class="nav-item" data-section="rewards-timeline">
                     <span class="nav-icon">⏰</span>
-                    <span class="nav-text">奖励时间线</span>
+                    <span class="nav-text" data-i18n="nav-rewards">奖励时间线</span>
                 </button>
                 <button class="nav-item" data-section="research-reports">
                     <span class="nav-icon">📊</span>
-                    <span class="nav-text">投资研报</span>
+                    <span class="nav-text" data-i18n="nav-research">投资研报</span>
                 </button>
             </div>
         </nav>
 
         <!-- 打赏信息 -->
         <div class="donation-section">
-            <h4>💝 欢迎小额打赏</h4>
+            <h4 data-i18n="donation-title">💝 欢迎小额打赏</h4>
             <div class="donation-addresses">
                 <div class="address-item">
                     <div class="address-header">
-                        <span class="address-label">SOL 地址：</span>
-                        <button class="qr-toggle-btn" onclick="toggleQRCode('sol-qr')">📱 显示收款码</button>
+                        <span class="address-label" data-i18n="sol-address">SOL 地址：</span>
+                        <button class="qr-toggle-btn" onclick="toggleQRCode('sol-qr')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
                     </div>
                     <div class="address-content">
                         <span class="address-value">97vJtSUYM2BpLTo8sLXzRAU9CZGBERFBAohuFLoXGwa2</span>
@@ -704,8 +753,8 @@
                 </div>
                 <div class="address-item">
                     <div class="address-header">
-                        <span class="address-label">EVM 地址：</span>
-                        <button class="qr-toggle-btn" onclick="toggleQRCode('evm-qr')">📱 显示收款码</button>
+                        <span class="address-label" data-i18n="evm-address">EVM 地址：</span>
+                        <button class="qr-toggle-btn" onclick="toggleQRCode('evm-qr')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
                     </div>
                     <div class="address-content">
                         <span class="address-value">0x90ea00E3c00606ee52ADD1c2468F83C927065584</span>
@@ -726,20 +775,20 @@
         <!-- KOL 排行榜模块 -->
         <section id="kol-leaderboard" class="content-section active">
             <div class="section-header">
-                <h2 class="section-title">🏆 KOL 影响力排行榜</h2>
-                <p class="section-description">发现加密货币领域最具影响力的 KOL 和思想领袖</p>
+                <h2 class="section-title" data-i18n="kol-title">🏆 KOL 影响力排行榜</h2>
+                <p class="section-description" data-i18n="kol-description">发现加密货币领域最具影响力的 KOL 和思想领袖</p>
             </div>
 
             <div class="controls-section">
                 <div class="control-group">
-                    <label for="category-select">项目分类:</label>
+                    <label for="category-select" data-i18n="project-category">项目分类:</label>
                     <select id="category-select" class="control-select">
                         <option value="post_tge">Post TGE 项目</option>
                         <option value="pre_tge">Pre TGE 项目</option>
                     </select>
                 </div>
                 <div class="control-group">
-                    <label for="topic-select">项目/代币:</label>
+                    <label for="topic-select" data-i18n="project-token">项目/代币:</label>
                     <select id="topic-select" class="control-select">
                         <option value="APT">APT</option>
                         <option value="ARB">ARB</option>
@@ -752,7 +801,7 @@
                     </select>
                 </div>
                 <div class="control-group">
-                    <label for="duration-select">时间范围:</label>
+                    <label for="duration-select" data-i18n="time-range">时间范围:</label>
                     <select id="duration-select" class="control-select">
                         <option value="7d">7 天</option>
                         <option value="30d">30 天</option>
@@ -762,7 +811,7 @@
                     </select>
                 </div>
                 <div class="control-group">
-                    <label for="top-n-select">显示数量:</label>
+                    <label for="top-n-select" data-i18n="display-count">显示数量:</label>
                     <select id="top-n-select" class="control-select">
                         <option value="10">Top 10</option>
                         <option value="25">Top 25</option>
@@ -779,7 +828,7 @@
 
             <div id="loading" class="loading">
                 <div class="loading-spinner"></div>
-                <p>正在加载排行榜数据...</p>
+                <p data-i18n="loading-text">正在加载排行榜数据...</p>
             </div>
             <div id="users-grid" class="users-grid" style="display: none;"></div>
         </section>
@@ -787,53 +836,257 @@
         <!-- ICT 名单模块 -->
         <section id="ict-list" class="content-section">
             <div class="section-header">
-                <h2 class="section-title">📋 ICT 名单</h2>
-                <p class="section-description">Initial Community Token 项目列表和详细信息</p>
+                <h2 class="section-title" data-i18n="ict-title">📋 ICT 名单</h2>
+                <p class="section-description" data-i18n="ict-description">Initial Community Token 项目列表和详细信息</p>
             </div>
 
             <div class="coming-soon">
                 <div class="coming-soon-icon">🚧</div>
-                <h3>功能开发中</h3>
-                <p>ICT 名单功能正在开发中，敬请期待...</p>
+                <h3 data-i18n="coming-soon">功能开发中</h3>
+                <p data-i18n="coming-soon-desc">ICT 名单功能正在开发中，敬请期待...</p>
             </div>
         </section>
 
         <!-- 奖励时间线模块 -->
         <section id="rewards-timeline" class="content-section">
             <div class="section-header">
-                <h2 class="section-title">⏰ 项目奖励时间线</h2>
-                <p class="section-description">各个项目的奖励机制和代币解锁时间安排</p>
+                <h2 class="section-title" data-i18n="rewards-title">⏰ 项目奖励时间线</h2>
+                <p class="section-description" data-i18n="rewards-description">各个项目的奖励机制和代币解锁时间安排</p>
             </div>
 
             <div class="coming-soon">
                 <div class="coming-soon-icon">🚧</div>
-                <h3>功能开发中</h3>
-                <p>奖励时间线功能正在开发中，敬请期待...</p>
+                <h3 data-i18n="coming-soon">功能开发中</h3>
+                <p data-i18n="coming-soon-desc">奖励时间线功能正在开发中，敬请期待...</p>
             </div>
         </section>
 
         <!-- 投资研报模块 -->
+                <!-- 投资研报模块 -->
         <section id="research-reports" class="content-section">
             <div class="section-header">
-                <h2 class="section-title">📊 投资机构研报</h2>
-                <p class="section-description">收集各大投资机构的项目研究报告</p>
+                <h2 class="section-title" data-i18n="research-title">📊 投资机构研报</h2>
+                <p class="section-description" data-i18n="research-description">收集各大投资机构的项目研究报告</p>
             </div>
 
             <div class="coming-soon">
                 <div class="coming-soon-icon">🚧</div>
-                <h3>功能开发中</h3>
-                <p>投资研报收集功能正在开发中，敬请期待...</p>
+                <h3 data-i18n="coming-soon">功能开发中</h3>
+                <p data-i18n="coming-soon-desc">投资研报功能正在开发中，敬请期待...</p>
             </div>
         </section>
     </main>
 
     <footer class="app-footer">
         <p>
-            数据来源: <a href="https://yaps.kaito.ai/yapper-leaderboards" target="_blank" rel="noopener noreferrer">Kaito AI</a>
+            <span data-i18n="data-source">数据来源:</span> <a href="https://yaps.kaito.ai/yapper-leaderboards" target="_blank" rel="noopener noreferrer">Kaito AI</a>
         </p>
     </footer>
 
     <script>
+        // 多语言文本数据
+        const translations = {
+            'zh': {
+                // 页面标题和描述
+                'page-title': 'Kaito 影响力排行榜',
+                'app-title': 'Kaito 加密生态数据平台',
+                'app-description': '一站式加密货币项目数据分析平台 - KOL排行榜 | ICT名单 | 奖励时间线 | 投资研报',
+                'cors-notice-title': '🌟 实时数据版本',
+                'cors-notice-desc': '本版本直接调用 Kaito API 获取实时数据。由于浏览器安全策略，某些环境下可能显示模拟数据。',
+                
+                // 导航菜单
+                'nav-kol': 'KOL 排行榜',
+                'nav-ict': 'ICT 名单',
+                'nav-rewards': '奖励时间线',
+                'nav-research': '投资研报',
+                
+                // 打赏区域
+                'donation-title': '💝 欢迎小额打赏',
+                'sol-address': 'SOL 地址：',
+                'evm-address': 'EVM 地址：',
+                'show-qr': '📱 显示收款码',
+                'hide-qr': '❌ 隐藏收款码',
+                
+                // KOL排行榜
+                'kol-title': '🏆 KOL 影响力排行榜',
+                'kol-description': '发现加密货币领域最具影响力的 KOL 和思想领袖',
+                'project-category': '项目分类:',
+                'project-token': '项目/代币:',
+                'time-range': '时间范围:',
+                'display-count': '显示数量:',
+                'post-tge': 'Post TGE 项目',
+                'pre-tge': 'Pre TGE 项目',
+                'days-7': '7 天',
+                'days-30': '30 天',
+                'months-3': '3 个月',
+                'months-6': '6 个月',
+                'months-12': '12 个月',
+                'loading-text': '正在加载排行榜数据...',
+                'influence-score': '影响力分数',
+                'followers': '粉丝数',
+                'following': '关注数',
+                'smart-followers': '智能粉丝',
+                
+                // 其他页面
+                'ict-title': '📋 ICT 名单',
+                'ict-description': 'Initial Community Token 项目列表和详细信息',
+                'rewards-title': '⏰ 项目奖励时间线',
+                'rewards-description': '各个项目的奖励机制和代币解锁时间安排',
+                'research-title': '📊 投资机构研报',
+                'research-description': '收集各大投资机构的项目研究报告',
+                'coming-soon': '功能开发中',
+                'coming-soon-desc': '功能正在开发中，敬请期待...',
+                
+                // 页脚
+                'data-source': '数据来源:'
+            },
+            'en': {
+                // 页面标题和描述
+                'page-title': 'Kaito Influence Leaderboard',
+                'app-title': 'Kaito Crypto Ecosystem Data Platform',
+                'app-description': 'One-stop cryptocurrency project data analysis platform - KOL Rankings | ICT Lists | Reward Timeline | Investment Reports',
+                'cors-notice-title': '🌟 Real-time Data Version',
+                'cors-notice-desc': 'This version directly calls Kaito API for real-time data. Due to browser security policies, simulated data may be displayed in some environments.',
+                
+                // 导航菜单
+                'nav-kol': 'KOL Rankings',
+                'nav-ict': 'ICT Lists',
+                'nav-rewards': 'Reward Timeline',
+                'nav-research': 'Research Reports',
+                
+                // 打赏区域
+                'donation-title': '💝 Welcome Small Tips',
+                'sol-address': 'SOL Address:',
+                'evm-address': 'EVM Address:',
+                'show-qr': '📱 Show QR Code',
+                'hide-qr': '❌ Hide QR Code',
+                
+                // KOL排行榜
+                'kol-title': '🏆 KOL Influence Leaderboard',
+                'kol-description': 'Discover the most influential KOLs and thought leaders in the cryptocurrency space',
+                'project-category': 'Project Category:',
+                'project-token': 'Project/Token:',
+                'time-range': 'Time Range:',
+                'display-count': 'Display Count:',
+                'post-tge': 'Post TGE Projects',
+                'pre-tge': 'Pre TGE Projects',
+                'days-7': '7 Days',
+                'days-30': '30 Days',
+                'months-3': '3 Months',
+                'months-6': '6 Months',
+                'months-12': '12 Months',
+                'loading-text': 'Loading leaderboard data...',
+                'influence-score': 'Influence Score',
+                'followers': 'Followers',
+                'following': 'Following',
+                'smart-followers': 'Smart Followers',
+                
+                // 其他页面
+                'ict-title': '📋 ICT Lists',
+                'ict-description': 'Initial Community Token project lists and detailed information',
+                'rewards-title': '⏰ Project Reward Timeline',
+                'rewards-description': 'Reward mechanisms and token unlock schedules for various projects',
+                'research-title': '📊 Investment Institution Reports',
+                'research-description': 'Collect project research reports from major investment institutions',
+                'coming-soon': 'Feature Under Development',
+                'coming-soon-desc': 'This feature is under development, stay tuned...',
+                
+                // 页脚
+                'data-source': 'Data Source:'
+            }
+        };
+
+        // 当前语言
+        let currentLanguage = localStorage.getItem('language') || 'zh';
+
+        // 切换语言函数
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'zh' ? 'en' : 'zh';
+            localStorage.setItem('language', currentLanguage);
+            updateLanguage();
+        }
+
+        // 更新页面语言
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            
+            // 更新页面标题
+            document.title = t['page-title'];
+            
+            // 更新语言切换按钮
+            const langIcon = document.getElementById('lang-icon');
+            const langText = document.getElementById('lang-text');
+            if (currentLanguage === 'zh') {
+                langIcon.textContent = '🇺🇸';
+                langText.textContent = 'EN';
+            } else {
+                langIcon.textContent = '🇨🇳';
+                langText.textContent = '中文';
+            }
+            
+            // 更新所有具有 data-i18n 属性的元素
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+            
+            // 更新项目分类选项
+            updateProjectCategoryOptions();
+            
+            // 更新时间范围选项
+            updateTimeRangeOptions();
+            
+            // 更新显示数量选项
+            updateDisplayCountOptions();
+            
+            // 更新排行榜标题
+            updateLabels();
+            
+            // 重新渲染当前数据
+            if (currentData.length > 0) {
+                renderUsers(currentData);
+            }
+        }
+
+        // 更新项目分类选项
+        function updateProjectCategoryOptions() {
+            const categorySelect = document.getElementById('category-select');
+            const t = translations[currentLanguage];
+            
+            categorySelect.innerHTML = `
+                <option value="post_tge">${t['post-tge']}</option>
+                <option value="pre_tge">${t['pre-tge']}</option>
+            `;
+        }
+
+        // 更新时间范围选项
+        function updateTimeRangeOptions() {
+            const durationSelect = document.getElementById('duration-select');
+            const t = translations[currentLanguage];
+            
+            durationSelect.innerHTML = `
+                <option value="7d">${t['days-7']}</option>
+                <option value="30d">${t['days-30']}</option>
+                <option value="3m">${t['months-3']}</option>
+                <option value="6m">${t['months-6']}</option>
+                <option value="12m">${t['months-12']}</option>
+            `;
+        }
+
+        // 更新显示数量选项
+        function updateDisplayCountOptions() {
+            const topNSelect = document.getElementById('top-n-select');
+            
+            topNSelect.innerHTML = `
+                <option value="10">Top 10</option>
+                <option value="25">Top 25</option>
+                <option value="50">Top 50</option>
+                <option value="100">Top 100</option>
+            `;
+        }
+
         // 项目分类数据
         const projectCategories = {
             'pre_tge': {
@@ -897,9 +1150,10 @@
         function renderUsers(users) {
             const grid = document.getElementById('users-grid');
             const loading = document.getElementById('loading');
+            const t = translations[currentLanguage];
 
             // 重置加载状态的内容（如果之前显示了错误信息）
-            loading.innerHTML = '<div class="loading-spinner"></div><p>正在加载排行榜数据...</p>';
+            loading.innerHTML = `<div class="loading-spinner"></div><p>${t['loading-text']}</p>`;
             loading.style.display = 'none';
             grid.style.display = 'grid';
             
@@ -920,22 +1174,22 @@
 
                     <div class="user-stats">
                         <div class="stat-item">
-                            <span class="stat-label">影响力分数</span>
+                            <span class="stat-label">${t['influence-score']}</span>
                             <span class="stat-value mindshare-score">${(user.mindshare * 100).toFixed(2)}%</span>
                         </div>
                         
                         <div class="stat-item">
-                            <span class="stat-label">粉丝数</span>
+                            <span class="stat-label">${t['followers']}</span>
                             <span class="stat-value">${formatNumber(user.follower_count)}</span>
                         </div>
 
                         <div class="stat-item">
-                            <span class="stat-label">关注数</span>
+                            <span class="stat-label">${t['following']}</span>
                             <span class="stat-value">${formatNumber(user.following_count)}</span>
                         </div>
 
                         <div class="stat-item">
-                            <span class="stat-label">智能粉丝</span>
+                            <span class="stat-label">${t['smart-followers']}</span>
                             <span class="stat-value">${formatNumber(user.smart_follower_count)}</span>
                         </div>
                     </div>
@@ -1049,18 +1303,63 @@
             const topic = document.getElementById('topic-select').value;
             const duration = document.getElementById('duration-select').value;
             const topN = document.getElementById('top-n-select').value;
+            const t = translations[currentLanguage];
 
             const durationLabels = {
-                '7d': '7 天',
-                '30d': '30 天',
-                '3m': '3 个月',
-                '6m': '6 个月',
-                '12m': '12 个月'
+                'zh': {
+                    '7d': '7 天',
+                    '30d': '30 天',
+                    '3m': '3 个月',
+                    '6m': '6 个月',
+                    '12m': '12 个月'
+                },
+                'en': {
+                    '7d': '7 Days',
+                    '30d': '30 Days',
+                    '3m': '3 Months',
+                    '6m': '6 Months',
+                    '12m': '12 Months'
+                }
             };
 
-            document.getElementById('leaderboard-title').textContent = `🏆 ${topic} 影响力排行榜`;
-            document.getElementById('leaderboard-subtitle').textContent =
-                `${projectCategories[category].label} - 显示过去 ${durationLabels[duration]} 的前 ${topN} 名影响者`;
+            const categoryLabels = {
+                'zh': {
+                    'post_tge': 'Post TGE 项目',
+                    'pre_tge': 'Pre TGE 项目'
+                },
+                'en': {
+                    'post_tge': 'Post TGE Projects',
+                    'pre_tge': 'Pre TGE Projects'
+                }
+            };
+
+            const titleText = currentLanguage === 'zh' ? 
+                `🏆 ${topic} 影响力排行榜` : 
+                `🏆 ${topic} Influence Leaderboard`;
+            
+            const subtitleText = currentLanguage === 'zh' ?
+                `${categoryLabels[currentLanguage][category]} - 显示过去 ${durationLabels[currentLanguage][duration]} 的前 ${topN} 名影响者` :
+                `${categoryLabels[currentLanguage][category]} - Showing Top ${topN} influencers in the past ${durationLabels[currentLanguage][duration]}`;
+
+            document.getElementById('leaderboard-title').textContent = titleText;
+            document.getElementById('leaderboard-subtitle').textContent = subtitleText;
+            
+            // 更新QR码按钮文字
+            updateQRButtonTexts();
+        }
+
+        // 更新QR码按钮文字
+        function updateQRButtonTexts() {
+            const t = translations[currentLanguage];
+            document.querySelectorAll('.qr-toggle-btn').forEach(button => {
+                const container = button.getAttribute('onclick').match(/toggleQRCode\('([^']+)'\)/)[1];
+                const qrContainer = document.getElementById(container);
+                if (qrContainer.style.display === 'none') {
+                    button.textContent = t['show-qr'];
+                } else {
+                    button.textContent = t['hide-qr'];
+                }
+            });
         }
 
         // 导航切换功能
@@ -1102,19 +1401,25 @@
         function toggleQRCode(qrId) {
             const qrContainer = document.getElementById(qrId);
             const button = event.target;
+            const t = translations[currentLanguage];
             
             if (qrContainer.style.display === 'none' || qrContainer.style.display === '') {
                 qrContainer.style.display = 'block';
-                button.textContent = '❌ 隐藏收款码';
+                button.textContent = t['hide-qr'];
             } else {
                 qrContainer.style.display = 'none';
-                button.textContent = '📱 显示收款码';
+                button.textContent = t['show-qr'];
             }
         }
 
-        // 初始化
-        updateTopicSelect('post_tge');
-        loadData();
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化语言
+            updateLanguage();
+            // 初始化其他功能
+            updateTopicSelect('post_tge');
+            loadData();
+        });
     </script>
 </body>
 </html>

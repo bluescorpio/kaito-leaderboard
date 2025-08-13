@@ -431,6 +431,129 @@
             line-height: 1.5;
         }
 
+        /* 打赏区域样式 */
+        .donation-section {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .donation-section h4 {
+            color: #166534;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .donation-addresses {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .address-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            word-break: break-all;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .address-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .address-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .address-label {
+            font-weight: 600;
+            color: #166534;
+            font-size: 1rem;
+        }
+
+        .qr-toggle-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .qr-toggle-btn:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+        }
+
+        .address-value {
+            color: #1f2937;
+            font-size: 0.9rem;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            display: block;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .qr-code-container {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            border: 2px solid #22c55e;
+            margin-top: 8px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .qr-code-img {
+            max-width: 250px;
+            max-height: 250px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border: 3px solid #fff;
+        }
+
+        .qr-error {
+            color: #dc2626;
+            padding: 20px;
+        }
+
+        .qr-error p {
+            margin: 0 0 8px 0;
+            font-weight: 600;
+        }
+
+        .qr-error small {
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+
         @media (max-width: 768px) {
             .app-title {
                 font-size: 2rem;
@@ -478,6 +601,45 @@
             .coming-soon-icon {
                 font-size: 3rem;
             }
+
+            .donation-section {
+                margin: 15px;
+                padding: 16px;
+            }
+
+            .donation-section h4 {
+                font-size: 1rem;
+            }
+
+            .address-item {
+                padding: 12px;
+            }
+
+            .address-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .qr-toggle-btn {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+                align-self: flex-start;
+            }
+
+            .address-value {
+                font-size: 0.8rem;
+                padding: 10px;
+            }
+
+            .qr-code-container {
+                padding: 15px;
+            }
+
+            .qr-code-img {
+                max-width: 180px;
+                max-height: 180px;
+            }
         }
     </style>
 </head>
@@ -519,6 +681,45 @@
                 </button>
             </div>
         </nav>
+
+        <!-- 打赏信息 -->
+        <div class="donation-section">
+            <h4>💝 欢迎小额打赏</h4>
+            <div class="donation-addresses">
+                <div class="address-item">
+                    <div class="address-header">
+                        <span class="address-label">SOL 地址：</span>
+                        <button class="qr-toggle-btn" onclick="toggleQRCode('sol-qr')">📱 显示收款码</button>
+                    </div>
+                    <div class="address-content">
+                        <span class="address-value">97vJtSUYM2BpLTo8sLXzRAU9CZGBERFBAohuFLoXGwa2</span>
+                        <div id="sol-qr" class="qr-code-container" style="display: none;">
+                            <img src="images/sol.png" alt="SOL 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="qr-error" style="display: none;">
+                                <p>收款码图片未找到</p>
+                                <small>请将 SOL 收款码保存为 images/sol.png</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="address-item">
+                    <div class="address-header">
+                        <span class="address-label">EVM 地址：</span>
+                        <button class="qr-toggle-btn" onclick="toggleQRCode('evm-qr')">📱 显示收款码</button>
+                    </div>
+                    <div class="address-content">
+                        <span class="address-value">0x90ea00E3c00606ee52ADD1c2468F83C927065584</span>
+                        <div id="evm-qr" class="qr-code-container" style="display: none;">
+                            <img src="images/evm.png" alt="EVM 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="qr-error" style="display: none;">
+                                <p>收款码图片未找到</p>
+                                <small>请将 EVM 收款码保存为 images/evm.png</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <main class="container">
@@ -896,6 +1097,20 @@
         document.getElementById('topic-select').addEventListener('change', loadData);
         document.getElementById('duration-select').addEventListener('change', loadData);
         document.getElementById('top-n-select').addEventListener('change', loadData);
+
+        // 切换收款码显示
+        function toggleQRCode(qrId) {
+            const qrContainer = document.getElementById(qrId);
+            const button = event.target;
+            
+            if (qrContainer.style.display === 'none' || qrContainer.style.display === '') {
+                qrContainer.style.display = 'block';
+                button.textContent = '❌ 隐藏收款码';
+            } else {
+                qrContainer.style.display = 'none';
+                button.textContent = '📱 显示收款码';
+            }
+        }
 
         // 初始化
         updateTopicSelect('post_tge');

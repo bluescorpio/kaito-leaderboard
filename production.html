@@ -2152,6 +2152,9 @@
             });
         }
 
+        // 用于存储获取到的数据以便保存到 JSON 文件
+        let collectedData = {};
+
         // 尝试调用真实的 Kaito API，如果失败则使用模拟数据
         async function fetchKaitoData(duration, topic_id, top_n) {
             const url = "https://hub.kaito.ai/api/v1/gateway/ai/kol/mindshare/top-leaderboard";
@@ -2165,6 +2168,7 @@
             });
 
             try {
+                console.log(`调用 Kaito API: ${topic_id} - ${duration}`);
                 const response = await fetch(`${url}?${params}`, {
                     method: 'GET',
                     mode: 'cors',
@@ -2178,10 +2182,11 @@
                 }
                 
                 const data = await response.json();
+                console.log(`成功获取 ${topic_id} 数据:`, data);
 
                 // 处理 API 返回的数据，确保格式正确
                 if (Array.isArray(data) && data.length > 0) {
-                    return data.map((user, index) => ({
+                    const formattedData = data.map((user, index) => ({
                         user_id: user.user_id || `user-${index}`,
                         name: user.name || 'Unknown User',
                         username: user.username || '',
@@ -2194,14 +2199,83 @@
                         rank: user.rank || (index + 1),
                         twitter_user_url: user.twitter_user_url || '#'
                     }));
+
+                    // 保存数据到 collectedData 对象中
+                    saveDataToCollection(topic_id, duration, formattedData);
+                    
+                    return formattedData;
                 } else {
                     throw new Error('Empty or invalid API response');
                 }
             } catch (error) {
-                console.warn('API调用失败，使用模拟数据:', error.message);
+                console.error('API调用失败:', error.message);
                 // 如果 API 调用失败，使用模拟数据
                 return generateMockData(topic_id, top_n);
             }
+        }
+
+        // 保存数据到收集对象中
+        function saveDataToCollection(topic_id, duration, data) {
+            // 确定分类
+            const category = projectCategories['post_tge'].topics.includes(topic_id) ? 'post_tge' : 'pre_tge';
+            
+            // 初始化数据结构
+            if (!collectedData.categories) {
+                collectedData.categories = {};
+            }
+            if (!collectedData.categories[category]) {
+                collectedData.categories[category] = {};
+            }
+            if (!collectedData.categories[category][topic_id]) {
+                collectedData.categories[category][topic_id] = {};
+            }
+            
+            // 保存数据
+            collectedData.categories[category][topic_id][duration] = data;
+            
+            console.log(`数据已保存到收集对象: ${category}/${topic_id}/${duration}`);
+            
+            // 显示下载按钮
+            showDownloadButton();
+        }
+
+        // 显示下载按钮
+        function showDownloadButton() {
+            let downloadBtn = document.getElementById('download-btn');
+            if (!downloadBtn) {
+                downloadBtn = document.createElement('button');
+                downloadBtn.id = 'download-btn';
+                downloadBtn.innerHTML = '📥 下载收集的数据 (JSON)';
+                downloadBtn.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    border: none;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    z-index: 1000;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                `;
+                downloadBtn.onclick = downloadCollectedData;
+                document.body.appendChild(downloadBtn);
+            }
+        }
+
+        // 下载收集的数据为 JSON 文件
+        function downloadCollectedData() {
+            const dataStr = JSON.stringify(collectedData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'kol.json';
+            link.click();
+            
+            console.log('数据已下载为 kol.json 文件');
         }
 
         // 加载数据

@@ -2278,6 +2278,77 @@
             console.log('数据已下载为 kol.json 文件');
         }
 
+        // 定时收集功能（生产版本）
+        let autoCollectTimer = null;
+        let collectInterval = 24 * 60 * 60 * 1000; // 默认24小时
+
+        // 开始定时收集
+        function startScheduledCollection(intervalHours = 24) {
+            if (autoCollectTimer) {
+                clearInterval(autoCollectTimer);
+            }
+            
+            collectInterval = intervalHours * 60 * 60 * 1000;
+            console.log(`开始定时收集，间隔: ${intervalHours} 小时`);
+            
+            // 设置定时器
+            autoCollectTimer = setInterval(() => {
+                console.log('定时收集数据...');
+                // 生产环境的数据收集：收集当前选中的项目数据
+                loadData();
+            }, collectInterval);
+        }
+
+        // 停止定时收集
+        function stopScheduledCollection() {
+            if (autoCollectTimer) {
+                clearInterval(autoCollectTimer);
+                autoCollectTimer = null;
+                console.log('定时收集已停止');
+            }
+        }
+
+        // 显示定时收集控制按钮（生产版本）
+        function showTimerControls() {
+            let controlBtn = document.getElementById('timer-control-btn');
+            if (!controlBtn) {
+                controlBtn = document.createElement('button');
+                controlBtn.id = 'timer-control-btn';
+                controlBtn.innerHTML = '🕐 开始定时收集';
+                controlBtn.style.cssText = `
+                    position: fixed;
+                    top: 80px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+                    color: white;
+                    border: none;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    z-index: 1000;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                `;
+                
+                let isActive = false;
+                controlBtn.onclick = () => {
+                    if (!isActive) {
+                        startScheduledCollection(24);
+                        controlBtn.innerHTML = '⏸️ 停止定时收集';
+                        controlBtn.style.background = 'linear-gradient(135deg, #dc3545 0%, #e83e8c 100%)';
+                        isActive = true;
+                    } else {
+                        stopScheduledCollection();
+                        controlBtn.innerHTML = '🕐 开始定时收集';
+                        controlBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+                        isActive = false;
+                    }
+                };
+                
+                document.body.appendChild(controlBtn);
+            }
+        }
+
         // 加载数据
         async function loadData() {
             const category = document.getElementById('category-select').value;
@@ -2709,6 +2780,9 @@
             // 初始化其他功能
             updateTopicSelect('post_tge');
             loadData();
+            
+            // 显示定时收集控制按钮
+            showTimerControls();
             
             // 初始化个人搜索功能
             loadCachedData();

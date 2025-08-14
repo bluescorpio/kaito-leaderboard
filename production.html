@@ -2152,72 +2152,105 @@
             });
         }
 
-        // 用于存储获取到的数据以便保存到 JSON 文件
-        let collectedData = {};
+        // 用于存储获取到的数据
+        let kolJsonData = null;
 
-        // 尝试调用真实的 Kaito API，如果失败则使用模拟数据
-        async function fetchKaitoData(duration, topic_id, top_n) {
-            const url = "https://hub.kaito.ai/api/v1/gateway/ai/kol/mindshare/top-leaderboard";
-            const params = new URLSearchParams({
-                duration: duration,
-                topic_id: topic_id,
-                top_n: top_n.toString(),
-                community_tier: 'tier1',
-                customized_community: 'customized',
-                community_yaps: 'true'
-            });
-
+        // 加载 kol.json 数据
+        async function loadKolJsonData() {
+            if (kolJsonData) return kolJsonData;
+            
             try {
-                console.log(`调用 Kaito API: ${topic_id} - ${duration}`);
-                const response = await fetch(`${url}?${params}`, {
-                    method: 'GET',
-                    mode: 'cors',
-                    headers: {
-                        'Accept': 'application/json',
-                    }
-                });
-                
+                console.log('正在加载 kol.json 数据...');
+                const response = await fetch('./kol.json');
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`无法加载 kol.json: ${response.status}`);
                 }
-                
-                const data = await response.json();
-                console.log(`成功获取 ${topic_id} 数据:`, data);
-
-                // 处理 API 返回的数据，确保格式正确
-                if (Array.isArray(data) && data.length > 0) {
-                    const formattedData = data.map((user, index) => ({
-                        user_id: user.user_id || `user-${index}`,
-                        name: user.name || 'Unknown User',
-                        username: user.username || '',
-                        icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
-                        bio: user.bio || '',
-                        following_count: user.following_count || 0,
-                        follower_count: user.follower_count || 0,
-                        smart_follower_count: user.smart_follower_count || 0,
-                        mindshare: user.mindshare || 0,
-                        rank: user.rank || (index + 1),
-                        twitter_user_url: user.twitter_user_url || '#'
-                    }));
-
-                    // 保存数据到 collectedData 对象中
-                    saveDataToCollection(topic_id, duration, formattedData);
-                    
-                    return formattedData;
-                } else {
-                    throw new Error('Empty or invalid API response');
-                }
+                kolJsonData = await response.json();
+                console.log('✅ 成功加载 kol.json 数据，最后更新时间:', kolJsonData.lastUpdate);
+                return kolJsonData;
             } catch (error) {
-                console.error('API调用失败:', error.message);
-                // 如果 API 调用失败，使用模拟数据
-                return generateMockData(topic_id, top_n);
+                console.error('❌ 无法加载 kol.json:', error.message);
+                return null;
             }
         }
 
-        // 保存数据到收集对象中
-        function saveDataToCollection(topic_id, duration, data) {
+        // 从 kol.json 获取数据
+        function getDataFromKolJson(duration, topic_id, top_n) {
+            if (!kolJsonData || !kolJsonData.categories) {
+                return null;
+            }
+
             // 确定分类
             const category = projectCategories['post_tge'].topics.includes(topic_id) ? 'post_tge' : 'pre_tge';
+            
+            const categoryData = kolJsonData.categories[category];
+            if (!categoryData || !categoryData[topic_id] || !categoryData[topic_id][duration]) {
+                console.warn(`kol.json 中没有找到 ${category}/${topic_id}/${duration} 的数据`);
+                return null;
+            }
+
+            const data = categoryData[topic_id][duration];
+            if (!Array.isArray(data) || data.length === 0) {
+                console.warn(`${category}/${topic_id}/${duration} 的数据为空`);
+                return null;
+            }
+
+            // 限制返回数量并确保数据格式正确
+            return data.slice(0, top_n).map((user, index) => ({
+                user_id: user.user_id || `user-${index}`,
+                name: user.name || 'Unknown User',
+                username: user.username || '',
+                icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
+                bio: user.bio || '',
+                following_count: user.following_count || 0,
+                follower_count: user.follower_count || 0,
+                smart_follower_count: user.smart_follower_count || 0,
+                mindshare: user.mindshare || 0,
+                rank: user.rank || (index + 1),
+                twitter_user_url: user.twitter_user_url || '#'
+            }));
+        }
+
+        // 显示错误信息
+        function showErrorMessage(message) {
+            const loading = document.getElementById('loading');
+            loading.innerHTML = `
+                <div style="color: #e74c3c; font-size: 1.1rem;">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">⚠️</div>
+                    <p>${message}</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                        请联系管理员或稍后重试
+                    </p>
+                </div>
+            `;
+            loading.style.display = 'block';
+            document.getElementById('users-grid').style.display = 'none';
+        }
+
+        // 从 kol.json 读取真实数据（生产环境专用）
+        async function fetchKaitoData(duration, topic_id, top_n) {
+        // 从 kol.json 读取真实数据（生产环境专用）
+        async function fetchKaitoData(duration, topic_id, top_n) {
+            // 加载 kol.json 数据
+            await loadKolJsonData();
+            
+            if (!kolJsonData) {
+                showErrorMessage('数据文件加载失败');
+                return [];
+            }
+
+            const jsonData = getDataFromKolJson(duration, topic_id, top_n);
+            
+            if (jsonData && jsonData.length > 0) {
+                console.log(`✅ 从 kol.json 获取 ${topic_id}/${duration} 数据:`, jsonData.length, '条记录');
+                return jsonData;
+            } else {
+                console.warn(`⚠️ kol.json 中没有 ${topic_id}/${duration} 的数据`);
+                showErrorMessage(`暂无 ${topic_id} 在 ${duration} 时间范围内的数据`);
+                return [];
+            }
+        }
+        }
             
             // 初始化数据结构
             if (!collectedData.categories) {

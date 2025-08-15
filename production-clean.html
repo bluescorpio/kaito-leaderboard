@@ -338,6 +338,221 @@
             font-weight: 600;
         }
 
+        /* 导航菜单样式 */
+        .main-nav {
+            margin-top: 20px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* 内容区域样式 */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* 即将推出样式 */
+        .coming-soon {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin: 40px 0;
+        }
+
+        .coming-soon-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .coming-soon h3 {
+            font-size: 1.8rem;
+            color: #667eea;
+            margin-bottom: 12px;
+        }
+
+        .coming-soon p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* 个人搜索样式 */
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-form {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .search-input-group {
+            margin-bottom: 20px;
+        }
+
+        .search-input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .input-with-button {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-button {
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .data-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .refresh-button {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-button:hover {
+            background: #e2e8f0;
+        }
+
+        .data-status {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .search-loading, .search-result, .search-error {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .search-error {
+            color: #e74c3c;
+        }
+
         @media (max-width: 768px) {
             .app-title {
                 font-size: 2rem;
@@ -362,6 +577,33 @@
                 margin-bottom: 20px;
                 display: inline-block;
             }
+
+            .nav-item {
+                min-width: 100px;
+                padding: 12px 16px;
+            }
+
+            .nav-icon {
+                font-size: 1.2rem;
+            }
+
+            .nav-text {
+                font-size: 0.8rem;
+            }
+
+            .input-with-button {
+                flex-direction: column;
+            }
+
+            .search-button {
+                width: 100%;
+            }
+
+            .data-controls {
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+            }
         }
     </style>
 </head>
@@ -379,54 +621,177 @@
                 基于真实数据的加密货币 KOL 影响力排行榜 - 发现最具影响力的思想领袖
             </p>
         </div>
+
+        <!-- 导航菜单 -->
+        <nav class="main-nav">
+            <div class="nav-container">
+                <button class="nav-item active" data-section="kol-leaderboard">
+                    <span class="nav-icon">🏆</span>
+                    <span class="nav-text">KOL 排行榜</span>
+                </button>
+                <button class="nav-item" data-section="personal-search">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-text">个人查询</span>
+                </button>
+                <button class="nav-item" data-section="ict-list">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">ICT 名单</span>
+                </button>
+                <button class="nav-item" data-section="rewards-timeline">
+                    <span class="nav-icon">⏰</span>
+                    <span class="nav-text">奖励时间线</span>
+                </button>
+                <button class="nav-item" data-section="research-reports">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">投资研报</span>
+                </button>
+            </div>
+        </nav>
     </header>
 
     <main class="container">
-        <div class="controls-section">
-            <div class="control-group">
-                <label for="category-select">项目分类:</label>
-                <select id="category-select" class="control-select">
-                    <option value="post_tge">Post TGE 项目</option>
-                    <option value="pre_tge">Pre TGE 项目</option>
-                </select>
+        <!-- KOL 排行榜模块 -->
+        <section id="kol-leaderboard" class="content-section active">
+            <div class="section-header">
+                <h2 class="section-title">🏆 KOL 影响力排行榜</h2>
+                <p class="section-description">发现加密货币领域最具影响力的 KOL 和思想领袖</p>
             </div>
-            <div class="control-group">
-                <label for="topic-select">项目/代币:</label>
-                <select id="topic-select" class="control-select">
-                    <option value="APT">APT</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="duration-select">时间范围:</label>
-                <select id="duration-select" class="control-select">
-                    <option value="7d">7 天</option>
-                    <option value="30d">30 天</option>
-                    <option value="3m">3 个月</option>
-                    <option value="6m">6 个月</option>
-                    <option value="12m">12 个月</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="top-n-select">显示数量:</label>
-                <select id="top-n-select" class="control-select">
-                    <option value="10">Top 10</option>
-                    <option value="25">Top 25</option>
-                    <option value="50">Top 50</option>
-                    <option value="100">Top 100</option>
-                </select>
-            </div>
-        </div>
 
-        <div class="leaderboard-header">
-            <h3 id="leaderboard-title">APT 影响力排行榜</h3>
-            <p class="subtitle" id="leaderboard-subtitle">Post TGE 项目 - 显示过去 7 天 的前 10 名影响者</p>
-        </div>
+            <div class="controls-section">
+                <div class="control-group">
+                    <label for="category-select">项目分类:</label>
+                    <select id="category-select" class="control-select">
+                        <option value="post_tge">Post TGE 项目</option>
+                        <option value="pre_tge">Pre TGE 项目</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="topic-select">项目/代币:</label>
+                    <select id="topic-select" class="control-select">
+                        <option value="APT">APT</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="duration-select">时间范围:</label>
+                    <select id="duration-select" class="control-select">
+                        <option value="7d">7 天</option>
+                        <option value="30d">30 天</option>
+                        <option value="3m">3 个月</option>
+                        <option value="6m">6 个月</option>
+                        <option value="12m">12 个月</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="top-n-select">显示数量:</label>
+                    <select id="top-n-select" class="control-select">
+                        <option value="10">Top 10</option>
+                        <option value="25">Top 25</option>
+                        <option value="50">Top 50</option>
+                        <option value="100">Top 100</option>
+                    </select>
+                </div>
+            </div>
 
-        <div id="loading" class="loading">
-            <div class="loading-spinner"></div>
-            <p>正在加载排行榜数据...</p>
-        </div>
-        <div id="users-grid" class="users-grid" style="display: none;"></div>
+            <div class="leaderboard-header">
+                <h3 id="leaderboard-title">APT 影响力排行榜</h3>
+                <p class="subtitle" id="leaderboard-subtitle">Post TGE 项目 - 显示过去 7 天 的前 10 名影响者</p>
+            </div>
+
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p>正在加载排行榜数据...</p>
+            </div>
+            <div id="users-grid" class="users-grid" style="display: none;"></div>
+        </section>
+
+        <!-- 个人搜索模块 -->
+        <section id="personal-search" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">🔍 个人影响力查询</h2>
+                <p class="section-description">输入推特ID查询您的影响力排名和YAPS分数变化</p>
+            </div>
+
+            <div class="search-container">
+                <div class="search-form">
+                    <div class="search-input-group">
+                        <label for="twitter-id-input">推特 ID:</label>
+                        <div class="input-with-button">
+                            <input type="text" 
+                                   id="twitter-id-input" 
+                                   class="search-input" 
+                                   placeholder="请输入推特用户名（不含@）">
+                            <button id="search-btn" class="search-button" onclick="searchUser()">
+                                <span>🔍 查询排名</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="data-controls">
+                        <button id="refresh-data-btn" class="refresh-button" onclick="forceRefreshData()">
+                            <span>🔄 更新全量数据</span>
+                        </button>
+                        <div id="data-status" class="data-status">
+                            <span id="data-info">数据状态：检查中...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="search-loading" class="search-loading" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <p>正在查询中...</p>
+                </div>
+
+                <div id="search-result" class="search-result" style="display: none;">
+                    <!-- 搜索结果将在这里显示 -->
+                </div>
+
+                <div id="search-error" class="search-error" style="display: none;">
+                    <p>查询出错，请稍后重试</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ICT 名单模块 -->
+        <section id="ict-list" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">📋 ICT 名单</h2>
+                <p class="section-description">Initial Community Token 项目列表和详细信息</p>
+            </div>
+
+            <div class="coming-soon">
+                <div class="coming-soon-icon">🚧</div>
+                <h3>功能开发中</h3>
+                <p>ICT 名单功能正在开发中，敬请期待...</p>
+            </div>
+        </section>
+
+        <!-- 奖励时间线模块 -->
+        <section id="rewards-timeline" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">⏰ 项目奖励时间线</h2>
+                <p class="section-description">各个项目的奖励机制和代币解锁时间安排</p>
+            </div>
+
+            <div class="coming-soon">
+                <div class="coming-soon-icon">🚧</div>
+                <h3>功能开发中</h3>
+                <p>奖励时间线功能正在开发中，敬请期待...</p>
+            </div>
+        </section>
+
+        <!-- 投资研报模块 -->
+        <section id="research-reports" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">📊 投资机构研报</h2>
+                <p class="section-description">收集各大投资机构的项目研究报告</p>
+            </div>
+
+            <div class="coming-soon">
+                <div class="coming-soon-icon">🚧</div>
+                <h3>功能开发中</h3>
+                <p>投资研报功能正在开发中，敬请期待...</p>
+            </div>
+        </section>
     </main>
 
     <footer class="app-footer">
@@ -708,6 +1073,75 @@
         // 初始化
         updateTopicSelect('post_tge');
         loadData();
+
+        // 导航功能
+        function switchSection(sectionId) {
+            // 隐藏所有内容区域
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 移除所有导航项的激活状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 显示指定的内容区域
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // 激活对应的导航项
+            const activeNavItem = document.querySelector(`[data-section="${sectionId}"]`);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
+        }
+
+        // 添加导航事件监听
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const sectionId = this.getAttribute('data-section');
+                switchSection(sectionId);
+            });
+        });
+
+        // 个人搜索功能
+        function searchUser() {
+            const twitterId = document.getElementById('twitter-id-input').value.trim();
+            if (!twitterId) {
+                alert('请输入推特用户名');
+                return;
+            }
+            
+            // 显示加载状态
+            document.getElementById('search-loading').style.display = 'block';
+            document.getElementById('search-result').style.display = 'none';
+            document.getElementById('search-error').style.display = 'none';
+            
+            // 模拟搜索（这里可以实现真实的搜索逻辑）
+            setTimeout(() => {
+                document.getElementById('search-loading').style.display = 'none';
+                document.getElementById('search-result').style.display = 'block';
+                document.getElementById('search-result').innerHTML = `
+                    <h3>搜索结果：@${twitterId}</h3>
+                    <p>功能开发中，敬请期待...</p>
+                `;
+            }, 2000);
+        }
+
+        // 强制刷新数据功能
+        function forceRefreshData() {
+            document.getElementById('data-info').textContent = '数据状态：正在更新...';
+            // 这里可以实现真实的数据刷新逻辑
+            setTimeout(() => {
+                document.getElementById('data-info').textContent = '数据状态：已更新';
+            }, 3000);
+        }
+
+        // 初始化数据状态
+        document.getElementById('data-info').textContent = '数据状态：正常';
     </script>
 </body>
 </html>

@@ -635,6 +635,357 @@
             }
         }
 
+        /* 空投估算器样式 */
+        .airdrop-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .calculator-section {
+            margin-bottom: 30px;
+        }
+
+        .calculator-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .calculator-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .calculator-icon {
+            font-size: 1.6rem;
+        }
+
+        .calculator-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .calculator-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .calculator-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 20px;
+            color: #666;
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        .result-display {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #e1e8ed;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .reward-tier {
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e1e8ed;
+            background: #f8f9fa;
+        }
+
+        .reward-tier.boosted {
+            border-color: #10ac84;
+            background: rgba(16, 172, 132, 0.05);
+        }
+
+        .reward-tier h4 {
+            margin: 0 0 12px 0;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .reward-tier.boosted h4 {
+            color: #10ac84;
+        }
+
+        .reward-tier .result-item {
+            background: white;
+            margin: 0;
+        }
+
+        .result-usd {
+            font-size: 0.9rem;
+            color: #666;
+            margin-left: 12px;
+        }
+
+        .total-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+
+        .total-card .calculator-title {
+            color: white;
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .total-display {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .total-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .total-label {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .total-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .total-scenarios {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .scenario {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .scenario-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .scenario-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .calculator-info {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f0f0f0;
+            margin-top: 20px;
+        }
+
+        .calculator-info h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #e1e8ed;
+        }
+
+        .info-item strong {
+            color: #667eea;
+            font-size: 0.9rem;
+        }
+
+        .info-item span {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .calculator-footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 30px;
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+        }
+
+        .calculator-footer p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            color: #856404;
+            line-height: 1.5;
+        }
+
+        .calculator-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .calculator-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .disclaimer {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .disclaimer p {
+            color: #e65100;
+            font-size: 0.9rem;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* 空投估算器移动端适配 */
+        @media (max-width: 768px) {
+            .airdrop-container {
+                padding: 0 15px;
+            }
+
+            .calculator-card {
+                padding: 20px;
+            }
+
+            .calculator-title {
+                font-size: 1.2rem;
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+
+            .calculator-input {
+                padding: 14px 16px;
+                font-size: 1rem;
+            }
+
+            .input-suffix {
+                right: 16px;
+                font-size: 0.9rem;
+            }
+
+            .result-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+
+            .total-scenarios {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scenario {
+                padding: 12px;
+            }
+
+            .reward-tier {
+                padding: 16px;
+            }
+        }
+
         .controls-section {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 16px;
@@ -1177,6 +1528,10 @@
                     <span class="nav-icon">🔍</span>
                     <span class="nav-text" data-i18n="nav-search">个人查询</span>
                 </button>
+                <button class="nav-item" data-section="airdrop-calculator">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-text" data-i18n="nav-airdrop">空投估算</span>
+                </button>
                 <button class="nav-item" data-section="ict-list">
                     <span class="nav-icon">📋</span>
                     <span class="nav-text" data-i18n="nav-ict">ICT 名单</span>
@@ -1346,6 +1701,166 @@
             </div>
         </section>
 
+        <!-- 空投估算模块 -->
+        <section id="airdrop-calculator" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="airdrop-title">💰 HUMA 空投估算器</h2>
+                <p class="section-description" data-i18n="airdrop-description">基于 Feathers 和 Kaito 排名估算您的 HUMA 代币空投数量</p>
+                <div class="disclaimer">
+                    <p data-i18n="airdrop-disclaimer">⚠️ 这只是基于社区假设的估算，非官方计算，与 Huma 团队无关</p>
+                </div>
+            </div>
+
+            <div class="airdrop-container">
+                <!-- Feathers 计算器 -->
+                <div class="calculator-section">
+                    <div class="calculator-card">
+                        <h3 class="calculator-title">
+                            <span class="calculator-icon">🪶</span>
+                            <span data-i18n="feathers-title">Feathers → $HUMA 分配</span>
+                        </h3>
+                        <div class="calculator-content">
+                            <div class="input-group">
+                                <label for="feathers-input" data-i18n="feathers-label">输入 Feathers 数量:</label>
+                                <div class="input-container">
+                                    <input type="number" 
+                                           id="feathers-input" 
+                                           class="calculator-input" 
+                                           placeholder="0" 
+                                           oninput="calculateFeathersReward()">
+                                    <span class="input-suffix">Feathers</span>
+                                </div>
+                            </div>
+                            <div class="result-display">
+                                <div class="result-item">
+                                    <span class="result-label" data-i18n="estimated-huma">预估 $HUMA 分配:</span>
+                                    <span class="result-value" id="feathers-huma-result">0 $HUMA</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label" data-i18n="estimated-usd">预估价值 (USD):</span>
+                                    <span class="result-value" id="feathers-usd-result">$0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kaito 排名计算器 -->
+                <div class="calculator-section">
+                    <div class="calculator-card">
+                        <h3 class="calculator-title">
+                            <span class="calculator-icon">🎯</span>
+                            <span data-i18n="kaito-title">Kaito 排名 → $HUMA 奖励</span>
+                        </h3>
+                        <div class="calculator-content">
+                            <div class="input-group">
+                                <label for="kaito-rank-input" data-i18n="kaito-rank-label">您的 Kaito 排名:</label>
+                                <div class="input-container">
+                                    <input type="number" 
+                                           id="kaito-rank-input" 
+                                           class="calculator-input" 
+                                           placeholder="50" 
+                                           min="1"
+                                           oninput="calculateKaitoReward()">
+                                    <span class="input-suffix">Rank</span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="mindshare-input" data-i18n="mindshare-label">Mindshare 百分比:</label>
+                                <div class="input-container">
+                                    <input type="number" 
+                                           id="mindshare-input" 
+                                           class="calculator-input" 
+                                           placeholder="0.5" 
+                                           step="0.01"
+                                           min="0"
+                                           max="100"
+                                           oninput="calculateKaitoReward()">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="result-display">
+                                <div class="reward-tier">
+                                    <h4 data-i18n="standard-airdrop">标准空投 (按 Mindshare)</h4>
+                                    <div class="result-item">
+                                        <span class="result-value" id="standard-huma-result">0 $HUMA</span>
+                                        <span class="result-usd" id="standard-usd-result">$0.00 USD</span>
+                                    </div>
+                                </div>
+                                <div class="reward-tier boosted">
+                                    <h4 data-i18n="boosted-airdrop">加成空投 (优质内容)</h4>
+                                    <div class="result-item">
+                                        <span class="result-value" id="boosted-huma-result">0 $HUMA</span>
+                                        <span class="result-usd" id="boosted-usd-result">$0.00 USD</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 总计显示 -->
+                <div class="calculator-section">
+                    <div class="calculator-card total-card">
+                        <h3 class="calculator-title">
+                            <span class="calculator-icon">💎</span>
+                            <span data-i18n="total-rewards">总计奖励</span>
+                        </h3>
+                        <div class="calculator-content">
+                            <div class="total-display">
+                                <div class="total-item">
+                                    <span class="total-label" data-i18n="total-huma">总 $HUMA 代币:</span>
+                                    <span class="total-value" id="total-huma-result">0 $HUMA</span>
+                                </div>
+                                <div class="total-scenarios">
+                                    <div class="scenario">
+                                        <span class="scenario-label" data-i18n="with-standard">标准奖励总价值:</span>
+                                        <span class="scenario-value" id="total-standard-usd">$0.00 USD</span>
+                                    </div>
+                                    <div class="scenario">
+                                        <span class="scenario-label" data-i18n="with-boosted">加成奖励总价值:</span>
+                                        <span class="scenario-value" id="total-boosted-usd">$0.00 USD</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 计算参数说明 -->
+                <div class="calculator-info">
+                    <h4 data-i18n="calculation-info">计算说明</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong data-i18n="feathers-formula">Feathers 公式:</strong>
+                            <span data-i18n="feathers-desc">0.06 × Feathers = 空投分配量</span>
+                        </div>
+                        <div class="info-item">
+                            <strong data-i18n="huma-price">$HUMA 价格:</strong>
+                            <span>$0.038 / $HUMA</span>
+                        </div>
+                        <div class="info-item">
+                            <strong data-i18n="boost-factor">加成倍数:</strong>
+                            <span data-i18n="boost-desc">优质内容可获得 1.1× 加成</span>
+                        </div>
+                        <div class="info-item">
+                            <strong data-i18n="max-feathers">最大 Feathers:</strong>
+                            <span data-i18n="max-feathers-desc">预计赛季结束时达到 35 亿</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 免责声明 -->
+                <div class="calculator-footer">
+                    <p data-i18n="calculator-footer-text">
+                        基于 <a href="https://x.com/KakashiAirdrops" target="_blank" rel="noopener noreferrer">@KakashiAirdrops</a> 
+                        的公开估算表。这是非官方估算，与任何团队均无关联。
+                    </p>
+                    <p data-i18n="assumptions-warning">⚠️ 仅基于假设的估算</p>
+                </div>
+            </div>
+        </section>
+
         <!-- ICT 名单模块 -->
         <section id="ict-list" class="content-section">
             <div class="section-header">
@@ -1413,6 +1928,7 @@
                 'nav-rewards': '奖励时间线',
                 'nav-research': '投资研报',
                 'nav-search': '个人查询',
+                'nav-airdrop': '空投估算',
                 
                 // 打赏区域
                 'donation-title': '💝 欢迎小额打赏',
@@ -1488,7 +2004,35 @@
                 'data-update-failed': '数据更新失败，请稍后重试',
                 'updating': '🔄 更新中...',
                 'kol-count': '%d 个KOL',
-                'record-count': '%d 条记录'
+                'record-count': '%d 条记录',
+                
+                // 空投估算
+                'airdrop-title': '💰 HUMA 空投估算器',
+                'airdrop-description': '基于 Feathers 和 Kaito 排名估算您的 HUMA 代币空投数量',
+                'airdrop-disclaimer': '⚠️ 这只是基于社区假设的估算，非官方计算，与 Huma 团队无关',
+                'feathers-title': 'Feathers → $HUMA 分配',
+                'feathers-label': '输入 Feathers 数量:',
+                'estimated-huma': '预估 $HUMA 分配:',
+                'estimated-usd': '预估价值 (USD):',
+                'kaito-title': 'Kaito 排名 → $HUMA 奖励',
+                'kaito-rank-label': '您的 Kaito 排名:',
+                'mindshare-label': 'Mindshare 百分比:',
+                'standard-airdrop': '标准空投 (按 Mindshare)',
+                'boosted-airdrop': '加成空投 (优质内容)',
+                'total-rewards': '总计奖励',
+                'total-huma': '总 $HUMA 代币:',
+                'with-standard': '标准奖励总价值:',
+                'with-boosted': '加成奖励总价值:',
+                'calculation-info': '计算说明',
+                'feathers-formula': 'Feathers 公式:',
+                'feathers-desc': '0.06 × Feathers = 空投分配量',
+                'huma-price': '$HUMA 价格:',
+                'boost-factor': '加成倍数:',
+                'boost-desc': '优质内容可获得 1.1× 加成',
+                'max-feathers': '最大 Feathers:',
+                'max-feathers-desc': '预计赛季结束时达到 35 亿',
+                'calculator-footer-text': '基于 @KakashiAirdrops 的公开估算表。这是非官方估算，与任何团队均无关联。',
+                'assumptions-warning': '⚠️ 仅基于假设的估算'
             },
             'en': {
                 // 页面标题和描述
@@ -1504,6 +2048,7 @@
                 'nav-rewards': 'Reward Timeline',
                 'nav-research': 'Research Reports',
                 'nav-search': 'Personal Search',
+                'nav-airdrop': 'Airdrop Calculator',
                 
                 // 打赏区域
                 'donation-title': '💝 Welcome Small Tips',
@@ -1579,7 +2124,35 @@
                 'data-update-failed': 'Data update failed, please try again later',
                 'updating': '🔄 Updating...',
                 'kol-count': '%d KOLs',
-                'record-count': '%d records'
+                'record-count': '%d records',
+                
+                // 空投估算
+                'airdrop-title': '💰 HUMA Airdrop Calculator',
+                'airdrop-description': 'Estimate your HUMA token airdrop based on Feathers and Kaito ranking',
+                'airdrop-disclaimer': '⚠️ This is just an estimation based on community assumptions, not official and not affiliated with Huma team',
+                'feathers-title': 'Feathers → $HUMA Allocation',
+                'feathers-label': 'Enter Feathers amount:',
+                'estimated-huma': 'Estimated $HUMA allocation:',
+                'estimated-usd': 'Estimated value (USD):',
+                'kaito-title': 'Kaito Ranking → $HUMA Rewards',
+                'kaito-rank-label': 'Your Kaito Rank:',
+                'mindshare-label': 'Mindshare percentage:',
+                'standard-airdrop': 'Standard Airdrop (by mindshare)',
+                'boosted-airdrop': 'Boosted Airdrop (quality content)',
+                'total-rewards': 'Total Rewards',
+                'total-huma': 'Total $HUMA tokens:',
+                'with-standard': 'Total value with standard:',
+                'with-boosted': 'Total value with boosted:',
+                'calculation-info': 'Calculation Info',
+                'feathers-formula': 'Feathers Formula:',
+                'feathers-desc': '0.06 × Feathers = airdrop allocation',
+                'huma-price': '$HUMA Price:',
+                'boost-factor': 'Boost Factor:',
+                'boost-desc': 'Quality content gets 1.1× boost',
+                'max-feathers': 'Max Feathers:',
+                'max-feathers-desc': 'Expected to reach 3.5B by season end',
+                'calculator-footer-text': 'Based on public estimates by @KakashiAirdrops. This is unofficial estimate and not affiliated with any team.',
+                'assumptions-warning': '⚠️ Based on assumptions only'
             }
         };
 
@@ -2747,6 +3320,54 @@
         // 回车键搜索
         // (已移动到页面初始化函数中)
 
+        // 空投计算器功能
+        function calculateFeathersReward() {
+            const feathers = parseFloat(document.getElementById('feathers-input').value) || 0;
+            const humaAllocation = feathers * 0.06; // 0.06 × Feathers 公式
+            const usdValue = humaAllocation * 0.038; // $HUMA 价格约 $0.038
+            
+            document.getElementById('huma-allocation').textContent = humaAllocation.toLocaleString('en-US', {maximumFractionDigits: 0});
+            document.getElementById('usd-value').textContent = '$' + usdValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            
+            calculateTotalRewards();
+        }
+
+        function calculateKaitoReward() {
+            const rank = parseInt(document.getElementById('kaito-rank').value) || 0;
+            const mindshare = parseFloat(document.getElementById('mindshare').value) || 0;
+            
+            // 基于排名和 mindshare 的基础奖励计算
+            let baseReward = 0;
+            if (rank > 0 && mindshare > 0) {
+                // 简化的奖励公式，基于 mindshare 百分比
+                baseReward = mindshare * 100; // 基础奖励
+            }
+            
+            const standardAirdrop = baseReward;
+            const boostedAirdrop = baseReward * 1.1; // 1.1x 提升
+            
+            document.getElementById('standard-amount').textContent = standardAirdrop.toLocaleString('en-US', {maximumFractionDigits: 0});
+            document.getElementById('boosted-amount').textContent = boostedAirdrop.toLocaleString('en-US', {maximumFractionDigits: 0});
+            
+            calculateTotalRewards();
+        }
+
+        function calculateTotalRewards() {
+            const humaFromFeathers = parseFloat(document.getElementById('huma-allocation').textContent.replace(/,/g, '')) || 0;
+            const standardFromKaito = parseFloat(document.getElementById('standard-amount').textContent.replace(/,/g, '')) || 0;
+            const boostedFromKaito = parseFloat(document.getElementById('boosted-amount').textContent.replace(/,/g, '')) || 0;
+            
+            const totalWithStandard = humaFromFeathers + standardFromKaito;
+            const totalWithBoosted = humaFromFeathers + boostedFromKaito;
+            
+            const usdValueStandard = totalWithStandard * 0.038;
+            const usdValueBoosted = totalWithBoosted * 0.038;
+            
+            document.getElementById('total-huma').textContent = humaFromFeathers.toLocaleString('en-US', {maximumFractionDigits: 0});
+            document.getElementById('total-standard-value').textContent = '$' + usdValueStandard.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('total-boosted-value').textContent = '$' + usdValueBoosted.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
             // 初始化语言
@@ -2798,6 +3419,23 @@
                         performSearch();
                     }
                 });
+            }
+            
+            // 空投计算器事件监听
+            const feathersInput = document.getElementById('feathers-input');
+            const kaitoRankInput = document.getElementById('kaito-rank');
+            const mindshareInput = document.getElementById('mindshare');
+            
+            if (feathersInput) {
+                feathersInput.addEventListener('input', calculateFeathersReward);
+            }
+            
+            if (kaitoRankInput) {
+                kaitoRankInput.addEventListener('input', calculateKaitoReward);
+            }
+            
+            if (mindshareInput) {
+                mindshareInput.addEventListener('input', calculateKaitoReward);
             }
         });
     </script>

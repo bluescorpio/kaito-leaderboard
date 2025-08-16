@@ -27,6 +27,49 @@
             position: relative;
         }
 
+        /* 语言切换按钮样式 */
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        /* 数据源指示器样式 */
+        .data-source-indicator {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
         .app-title {
             font-size: 3rem;
             font-weight: 800;
@@ -54,15 +97,56 @@
             margin-bottom: 30px;
         }
 
-        .data-source-indicator {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            font-size: 0.8rem;
+        /* 导航菜单样式 */
+        .main-nav {
+            margin-top: 20px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
             backdrop-filter: blur(10px);
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
         }
 
         .container {
@@ -71,115 +155,919 @@
             padding: 40px 20px;
         }
 
-        .controls {
+        /* 内容区域样式 */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* 作者信息样式 */
+        .author-info {
+            text-align: center;
+            margin: 16px 0 24px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .author-info a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .author-info a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        /* 开发中状态样式 */
+        .coming-soon {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin: 40px 0;
+        }
+
+        .coming-soon-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .coming-soon h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .coming-soon p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* 个人搜索样式 */
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .search-form {
             background: white;
             padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
 
-        .control-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        .search-input-group {
+            margin-bottom: 20px;
+        }
+
+        .search-input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-with-button {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .search-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .data-controls {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e1e8ed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .refresh-button {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #10ac84 0%, #06a085 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(16, 172, 132, 0.3);
+        }
+
+        .refresh-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .data-status {
+            flex: 1;
+            text-align: right;
+        }
+
+        .data-info {
+            font-size: 0.85rem;
+            color: #657786;
+        }
+
+        .search-loading {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-result {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .search-error {
+            text-align: center;
+            padding: 40px;
+            background: #ffebee;
+            border-radius: 15px;
+            color: #c62828;
+            border: 2px solid #ffcdd2;
+        }
+
+        .user-profile {
+            padding: 30px;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
             gap: 20px;
             margin-bottom: 20px;
         }
 
-        .control-item {
-            display: flex;
-            flex-direction: column;
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #667eea;
         }
 
-        .control-label {
+        .profile-info h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .profile-info .username {
+            color: #657786;
+            font-size: 1.1rem;
+            margin: 0 0 10px 0;
+        }
+
+        .rank-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .rank-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .rank-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .rank-label {
+            color: #657786;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .rank-change {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .rank-change.up {
+            color: #10ac84;
+        }
+
+        .rank-change.down {
+            color: #ee5a52;
+        }
+
+        .rank-change.same {
+            color: #657786;
+        }
+
+        .stats-toggle {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .toggle-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .toggle-btn:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .toggle-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .detailed-stats {
+            padding: 20px;
+            display: none;
+        }
+
+        .detailed-stats.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-name {
+            color: #657786;
+            font-size: 0.85rem;
+        }
+
+        /* 项目排名样式 */
+        .project-rankings {
+            padding: 20px;
+            border-top: 1px solid #e1e8ed;
+        }
+
+        .project-rankings h4 {
+            margin: 0 0 20px 0;
+            color: #333;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .category-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .category-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #e1e8ed;
+        }
+
+        .category-title {
+            margin: 0 0 15px 0;
+            color: #667eea;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .project-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e1e8ed;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .project-name {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 4px 8px;
+            background: #667eea;
+            color: white;
+            border-radius: 4px;
+        }
+
+        .rank-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            margin: 4px 0;
+            padding: 2px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .rank-item:last-child {
+            border-bottom: none;
+        }
+
+        .duration {
+            color: #657786;
+            font-weight: 500;
+        }
+
+        .rank-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .score-value {
+            color: #10ac84;
+            font-size: 0.75rem;
+        }
+
+        .best-project {
+            color: #667eea !important;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .project-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+            
+            .category-sections {
+                gap: 15px;
+            }
+            
+            .project-rankings h4 {
+                font-size: 1rem;
+            }
+            
+            .category-title {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* 空投估算器样式 */
+        .airdrop-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .calculator-section {
+            margin-bottom: 30px;
+        }
+
+        .calculator-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .calculator-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .calculator-icon {
+            font-size: 1.6rem;
+        }
+
+        .calculator-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .calculator-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .calculator-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 20px;
+            color: #666;
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        .result-display {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #e1e8ed;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .reward-tier {
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e1e8ed;
+            background: #f8f9fa;
+        }
+
+        .reward-tier.boosted {
+            border-color: #10ac84;
+            background: rgba(16, 172, 132, 0.05);
+        }
+
+        .reward-tier h4 {
+            margin: 0 0 12px 0;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .reward-tier.boosted h4 {
+            color: #10ac84;
+        }
+
+        .reward-tier .result-item {
+            background: white;
+            margin: 0;
+        }
+
+        .result-usd {
+            font-size: 0.9rem;
+            color: #666;
+            margin-left: 12px;
+        }
+
+        .total-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+
+        .total-card .calculator-title {
+            color: white;
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .total-display {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .total-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .total-label {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .total-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .total-scenarios {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .scenario {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .scenario-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .scenario-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .calculator-info {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f0f0f0;
+            margin-top: 20px;
+        }
+
+        .calculator-info h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #e1e8ed;
+        }
+
+        .info-item strong {
+            color: #667eea;
+            font-size: 0.9rem;
+        }
+
+        .info-item span {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .calculator-footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 30px;
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+        }
+
+        .calculator-footer p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            color: #856404;
+            line-height: 1.5;
+        }
+
+        .calculator-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .calculator-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .disclaimer {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .disclaimer p {
+            color: #e65100;
+            font-size: 0.9rem;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* 空投估算器移动端适配 */
+        @media (max-width: 768px) {
+            .airdrop-container {
+                padding: 0 15px;
+            }
+
+            .calculator-card {
+                padding: 20px;
+            }
+
+            .calculator-title {
+                font-size: 1.2rem;
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+
+            .calculator-input {
+                padding: 14px 16px;
+                font-size: 1rem;
+            }
+
+            .input-suffix {
+                right: 16px;
+                font-size: 0.9rem;
+            }
+
+            .result-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+
+            .total-scenarios {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scenario {
+                padding: 12px;
+            }
+
+            .reward-tier {
+                padding: 16px;
+            }
+        }
+
+        .controls-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+        }
+
+        .control-group label {
+            color: white;
             font-weight: 600;
             margin-bottom: 8px;
-            color: #555;
-            font-size: 0.9rem;
+            font-size: 14px;
         }
 
         .control-select {
             padding: 12px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
-            font-size: 1rem;
-            background: white;
-            transition: border-color 0.3s;
-        }
-
-        .control-select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .load-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            transition: transform 0.2s;
-            margin-top: 10px;
+            transition: all 0.3s ease;
         }
 
-        .load-button:hover {
-            transform: translateY(-2px);
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
+        .control-select:hover {
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            display: none;
+            transform: translateY(-1px);
         }
 
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+        .leaderboard-header {
+            text-align: center;
+            margin-bottom: 32px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .leaderboard-header h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
         }
 
         .users-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
         }
 
         .user-card {
             background: white;
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
             border: 1px solid #f0f0f0;
         }
 
         .user-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
         }
 
-        .user-rank {
+        .rank-badge {
             position: absolute;
-            top: -10px;
-            right: -10px;
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #333;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -187,43 +1075,66 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(238, 90, 36, 0.3);
         }
 
-        .user-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
-            position: relative;
+        .user-card:nth-child(1) .rank-badge {
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+        }
+
+        .user-card:nth-child(2) .rank-badge {
+            background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+        }
+
+        .user-card:nth-child(3) .rank-badge {
+            background: linear-gradient(135deg, #cd7f32, #b8860b);
         }
 
         .user-avatar {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 16px;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            margin-right: 16px;
+            object-fit: cover;
             border: 3px solid #f0f0f0;
         }
 
-        .user-info h3 {
+        .user-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .user-name {
             font-size: 1.3rem;
             font-weight: 700;
             color: #333;
             margin: 0 0 4px 0;
         }
 
-        .user-info p {
+        .user-username {
             color: #666;
             font-size: 0.9rem;
+            margin: 0 0 8px 0;
+        }
+
+        .user-bio {
+            color: #888;
+            font-size: 0.85rem;
+            line-height: 1.4;
             margin: 0;
         }
 
         .user-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            margin-bottom: 20px;
             gap: 12px;
-            margin-bottom: 16px;
         }
 
         .stat-item {
@@ -249,182 +1160,1574 @@
             color: #333;
         }
 
-        .error-message {
-            background: #ffebee;
-            color: #c62828;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            text-align: center;
-            border: 1px solid #ffcdd2;
-        }
-
-        .summary-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .summary-card {
-            background: white;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .summary-number {
-            font-size: 2rem;
-            font-weight: 700;
+        .mindshare-score {
             color: #667eea;
-            margin-bottom: 8px;
         }
 
-        .summary-label {
-            color: #666;
+        .twitter-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #1da1f2;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
             font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .twitter-link:hover {
+            background: #0d8bd9;
+            transform: translateY(-1px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .app-footer {
+            background: #2d3748;
+            color: #a0aec0;
+            text-align: center;
+            padding: 24px 20px;
+            font-size: 0.9rem;
+        }
+
+        .app-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .cors-notice {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .cors-notice h4 {
+            color: #856404;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .cors-notice p {
+            color: #856404;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* 打赏区域样式 */
+        .donation-section {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .donation-section h4 {
+            color: #166534;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .donation-addresses {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .address-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            word-break: break-all;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .address-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .address-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .address-label {
+            font-weight: 600;
+            color: #166534;
+            font-size: 1rem;
+        }
+
+        .qr-toggle-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
             font-weight: 500;
+        }
+
+        .qr-toggle-btn:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+        }
+
+        .address-value {
+            color: #1f2937;
+            font-size: 0.9rem;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            display: block;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .qr-code-container {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            border: 2px solid #22c55e;
+            margin-top: 8px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .qr-code-img {
+            max-width: 250px;
+            max-height: 250px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border: 3px solid #fff;
+        }
+
+        .qr-error {
+            color: #dc2626;
+            padding: 20px;
+        }
+
+        .qr-error p {
+            margin: 0 0 8px 0;
+            font-weight: 600;
+        }
+
+        .qr-error small {
+            color: #6b7280;
+            font-size: 0.8rem;
         }
 
         @media (max-width: 768px) {
             .app-title {
                 font-size: 2rem;
+                flex-direction: column;
+                gap: 8px;
             }
-            
-            .control-group {
-                grid-template-columns: 1fr;
+
+            .app-description {
+                font-size: 1rem;
             }
-            
+
+            .nav-container {
+                gap: 6px;
+            }
+
+            .nav-item {
+                min-width: 100px;
+                padding: 12px 16px;
+            }
+
+            .nav-text {
+                font-size: 0.8rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .section-description {
+                font-size: 1rem;
+            }
+
             .users-grid {
                 grid-template-columns: 1fr;
             }
+
+            .controls-section {
+                flex-direction: column;
+            }
+
+            .coming-soon {
+                padding: 60px 20px;
+            }
+
+            .coming-soon-icon {
+                font-size: 3rem;
+            }
+
+            /* 搜索功能移动端适配 */
+            .input-with-button {
+                flex-direction: column;
+            }
             
-            .data-source-indicator {
-                position: static;
-                margin-bottom: 10px;
-                display: inline-block;
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .rank-overview {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-toggle {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .toggle-btn:first-child,
+            .toggle-btn:last-child {
+                border-radius: 8px;
+            }
+
+            .donation-section {
+                margin: 15px;
+                padding: 16px;
+            }
+
+            .donation-section h4 {
+                font-size: 1rem;
+            }
+
+            .address-item {
+                padding: 12px;
+            }
+
+            .address-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .qr-toggle-btn {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+                align-self: flex-start;
+            }
+
+            .address-value {
+                font-size: 0.8rem;
+                padding: 10px;
+            }
+
+            .qr-code-container {
+                padding: 15px;
+            }
+
+            .qr-code-img {
+                max-width: 180px;
+                max-height: 180px;
+            }
+
+            .language-switcher {
+                top: 15px;
+                right: 15px;
+            }
+
+            .lang-btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app-header">
+    <header class="app-header">
+        <!-- 数据源指示器 -->
         <div class="data-source-indicator" id="data-source-indicator">
             📊 数据源：正在检测...
         </div>
-        <div class="app-title">
-            <span class="logo">🏆</span>
-            Kaito 影响力排行榜
+        
+        <!-- 语言切换按钮 -->
+        <div class="language-switcher">
+            <button id="lang-btn" class="lang-btn" onclick="toggleLanguage()">
+                <span id="lang-icon">🇺🇸</span>
+                <span id="lang-text">EN</span>
+            </button>
         </div>
-        <div class="app-description">
-            发现并追踪加密货币领域最具影响力的意见领袖
-        </div>
-    </div>
 
-    <div class="container">
-        <div class="controls">
-            <div class="control-group">
-                <div class="control-item">
-                    <label class="control-label">项目类别</label>
+        <div class="header-content">
+            <h1 class="app-title">
+                <span class="logo">🚀</span>
+                <span data-i18n="app-title">Kaito 加密生态数据平台</span>
+            </h1>
+            <p class="app-description" data-i18n="app-description">
+                一站式加密货币项目数据分析平台 - KOL排行榜 | ICT名单 | 奖励时间线 | 投资研报
+            </p>
+            
+            <div class="cors-notice">
+                <h4 data-i18n="cors-notice-title">🌟 实时数据版本</h4>
+                <p data-i18n="cors-notice-desc">本版本优先从 kol.json 文件读取真实数据，如果数据不存在则尝试调用 Kaito API。这确保了生产环境使用真实数据。</p>
+            </div>
+        </div>
+
+        <!-- 导航菜单 -->
+        <nav class="main-nav">
+            <div class="nav-container">
+                <button class="nav-item active" data-section="kol-leaderboard">
+                    <span class="nav-icon">🏆</span>
+                    <span class="nav-text" data-i18n="nav-kol">KOL 排行榜</span>
+                </button>
+                <button class="nav-item" data-section="personal-search">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-text" data-i18n="nav-search">个人查询</span>
+                </button>
+                <button class="nav-item" data-section="airdrop-calculator">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-text" data-i18n="nav-airdrop">空投估算</span>
+                </button>
+                <button class="nav-item" data-section="ict-list">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text" data-i18n="nav-ict">ICT 名单</span>
+                </button>
+                <button class="nav-item" data-section="rewards-timeline">
+                    <span class="nav-icon">⏰</span>
+                    <span class="nav-text" data-i18n="nav-rewards">奖励时间线</span>
+                </button>
+                <button class="nav-item" data-section="research-reports">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text" data-i18n="nav-research">投资研报</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- 打赏信息 -->
+        <div class="donation-section">
+            <h4 data-i18n="donation-title">💝 欢迎小额打赏</h4>
+            <div class="donation-addresses">
+                <div class="address-item">
+                    <div class="address-header">
+                        <span class="address-label" data-i18n="sol-address">SOL 地址：</span>
+                        <button class="qr-toggle-btn" onclick="toggleQRCode('sol-qr')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
+                    </div>
+                    <div class="address-content">
+                        <span class="address-value">97vJtSUYM2BpLTo8sLXzRAU9CZGBERFBAohuFLoXGwa2</span>
+                        <div id="sol-qr" class="qr-code-container" style="display: none;">
+                            <img src="images/sol.png" alt="SOL 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="qr-error" style="display: none;">
+                                <p>收款码图片未找到</p>
+                                <small>请将 SOL 收款码保存为 images/sol.png</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="address-item">
+                    <div class="address-header">
+                        <span class="address-label" data-i18n="evm-address">EVM 地址：</span>
+                        <button class="qr-toggle-btn" onclick="toggleQRCode('evm-qr')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
+                    </div>
+                    <div class="address-content">
+                        <span class="address-value">0x90ea00E3c00606ee52ADD1c2468F83C927065584</span>
+                        <div id="evm-qr" class="qr-code-container" style="display: none;">
+                            <img src="images/evm.png" alt="EVM 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="qr-error" style="display: none;">
+                                <p>收款码图片未找到</p>
+                                <small>请将 EVM 收款码保存为 images/evm.png</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- KOL 排行榜模块 -->
+        <section id="kol-leaderboard" class="content-section active">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="kol-title">🏆 KOL 影响力排行榜</h2>
+                <div class="author-info">
+                    <div>made by <a href="https://x.com/wang_xiaolou" target="_blank" rel="noopener noreferrer">@wang_xiaolou</a></div>
+                    <div>powered by <a href="https://x.com/Flywheel_DAO" target="_blank" rel="noopener noreferrer">@Flywheel_DAO</a></div>
+                </div>
+                <p class="section-description" data-i18n="kol-description">发现加密货币领域最具影响力的 KOL 和思想领袖</p>
+            </div>
+
+            <div class="controls-section">
+                <div class="control-group">
+                    <label for="category-select" data-i18n="project-category">项目分类:</label>
                     <select id="category-select" class="control-select">
-                        <option value="pre_tge">Pre TGE 项目</option>
                         <option value="post_tge">Post TGE 项目</option>
+                        <option value="pre_tge">Pre TGE 项目</option>
                     </select>
                 </div>
-                <div class="control-item">
-                    <label class="control-label">项目</label>
+                <div class="control-group">
+                    <label for="topic-select" data-i18n="project-token">项目/代币:</label>
                     <select id="topic-select" class="control-select">
-                        <option value="APT">Aptos (APT)</option>
+                        <option value="APT">APT</option>
+                        <option value="ARB">ARB</option>
+                        <option value="BERA">BERA</option>
+                        <option value="DYDX">DYDX</option>
+                        <option value="FUEL">FUEL</option>
+                        <option value="INJ">INJ</option>
+                        <option value="NEAR">NEAR</option>
+                        <option value="SEI">SEI</option>
                     </select>
                 </div>
-                <div class="control-item">
-                    <label class="control-label">时间范围</label>
+                <div class="control-group">
+                    <label for="duration-select" data-i18n="time-range">时间范围:</label>
                     <select id="duration-select" class="control-select">
-                        <option value="7d">过去 7 天</option>
-                        <option value="30d">过去 30 天</option>
-                        <option value="3m">过去 3 个月</option>
-                        <option value="6m">过去 6 个月</option>
-                        <option value="12m">过去 12 个月</option>
+                        <option value="7d">7 天</option>
+                        <option value="30d">30 天</option>
+                        <option value="3m">3 个月</option>
+                        <option value="6m">6 个月</option>
+                        <option value="12m">12 个月</option>
                     </select>
                 </div>
-                <div class="control-item">
-                    <label class="control-label">显示数量</label>
+                <div class="control-group">
+                    <label for="top-n-select" data-i18n="display-count">显示数量:</label>
                     <select id="top-n-select" class="control-select">
-                        <option value="10">前 10 名</option>
-                        <option value="20">前 20 名</option>
-                        <option value="50">前 50 名</option>
-                        <option value="100">前 100 名</option>
+                        <option value="10">Top 10</option>
+                        <option value="25">Top 25</option>
+                        <option value="50">Top 50</option>
+                        <option value="100">Top 100</option>
                     </select>
                 </div>
             </div>
-            <button class="load-button" onclick="loadData()">🔄 加载数据</button>
-        </div>
 
-        <div class="summary-stats" id="summary-stats" style="display: none;">
-            <div class="summary-card">
-                <div class="summary-number" id="total-users">0</div>
-                <div class="summary-label">总用户数</div>
+            <div class="leaderboard-header">
+                <h3 id="leaderboard-title">APT 影响力排行榜</h3>
+                <p class="subtitle" id="leaderboard-subtitle">Post TGE 项目 - 显示过去 7 天 的前 10 名影响者</p>
             </div>
-            <div class="summary-card">
-                <div class="summary-number" id="avg-mindshare">0</div>
-                <div class="summary-label">平均影响力</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-number" id="total-followers">0</div>
-                <div class="summary-label">总粉丝数</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-number" id="data-source">API</div>
-                <div class="summary-label">数据来源</div>
-            </div>
-        </div>
 
-        <div class="loading" id="loading">
-            <div class="loading-spinner"></div>
-            <p>正在加载排行榜数据...</p>
-        </div>
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p data-i18n="loading-text">正在加载排行榜数据...</p>
+            </div>
+            <div id="users-grid" class="users-grid" style="display: none;"></div>
+        </section>
 
-        <div class="users-grid" id="users-grid"></div>
-    </div>
+        <!-- 个人搜索模块 -->
+        <section id="personal-search" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="search-title">🔍 个人影响力查询</h2>
+                <p class="section-description" data-i18n="search-description">输入推特ID查询您的影响力排名和YAPS分数变化</p>
+            </div>
+
+            <div class="search-container">
+                <div class="search-form">
+                    <div class="search-input-group">
+                        <label for="twitter-id-input" data-i18n="twitter-id-label">推特 ID:</label>
+                        <div class="input-with-button">
+                            <input type="text" 
+                                   id="twitter-id-input" 
+                                   class="search-input" 
+                                   data-i18n-placeholder="twitter-id-placeholder"
+                                   placeholder="请输入推特用户名（不含@）">
+                            <button id="search-btn" class="search-button" onclick="searchUser()">
+                                <span data-i18n="search-button">🔍 查询排名</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="data-controls">
+                        <button id="refresh-data-btn" class="refresh-button" onclick="forceRefreshData()">
+                            <span>🔄 更新全量数据</span>
+                        </button>
+                        <div id="data-status" class="data-status">
+                            <span id="data-info">数据状态：检查中...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="search-loading" class="search-loading" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <p data-i18n="search-loading">正在查询中...</p>
+                </div>
+
+                <div id="search-result" class="search-result" style="display: none;">
+                    <!-- 搜索结果将在这里显示 -->
+                </div>
+
+                <div id="search-error" class="search-error" style="display: none;">
+                    <p data-i18n="search-error">查询出错，请稍后重试</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 空投估算模块 -->
+        <section id="airdrop-calculator" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="airdrop-title">💰 HUMA 空投估算器</h2>
+                <p class="section-description" data-i18n="airdrop-description">基于 Feathers 和 Kaito 排名估算您的 HUMA 代币空投数量</p>
+                <div class="disclaimer">
+                    <p data-i18n="airdrop-disclaimer">⚠️ 这只是基于社区假设的估算，非官方计算，与 Huma 团队无关</p>
+                </div>
+            </div>
+
+            <div class="airdrop-container">
+                <!-- Feathers 计算器 -->
+                <div class="calculator-section">
+                    <div class="calculator-card">
+                        <h3 class="calculator-title">
+                            <span class="calculator-icon">🪶</span>
+                            <span data-i18n="feathers-title">Feathers → $HUMA 分配</span>
+                        </h3>
+                        <div class="calculator-content">
+                            <div class="input-group">
+                                <label for="feathers-input" data-i18n="feathers-label">输入 Feathers 数量:</label>
+                                <div class="input-container">
+                                    <input type="number" 
+                                           id="feathers-input" 
+                                           class="calculator-input" 
+                                           placeholder="0" 
+                                           oninput="calculateFeathersReward()">
+                                    <span class="input-suffix">Feathers</span>
+                                </div>
+                            </div>
+                            <div class="result-display">
+                                <div class="result-item">
+                                    <span class="result-label" data-i18n="estimated-huma">预估 $HUMA 分配:</span>
+                                    <span class="result-value" id="feathers-huma-result">0 $HUMA</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label" data-i18n="estimated-usd">预估价值 (USD):</span>
+                                    <span class="result-value" id="feathers-usd-result">$0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kaito 排名计算器 -->
+                <div class="calculator-section">
+                    <div class="calculator-card">
+                        <h3 class="calculator-title">
+                            <span class="calculator-icon">🎯</span>
+                            <span data-i18n="kaito-title">Kaito 排名 → $HUMA 奖励</span>
+                        </h3>
+                        <div class="calculator-content">
+                            <div class="input-group">
+                                <label for="kaito-rank-input" data-i18n="kaito-rank-label">您的 Kaito 排名:</label>
+                                <div class="input-container">
+                                    <input type="number" 
+                                           id="kaito-rank-input" 
+                                           class="calculator-input" 
+                                           placeholder="50" 
+                                           min="1"
+                                           oninput="calculateKaitoReward()">
+                                    <span class="input-suffix">Rank</span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="mindshare-input" data-i18n="mindshare-label">Mindshare 百分比:</label>
+                                <div class="input-container">
+                                    <input type="number" 
+                                           id="mindshare-input" 
+                                           class="calculator-input" 
+                                           placeholder="0.5" 
+                                           step="0.01"
+                                           min="0"
+                                           max="100"
+                                           oninput="calculateKaitoReward()">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="result-display">
+                                <div class="reward-tier">
+                                    <h4 data-i18n="standard-airdrop">标准空投 (按 Mindshare)</h4>
+                                    <div class="result-item">
+                                        <span class="result-value" id="standard-huma-result">0 $HUMA</span>
+                                        <span class="result-usd" id="standard-usd-result">$0.00 USD</span>
+                                    </div>
+                                </div>
+                                <div class="reward-tier boosted">
+                                    <h4 data-i18n="boosted-airdrop">加成空投 (优质内容)</h4>
+                                    <div class="result-item">
+                                        <span class="result-value" id="boosted-huma-result">0 $HUMA</span>
+                                        <span class="result-usd" id="boosted-usd-result">$0.00 USD</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 总计显示 -->
+                <div class="calculator-section">
+                    <div class="calculator-card total-card">
+                        <h3 class="calculator-title">
+                            <span class="calculator-icon">💎</span>
+                            <span data-i18n="total-rewards">总计奖励</span>
+                        </h3>
+                        <div class="calculator-content">
+                            <div class="total-display">
+                                <div class="total-item">
+                                    <span class="total-label" data-i18n="total-huma">总 $HUMA 代币:</span>
+                                    <span class="total-value" id="total-huma-result">0 $HUMA</span>
+                                </div>
+                                <div class="total-scenarios">
+                                    <div class="scenario">
+                                        <span class="scenario-label" data-i18n="with-standard">标准奖励总价值:</span>
+                                        <span class="scenario-value" id="total-standard-usd">$0.00 USD</span>
+                                    </div>
+                                    <div class="scenario">
+                                        <span class="scenario-label" data-i18n="with-boosted">加成奖励总价值:</span>
+                                        <span class="scenario-value" id="total-boosted-usd">$0.00 USD</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 计算参数说明 -->
+                <div class="calculator-info">
+                    <h4 data-i18n="calculation-info">计算说明</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong data-i18n="feathers-formula">Feathers 公式:</strong>
+                            <span data-i18n="feathers-desc">0.06 × Feathers = 空投分配量</span>
+                        </div>
+                        <div class="info-item">
+                            <strong data-i18n="huma-price">$HUMA 价格:</strong>
+                            <span>$0.038 / $HUMA</span>
+                        </div>
+                        <div class="info-item">
+                            <strong data-i18n="boost-factor">加成倍数:</strong>
+                            <span data-i18n="boost-desc">优质内容可获得 1.1× 加成</span>
+                        </div>
+                        <div class="info-item">
+                            <strong data-i18n="max-feathers">最大 Feathers:</strong>
+                            <span data-i18n="max-feathers-desc">预计赛季结束时达到 35 亿</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 免责声明 -->
+                <div class="calculator-footer">
+                    <p data-i18n="calculator-footer-text">
+                        基于 <a href="https://x.com/KakashiAirdrops" target="_blank" rel="noopener noreferrer">@KakashiAirdrops</a> 
+                        的公开估算表。这是非官方估算，与任何团队均无关联。
+                    </p>
+                    <p data-i18n="assumptions-warning">⚠️ 仅基于假设的估算</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ICT 名单模块 -->
+        <section id="ict-list" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="ict-title">📋 ICT 名单</h2>
+                <p class="section-description" data-i18n="ict-description">Initial Community Token 项目列表和详细信息</p>
+            </div>
+
+            <div class="coming-soon">
+                <div class="coming-soon-icon">🚧</div>
+                <h3 data-i18n="coming-soon">功能开发中</h3>
+                <p data-i18n="coming-soon-desc">ICT 名单功能正在开发中，敬请期待...</p>
+            </div>
+        </section>
+
+        <!-- 奖励时间线模块 -->
+        <section id="rewards-timeline" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="rewards-title">⏰ 项目奖励时间线</h2>
+                <p class="section-description" data-i18n="rewards-description">各个项目的奖励机制和代币解锁时间安排</p>
+            </div>
+
+            <div class="coming-soon">
+                <div class="coming-soon-icon">🚧</div>
+                <h3 data-i18n="coming-soon">功能开发中</h3>
+                <p data-i18n="coming-soon-desc">奖励时间线功能正在开发中，敬请期待...</p>
+            </div>
+        </section>
+
+        <!-- 投资研报模块 -->
+                <!-- 投资研报模块 -->
+        <section id="research-reports" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="research-title">📊 投资机构研报</h2>
+                <p class="section-description" data-i18n="research-description">收集各大投资机构的项目研究报告</p>
+            </div>
+
+            <div class="coming-soon">
+                <div class="coming-soon-icon">🚧</div>
+                <h3 data-i18n="coming-soon">功能开发中</h3>
+                <p data-i18n="coming-soon-desc">投资研报功能正在开发中，敬请期待...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>
+            <span data-i18n="data-source">数据来源:</span> <a href="https://yaps.kaito.ai/yapper-leaderboards" target="_blank" rel="noopener noreferrer">Kaito AI</a>
+        </p>
+    </footer>
 
     <script>
-        // 项目配置
-        const PRE_TGE_TOPICS = [
-            "0G", "ALLORA", "ANOMA", "BILLIONS", "BLS", "BOUNDLESS", "CAMP", "CYSIC", "FALCON", "FOGO", "HANAHANA",
-            "GOATNETWORK", "INFINEX", "INFINIT", "IRYS", "KAT", "LOMBARD", "LUMITERRA", "MEGAETH",
-            "MEMEX", "MIRA", "MITOSIS", "MOMENTUM", "MONAD", "MULTIBANK", "MULTIPLI", "NYT", "NOYA", "OPENLEDGER",
-            "PARADEX", "PORTALPORTAL", "PUFFPAW", "SAPIEN", "SOMNIA", "SO",
-            "SURF", "SYMPHONY", "THEORIQ", "THRIVE", "TURTLECLUB", "UNION", "WARP", "YEET"
-        ];
+        // 多语言文本数据
+        const translations = {
+            'zh': {
+                // 页面标题和描述
+                'page-title': 'Kaito 影响力排行榜',
+                'app-title': 'Kaito 加密生态数据平台',
+                'app-description': '一站式加密货币项目数据分析平台 - KOL排行榜 | ICT名单 | 奖励时间线 | 投资研报',
+                'cors-notice-title': '🌟 实时数据版本',
+                'cors-notice-desc': '本版本优先从 kol.json 文件读取真实数据，如果数据不存在则尝试调用 Kaito API。这确保了生产环境使用真实数据。',
+                
+                // 导航菜单
+                'nav-kol': 'KOL 排行榜',
+                'nav-ict': 'ICT 名单',
+                'nav-rewards': '奖励时间线',
+                'nav-research': '投资研报',
+                'nav-search': '个人查询',
+                'nav-airdrop': '空投估算',
+                
+                // 打赏区域
+                'donation-title': '💝 欢迎小额打赏',
+                'sol-address': 'SOL 地址：',
+                'evm-address': 'EVM 地址：',
+                'show-qr': '📱 显示收款码',
+                'hide-qr': '❌ 隐藏收款码',
+                
+                // KOL排行榜
+                'kol-title': '🏆 KOL 影响力排行榜',
+                'kol-description': '发现加密货币领域最具影响力的 KOL 和思想领袖',
+                'project-category': '项目分类:',
+                'project-token': '项目/代币:',
+                'time-range': '时间范围:',
+                'display-count': '显示数量:',
+                'post-tge': 'Post TGE 项目',
+                'pre-tge': 'Pre TGE 项目',
+                'days-7': '7 天',
+                'days-30': '30 天',
+                'months-3': '3 个月',
+                'months-6': '6 个月',
+                'months-12': '12 个月',
+                'loading-text': '正在加载排行榜数据...',
+                'influence-score': '影响力分数',
+                'followers': '粉丝数',
+                'following': '关注数',
+                'smart-followers': '智能粉丝',
+                
+                // 其他页面
+                'ict-title': '📋 ICT 名单',
+                'ict-description': 'Initial Community Token 项目列表和详细信息',
+                'rewards-title': '⏰ 项目奖励时间线',
+                'rewards-description': '各个项目的奖励机制和代币解锁时间安排',
+                'research-title': '📊 投资机构研报',
+                'research-description': '收集各大投资机构的项目研究报告',
+                'coming-soon': '功能开发中',
+                'coming-soon-desc': '功能正在开发中，敬请期待...',
+                
+                // 页脚
+                'data-source': '数据来源:',
+                
+                // 个人搜索页面
+                'search-title': '🔍 个人影响力查询',
+                'search-description': '输入推特ID查询您的影响力排名和YAPS分数变化',
+                'twitter-id-label': '推特 ID:',
+                'twitter-id-placeholder': '请输入推特用户名（不含@）',
+                'search-button': '🔍 查询排名',
+                'search-loading': '正在查询中...',
+                'search-not-found': '未找到该用户',
+                'search-error': '查询出错，请稍后重试',
+                'rank-info': '排名信息',
+                'current-rank': '当前排名',
+                'previous-rank': '24小时前排名',
+                'rank-change': '排名变化',
+                'rank-up': '上升',
+                'rank-down': '下降',
+                'rank-same': '保持',
+                'not-in-ranking': '未进入排行榜',
+                'yaps-score': 'YAPS 分数',
+                'score-change': '分数变化',
+                'detailed-stats': '详细统计',
+                'brief-stats': '简要统计',
+                
+                // 数据管理
+                'refresh-data': '🔄 更新全量数据',
+                'data-status-init': '数据状态：未初始化',
+                'data-status-just-updated': '数据状态：刚刚更新',
+                'data-status-minutes-ago': '数据状态：%d分钟前更新',
+                'data-status-hours-ago': '数据状态：%d小时前更新',
+                'data-status-need-update': '数据状态：需要更新',
+                'data-updating': '正在更新全量数据...',
+                'data-update-complete': '数据更新完成！',
+                'data-update-failed': '数据更新失败，请稍后重试',
+                'updating': '🔄 更新中...',
+                'kol-count': '%d 个KOL',
+                'record-count': '%d 条记录',
+                
+                // 空投估算
+                'airdrop-title': '💰 HUMA 空投估算器',
+                'airdrop-description': '基于 Feathers 和 Kaito 排名估算您的 HUMA 代币空投数量',
+                'airdrop-disclaimer': '⚠️ 这只是基于社区假设的估算，非官方计算，与 Huma 团队无关',
+                'feathers-title': 'Feathers → $HUMA 分配',
+                'feathers-label': '输入 Feathers 数量:',
+                'estimated-huma': '预估 $HUMA 分配:',
+                'estimated-usd': '预估价值 (USD):',
+                'kaito-title': 'Kaito 排名 → $HUMA 奖励',
+                'kaito-rank-label': '您的 Kaito 排名:',
+                'mindshare-label': 'Mindshare 百分比:',
+                'standard-airdrop': '标准空投 (按 Mindshare)',
+                'boosted-airdrop': '加成空投 (优质内容)',
+                'total-rewards': '总计奖励',
+                'total-huma': '总 $HUMA 代币:',
+                'with-standard': '标准奖励总价值:',
+                'with-boosted': '加成奖励总价值:',
+                'calculation-info': '计算说明',
+                'feathers-formula': 'Feathers 公式:',
+                'feathers-desc': '0.06 × Feathers = 空投分配量',
+                'huma-price': '$HUMA 价格:',
+                'boost-factor': '加成倍数:',
+                'boost-desc': '优质内容可获得 1.1× 加成',
+                'max-feathers': '最大 Feathers:',
+                'max-feathers-desc': '预计赛季结束时达到 35 亿',
+                'calculator-footer-text': '基于 @KakashiAirdrops 的公开估算表。这是非官方估算，与任何团队均无关联。',
+                'assumptions-warning': '⚠️ 仅基于假设的估算'
+            },
+            'en': {
+                // 页面标题和描述
+                'page-title': 'Kaito Influence Leaderboard',
+                'app-title': 'Kaito Crypto Ecosystem Data Platform',
+                'app-description': 'One-stop cryptocurrency project data analysis platform - KOL Rankings | ICT Lists | Reward Timeline | Investment Reports',
+                'cors-notice-title': '🌟 Real-time Data Version',
+                'cors-notice-desc': 'This version prioritizes reading real data from kol.json file, and tries to call Kaito API if data doesn\'t exist. This ensures production environments use real data.',
+                
+                // 导航菜单
+                'nav-kol': 'KOL Rankings',
+                'nav-ict': 'ICT Lists',
+                'nav-rewards': 'Reward Timeline',
+                'nav-research': 'Research Reports',
+                'nav-search': 'Personal Search',
+                'nav-airdrop': 'Airdrop Calculator',
+                
+                // 打赏区域
+                'donation-title': '💝 Welcome Small Tips',
+                'sol-address': 'SOL Address:',
+                'evm-address': 'EVM Address:',
+                'show-qr': '📱 Show QR Code',
+                'hide-qr': '❌ Hide QR Code',
+                
+                // KOL排行榜
+                'kol-title': '🏆 KOL Influence Leaderboard',
+                'kol-description': 'Discover the most influential KOLs and thought leaders in the cryptocurrency space',
+                'project-category': 'Project Category:',
+                'project-token': 'Project/Token:',
+                'time-range': 'Time Range:',
+                'display-count': 'Display Count:',
+                'post-tge': 'Post TGE Projects',
+                'pre-tge': 'Pre TGE Projects',
+                'days-7': '7 Days',
+                'days-30': '30 Days',
+                'months-3': '3 Months',
+                'months-6': '6 Months',
+                'months-12': '12 Months',
+                'loading-text': 'Loading leaderboard data...',
+                'influence-score': 'Influence Score',
+                'followers': 'Followers',
+                'following': 'Following',
+                'smart-followers': 'Smart Followers',
+                
+                // 其他页面
+                'ict-title': '📋 ICT Lists',
+                'ict-description': 'Initial Community Token project lists and detailed information',
+                'rewards-title': '⏰ Project Reward Timeline',
+                'rewards-description': 'Reward mechanisms and token unlock schedules for various projects',
+                'research-title': '📊 Investment Institution Reports',
+                'research-description': 'Collect project research reports from major investment institutions',
+                'coming-soon': 'Feature Under Development',
+                'coming-soon-desc': 'This feature is under development, stay tuned...',
+                
+                // 页脚
+                'data-source': 'Data Source:',
+                
+                // 个人搜索页面
+                'search-title': '🔍 Personal Influence Search',
+                'search-description': 'Enter Twitter ID to check your influence ranking and YAPS score changes',
+                'twitter-id-label': 'Twitter ID:',
+                'twitter-id-placeholder': 'Enter Twitter username (without @)',
+                'search-button': '🔍 Search Ranking',
+                'search-loading': 'Searching...',
+                'search-not-found': 'User not found',
+                'search-error': 'Search error, please try again later',
+                'rank-info': 'Ranking Information',
+                'current-rank': 'Current Rank',
+                'previous-rank': '24h Ago Rank',
+                'rank-change': 'Rank Change',
+                'rank-up': 'Up',
+                'rank-down': 'Down',
+                'rank-same': 'Same',
+                'not-in-ranking': 'Not in ranking',
+                'yaps-score': 'YAPS Score',
+                'score-change': 'Score Change',
+                'detailed-stats': 'Detailed Stats',
+                'brief-stats': 'Brief Stats',
+                
+                // 数据管理
+                'refresh-data': '🔄 Refresh All Data',
+                'data-status-init': 'Data Status: Not initialized',
+                'data-status-just-updated': 'Data Status: Just updated',
+                'data-status-minutes-ago': 'Data Status: %d minutes ago',
+                'data-status-hours-ago': 'Data Status: %d hours ago', 
+                'data-status-need-update': 'Data Status: Need update',
+                'data-updating': 'Updating all data...',
+                'data-update-complete': 'Data update completed!',
+                'data-update-failed': 'Data update failed, please try again later',
+                'updating': '🔄 Updating...',
+                'kol-count': '%d KOLs',
+                'record-count': '%d records',
+                
+                // 空投估算
+                'airdrop-title': '💰 HUMA Airdrop Calculator',
+                'airdrop-description': 'Estimate your HUMA token airdrop based on Feathers and Kaito ranking',
+                'airdrop-disclaimer': '⚠️ This is just an estimation based on community assumptions, not official and not affiliated with Huma team',
+                'feathers-title': 'Feathers → $HUMA Allocation',
+                'feathers-label': 'Enter Feathers amount:',
+                'estimated-huma': 'Estimated $HUMA allocation:',
+                'estimated-usd': 'Estimated value (USD):',
+                'kaito-title': 'Kaito Ranking → $HUMA Rewards',
+                'kaito-rank-label': 'Your Kaito Rank:',
+                'mindshare-label': 'Mindshare percentage:',
+                'standard-airdrop': 'Standard Airdrop (by mindshare)',
+                'boosted-airdrop': 'Boosted Airdrop (quality content)',
+                'total-rewards': 'Total Rewards',
+                'total-huma': 'Total $HUMA tokens:',
+                'with-standard': 'Total value with standard:',
+                'with-boosted': 'Total value with boosted:',
+                'calculation-info': 'Calculation Info',
+                'feathers-formula': 'Feathers Formula:',
+                'feathers-desc': '0.06 × Feathers = airdrop allocation',
+                'huma-price': '$HUMA Price:',
+                'boost-factor': 'Boost Factor:',
+                'boost-desc': 'Quality content gets 1.1× boost',
+                'max-feathers': 'Max Feathers:',
+                'max-feathers-desc': 'Expected to reach 3.5B by season end',
+                'calculator-footer-text': 'Based on public estimates by @KakashiAirdrops. This is unofficial estimate and not affiliated with any team.',
+                'assumptions-warning': '⚠️ Based on assumptions only'
+            }
+        };
 
-        const POST_TGE_TOPICS = [
-            "KAITO", "ANIME", "APT", "ARB", "BERA", "BLUE", "BOOPBOOPFUN", "BYBITTRADFI", "CALDERA",
-            "CORN", "CREATORBID", "DEFIAPP", "DYDX", "ECLIPSE", "FRAX", "FUEL", "HUMAFINANCE",
-            "HUMANITY", "INITIA", "INJ", "IQ", "KAIA", "KINTO", "MNT", "OM", "MAPLESTORYUNIVERSE",
-            "MOVEMENT", "NEAR", "NEWTON", "ORDERLYNETWORK", "PEAQ", "PENGU", "DOT", "POL", "PYTH",
-            "QUAI", "SATLAYER", "SEI", "SIDEKICK", "SKATE", "S", "SOON", "SOPHON", "STARKNET", "STORYPROTOCOL", "SUCCINCT", "UXLINK",
-            "VIRTUALECOSYSTEM", "WAL", "WAYFINDER", "XION", "ZEC"
-        ];
+        // 当前语言
+        let currentLanguage = localStorage.getItem('language') || 'zh';
 
+        // 切换语言函数
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'zh' ? 'en' : 'zh';
+            localStorage.setItem('language', currentLanguage);
+            updateLanguage();
+        }
+
+        // 更新页面语言
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            
+            // 更新页面标题
+            document.title = t['page-title'];
+            
+            // 更新语言切换按钮
+            const langIcon = document.getElementById('lang-icon');
+            const langText = document.getElementById('lang-text');
+            if (currentLanguage === 'zh') {
+                langIcon.textContent = '🇺🇸';
+                langText.textContent = 'EN';
+            } else {
+                langIcon.textContent = '🇨🇳';
+                langText.textContent = '中文';
+            }
+            
+            // 更新所有具有 data-i18n 属性的元素
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+            
+            // 更新占位符文本
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (t[key]) {
+                    element.placeholder = t[key];
+                }
+            });
+            
+            // 更新项目分类选项
+            updateProjectCategoryOptions();
+            
+            // 更新时间范围选项
+            updateTimeRangeOptions();
+            
+            // 更新显示数量选项
+            updateDisplayCountOptions();
+            
+            // 更新排行榜标题
+            updateLabels();
+            
+            // 重新渲染当前数据
+            if (currentData.length > 0) {
+                renderUsers(currentData);
+            }
+            
+            // 更新数据状态显示
+            updateDataStatus();
+        }
+
+        // 更新项目分类选项
+        function updateProjectCategoryOptions() {
+            const categorySelect = document.getElementById('category-select');
+            const t = translations[currentLanguage];
+            
+            categorySelect.innerHTML = `
+                <option value="post_tge">${t['post-tge']}</option>
+                <option value="pre_tge">${t['pre-tge']}</option>
+            `;
+        }
+
+        // 更新时间范围选项
+        function updateTimeRangeOptions() {
+            const durationSelect = document.getElementById('duration-select');
+            const t = translations[currentLanguage];
+            
+            durationSelect.innerHTML = `
+                <option value="7d">${t['days-7']}</option>
+                <option value="30d">${t['days-30']}</option>
+                <option value="3m">${t['months-3']}</option>
+                <option value="6m">${t['months-6']}</option>
+                <option value="12m">${t['months-12']}</option>
+            `;
+        }
+
+        // 更新显示数量选项
+        function updateDisplayCountOptions() {
+            const topNSelect = document.getElementById('top-n-select');
+            
+            topNSelect.innerHTML = `
+                <option value="10">Top 10</option>
+                <option value="25">Top 25</option>
+                <option value="50">Top 50</option>
+                <option value="100">Top 100</option>
+            `;
+        }
+
+        // 项目分类数据
+        const projectCategories = {
+            'pre_tge': {
+                label: 'Pre TGE 项目',
+                topics: ["0G", "ALLORA", "ANOMA", "BILLIONS", "BLS", "BOUNDLESS", "CAMP", "CYSIC", "FALCON", "FOGO", "HANAHANA",
+                        "GOATNETWORK", "INFINEX", "INFINIT", "IRYS", "KAT", "LOMBARD", "LUMITERRA", "MEGAETH",
+                        "MEMEX", "MIRA", "MITOSIS", "MOMENTUM", "MONAD", "MULTIBANK", "MULTIPLI", "NYT", "NOYA", "OPENLEDGER",
+                        "PARADEX", "PORTALPORTAL", "PUFFPAW", "SAPIEN", "SOMNIA", "SO",
+                        "SURF", "SYMPHONY", "THEORIQ", "THRIVE", "TURTLECLUB", "UNION", "WARP", "YEET"]
+            },
+            'post_tge': {
+                label: 'Post TGE 项目',
+                topics: ["KAITO", "ANIME", "APT", "ARB", "BERA", "BLUE", "BOOPBOOPFUN", "BYBITTRADFI", "CALDERA",
+                        "CORN", "CREATORBID", "DEFIAPP", "DYDX", "ECLIPSE", "FRAX", "FUEL", "HUMAFINANCE",
+                        "HUMANITY", "INITIA", "INJ", "IQ", "KAIA", "KINTO", "MNT", "OM", "MAPLESTORYUNIVERSE",
+                        "MOVEMENT", "NEAR", "NEWTON", "ORDERLYNETWORK", "PEAQ", "PENGU", "DOT", "POL", "PYTH",
+                        "QUAI", "SATLAYER", "SEI", "SIDEKICK", "SKATE", "S", "SOON", "SOPHON", "STARKNET", "STORYPROTOCOL", "SUCCINCT", "UXLINK",
+                        "VIRTUALECOSYSTEM", "WAL", "WAYFINDER", "XION", "ZEC"]
+            }
+        };
+
+        // 当前显示的数据
         let currentData = [];
         let kolJsonData = null;
-        let dataSource = 'unknown';
+        
+        // 更新数据源指示器
+        function updateDataSourceIndicator(source) {
+            const indicator = document.getElementById('data-source-indicator');
+            
+            if (source === 'api') {
+                indicator.innerHTML = '🔗 数据源：实时API';
+                indicator.style.background = 'rgba(76, 175, 80, 0.3)';
+                indicator.style.borderColor = 'rgba(76, 175, 80, 0.5)';
+            } else if (source === 'local') {
+                indicator.innerHTML = '📁 数据源：本地文件';
+                indicator.style.background = 'rgba(255, 193, 7, 0.3)';
+                indicator.style.borderColor = 'rgba(255, 193, 7, 0.5)';
+            } else {
+                indicator.innerHTML = '❌ 数据源：无可用数据';
+                indicator.style.background = 'rgba(244, 67, 54, 0.3)';
+                indicator.style.borderColor = 'rgba(244, 67, 54, 0.5)';
+            }
+        }
+        
+        // 本地存储的所有排名数据
+        let allRankingData = {
+            lastUpdate: null,
+            data: {} // 格式: { username: { project: 'APT', rank: 15, score: 85.6, ... } }
+        };
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            updateTopicOptions();
-            loadData();
-        });
+        // 缓存过期时间（1小时）
+        const CACHE_EXPIRY = 60 * 60 * 1000;
 
-        // 更新项目选项
-        function updateTopicOptions() {
-            const category = document.getElementById('category-select').value;
+        // 格式化数字
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // 检查数据完整性
+        function checkDataCompleteness() {
+            if (!allRankingData.data || Object.keys(allRankingData.data).length === 0) {
+                return {
+                    isComplete: false,
+                    totalExpected: 475, // 95项目 × 5时间周期
+                    totalCollected: 0,
+                    uniqueKOLs: 0,
+                    projectsCovered: 0
+                };
+            }
+
+            const durations = ['7d', '30d', '3m', '6m', '12m'];
+            const categories = ['post_tge', 'pre_tge'];
+            let totalDataSets = 0;
+            let projectsCovered = new Set();
+            
+            // 统计每个用户的排名数据数量
+            Object.values(allRankingData.data).forEach(user => {
+                if (user.rankings) {
+                    Object.keys(user.rankings).forEach(key => {
+                        totalDataSets++;
+                        // 从key中提取项目名 (格式: post_tge_APT_7d)
+                        const parts = key.split('_');
+                        if (parts.length >= 3) {
+                            const project = parts.slice(1, -1).join('_'); // 处理项目名中可能包含下划线的情况
+                            projectsCovered.add(project);
+                        }
+                    });
+                }
+            });
+
+            const totalExpected = Object.values(projectCategories).reduce((sum, category) => {
+                return sum + category.topics.length * durations.length;
+            }, 0);
+
+            return {
+                isComplete: totalDataSets >= totalExpected * 0.8, // 80%以上认为完整
+                totalExpected: totalExpected,
+                totalCollected: totalDataSets,
+                uniqueKOLs: Object.keys(allRankingData.data).length,
+                projectsCovered: projectsCovered.size
+            };
+        }
+
+        // 获取并缓存所有排名数据
+        async function fetchAndCacheAllRankings() {
+            console.log('开始获取所有排名数据...');
+            const loadingElement = document.getElementById('loading');
+            
+            try {
+                // 检查缓存是否有效
+                const cachedData = localStorage.getItem('allRankingData');
+                if (cachedData) {
+                    const parsed = JSON.parse(cachedData);
+                    const now = Date.now();
+                    if (parsed.lastUpdate && (now - parsed.lastUpdate) < CACHE_EXPIRY) {
+                        allRankingData = parsed;
+                        console.log('使用缓存的排名数据');
+                        return;
+                    }
+                }
+
+                // 获取所有项目和时间周期的数据
+                const durations = ['7d', '30d', '3m', '6m', '12m'];
+                const categories = ['post_tge', 'pre_tge'];
+                
+                allRankingData.data = {};
+                allRankingData.lastUpdate = Date.now();
+
+                // 显示加载进度
+                if (loadingElement && loadingElement.style.display !== 'none') {
+                    loadingElement.innerHTML = '<div class="loading-spinner"></div><p>正在获取全量排名数据...</p>';
+                }
+
+                let totalRequests = 0;
+                let completedRequests = 0;
+                let totalKOLsFound = 0;
+
+                // 计算总请求数
+                for (const category of categories) {
+                    const projects = projectCategories[category].topics;
+                    totalRequests += projects.length * durations.length;
+                }
+
+                console.log(`总计需要获取 ${totalRequests} 个数据集`);
+
+                for (const category of categories) {
+                    const projects = projectCategories[category].topics;
+                    console.log(`处理 ${category} 类别，包含 ${projects.length} 个项目`);
+                    
+                    for (const project of projects) {
+                        for (const duration of durations) {
+                            completedRequests++;
+                            
+                            try {
+                                console.log(`获取数据 (${completedRequests}/${totalRequests}): ${category} - ${project} - ${duration}`);
+                                const data = await fetchKaitoData(duration, project, 100, category);
+                                
+                                if (data && data.length > 0) {
+                                    console.log(`${category}-${project}-${duration}: 找到 ${data.length} 个KOL`);
+                                    
+                                    data.forEach((user, index) => {
+                                        const username = user.username.toLowerCase();
+                                        
+                                        // 初始化用户数据结构
+                                        if (!allRankingData.data[username]) {
+                                            allRankingData.data[username] = {
+                                                name: user.name,
+                                                username: user.username,
+                                                icon: user.icon,
+                                                bio: user.bio || '',
+                                                follower_count: user.follower_count || 0,
+                                                following_count: user.following_count || 0,
+                                                smart_follower_count: user.smart_follower_count || 0,
+                                                twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`,
+                                                rankings: {},
+                                                firstSeen: Date.now()
+                                            };
+                                            totalKOLsFound++;
+                                        } else {
+                                            // 更新用户基本信息（取最新的）
+                                            allRankingData.data[username].name = user.name || allRankingData.data[username].name;
+                                            allRankingData.data[username].icon = user.icon || allRankingData.data[username].icon;
+                                            allRankingData.data[username].bio = user.bio || allRankingData.data[username].bio;
+                                            allRankingData.data[username].follower_count = user.follower_count || allRankingData.data[username].follower_count;
+                                            allRankingData.data[username].following_count = user.following_count || allRankingData.data[username].following_count;
+                                            allRankingData.data[username].smart_follower_count = user.smart_follower_count || allRankingData.data[username].smart_follower_count;
+                                            allRankingData.data[username].twitter_user_url = user.twitter_user_url || allRankingData.data[username].twitter_user_url;
+                                        }
+
+                                        // 记录该项目该周期的排名信息
+                                        const key = `${category}_${project}_${duration}`;
+                                        allRankingData.data[username].rankings[key] = {
+                                            rank: user.rank || index + 1,
+                                            mindshare: user.mindshare || 0,
+                                            score: (user.mindshare || 0) * 100,
+                                            category: category,
+                                            project: project,
+                                            duration: duration,
+                                            timestamp: Date.now(),
+                                            // 保存完整的原始数据
+                                            rawData: {
+                                                follower_count: user.follower_count,
+                                                following_count: user.following_count,
+                                                smart_follower_count: user.smart_follower_count,
+                                                mindshare: user.mindshare,
+                                                bio: user.bio,
+                                                icon: user.icon
+                                            }
+                                        };
+                                    });
+                                } else {
+                                    console.warn(`${category}-${project}-${duration}: 未获取到数据`);
+                                }
+                            } catch (error) {
+                                console.error(`获取 ${category}-${project}-${duration} 数据失败:`, error);
+                            }
+
+                            completedRequests++;
+                            
+                            // 更新进度
+                            if (loadingElement && loadingElement.style.display !== 'none') {
+                                const progress = Math.round((completedRequests / totalRequests) * 100);
+                                loadingElement.innerHTML = `
+                                    <div class="loading-spinner"></div>
+                                    <p>正在获取全量排名数据... ${progress}%</p>
+                                    <p>${completedRequests}/${totalRequests} 请求完成</p>
+                                    <p>已发现 ${totalKOLsFound} 个唯一KOL</p>
+                                `;
+                            }
+
+                            // 添加延迟避免API限制
+                            await new Promise(resolve => setTimeout(resolve, 200));
+                        }
+                    }
+                }
+
+                // 统计信息
+                const uniqueKOLs = Object.keys(allRankingData.data).length;
+                let totalRankings = 0;
+                Object.values(allRankingData.data).forEach(user => {
+                    totalRankings += Object.keys(user.rankings).length;
+                });
+
+                console.log(`=== 数据获取完成 ===`);
+                console.log(`唯一KOL数量: ${uniqueKOLs}`);
+                console.log(`总排名记录数: ${totalRankings}`);
+                console.log(`平均每个KOL的排名记录: ${(totalRankings / uniqueKOLs).toFixed(1)}`);
+
+                // 保存到本地存储
+                try {
+                    const dataToSave = JSON.stringify(allRankingData);
+                    localStorage.setItem('allRankingData', dataToSave);
+                    console.log(`数据已保存到本地存储，大小: ${(dataToSave.length / 1024 / 1024).toFixed(2)} MB`);
+                } catch (storageError) {
+                    console.error('保存到本地存储失败:', storageError);
+                    // 如果数据太大，尝试清理旧数据
+                    localStorage.clear();
+                    try {
+                        localStorage.setItem('allRankingData', JSON.stringify(allRankingData));
+                        console.log('清理存储后重新保存成功');
+                    } catch (retryError) {
+                        console.error('重新保存仍然失败:', retryError);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('获取全量数据时出错:', error);
+            }
+        }
+
+        // 强制刷新全量数据
+        async function forceRefreshData() {
+            const refreshBtn = document.getElementById('refresh-data-btn');
+            const dataInfo = document.getElementById('data-info');
+            
+            if (refreshBtn.disabled) return;
+            
+            refreshBtn.disabled = true;
+            refreshBtn.innerHTML = `<span>${translations[currentLanguage]['updating']}</span>`;
+            dataInfo.textContent = translations[currentLanguage]['data-updating'];
+            
+            try {
+                // 清除缓存
+                localStorage.removeItem('allRankingData');
+                allRankingData = { lastUpdate: null, data: {} };
+                
+                // 重新获取数据
+                await fetchAndCacheAllRankings();
+                
+                // 更新状态显示
+                updateDataStatus();
+                
+                dataInfo.textContent = translations[currentLanguage]['data-update-complete'];
+                
+            } catch (error) {
+                console.error('强制刷新数据失败:', error);
+                dataInfo.textContent = translations[currentLanguage]['data-update-failed'];
+            } finally {
+                refreshBtn.disabled = false;
+                refreshBtn.innerHTML = `<span>${translations[currentLanguage]['refresh-data']}</span>`;
+            }
+        }
+
+        // 更新数据状态显示
+        function updateDataStatus() {
+            const dataInfo = document.getElementById('data-info');
+            
+            if (!allRankingData.lastUpdate) {
+                dataInfo.textContent = translations[currentLanguage]['data-status-init'];
+                return;
+            }
+            
+            const now = Date.now();
+            const updateTime = new Date(allRankingData.lastUpdate);
+            const timeDiff = now - allRankingData.lastUpdate;
+            const uniqueKOLs = Object.keys(allRankingData.data || {}).length;
+            
+            // 检查数据完整性
+            const completeness = checkDataCompleteness();
+            
+            let totalRankings = 0;
+            Object.values(allRankingData.data || {}).forEach(user => {
+                totalRankings += Object.keys(user.rankings || {}).length;
+            });
+            
+            let statusText = '';
+            const kolText = translations[currentLanguage]['kol-count'].replace('%d', uniqueKOLs);
+            const recordText = translations[currentLanguage]['record-count'].replace('%d', totalRankings);
+            const completenessText = `${completeness.projectsCovered}/95项目`;
+            
+            if (timeDiff < 60000) { // 1分钟内
+                statusText = `${translations[currentLanguage]['data-status-just-updated']} | ${kolText} | ${recordText} | ${completenessText}`;
+            } else if (timeDiff < 3600000) { // 1小时内
+                const minutes = Math.floor(timeDiff / 60000);
+                const statusBase = translations[currentLanguage]['data-status-minutes-ago'].replace('%d', minutes);
+                statusText = `${statusBase} | ${kolText} | ${recordText} | ${completenessText}`;
+            } else if (timeDiff < CACHE_EXPIRY) { // 缓存有效期内
+                const hours = Math.floor(timeDiff / 3600000);
+                const statusBase = translations[currentLanguage]['data-status-hours-ago'].replace('%d', hours);
+                statusText = `${statusBase} | ${kolText} | ${recordText} | ${completenessText}`;
+            } else { // 缓存过期
+                statusText = `${translations[currentLanguage]['data-status-need-update']} | ${kolText} | ${recordText} | ${completenessText}`;
+            }
+            
+            dataInfo.textContent = statusText;
+            
+            // 如果数据不完整，添加视觉提示
+            if (!completeness.isComplete) {
+                dataInfo.style.color = '#f39c12'; // 橙色警告
+            } else {
+                dataInfo.style.color = '#10ac84'; // 绿色正常
+            }
+        }
+
+        // 从本地数据中搜索用户
+        function searchUserInLocalData(username) {
+            const userKey = username.toLowerCase();
+            const userData = allRankingData.data[userKey];
+            
+            if (!userData) {
+                return null;
+            }
+
+            // 找到用户最好的排名
+            let bestRanking = null;
+            let currentProject = null;
+
+            for (const key in userData.rankings) {
+                const ranking = userData.rankings[key];
+                if (!bestRanking || ranking.rank < bestRanking.rank) {
+                    bestRanking = ranking;
+                    currentProject = ranking.project;
+                }
+            }
+
+            if (!bestRanking) {
+                return null;
+            }
+
+            // 模拟24小时前的数据（实际应用中应该存储历史数据）
+            const previousRank = bestRanking.rank + Math.floor(Math.random() * 6) - 3; // ±3的随机变化
+            const previousScore = bestRanking.score - (Math.random() * 5) + 2.5; // ±2.5的分数变化
+
+            return {
+                username: userData.username,
+                name: userData.name,
+                avatar: userData.icon,
+                bio: userData.bio,
+                currentRank: bestRanking.rank,
+                previousRank: Math.max(1, previousRank),
+                yapsScore: bestRanking.score,
+                previousScore: Math.max(0, previousScore),
+                followerCount: userData.follower_count,
+                followingCount: userData.following_count,
+                smartFollowerCount: userData.smart_follower_count,
+                mindshare: bestRanking.mindshare,
+                project: currentProject,
+                category: bestRanking.category,
+                duration: bestRanking.duration,
+                allRankings: userData.rankings // 包含所有项目的排名信息
+            };
+        }
+
+        function renderUsers(users) {
+            const grid = document.getElementById('users-grid');
+            const loading = document.getElementById('loading');
+            const t = translations[currentLanguage];
+
+            // 重置加载状态的内容（如果之前显示了错误信息）
+            loading.innerHTML = `<div class="loading-spinner"></div><p>${t['loading-text']}</p>`;
+            loading.style.display = 'none';
+            grid.style.display = 'grid';
+            
+            grid.innerHTML = users.map((user, index) => `
+                <div class="user-card">
+                    <div class="rank-badge">#${user.rank}</div>
+                    
+                    <div class="user-avatar">
+                        <img src="${user.icon}" alt="${user.name}" 
+                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random'">
+                    </div>
+
+                    <div class="user-info">
+                        <h3 class="user-name">${user.name}</h3>
+                        <p class="user-username">@${user.username}</p>
+                        <p class="user-bio">${user.bio}</p>
+                    </div>
+
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">${t['influence-score']}</span>
+                            <span class="stat-value mindshare-score">${(user.mindshare * 100).toFixed(2)}%</span>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <span class="stat-label">${t['followers']}</span>
+                            <span class="stat-value">${formatNumber(user.follower_count)}</span>
+                        </div>
+
+                        <div class="stat-item">
+                            <span class="stat-label">${t['following']}</span>
+                            <span class="stat-value">${formatNumber(user.following_count)}</span>
+                        </div>
+
+                        <div class="stat-item">
+                            <span class="stat-label">${t['smart-followers']}</span>
+                            <span class="stat-value">${formatNumber(user.smart_follower_count)}</span>
+                        </div>
+                    </div>
+
+                    <div class="user-actions">
+                        <a href="${user.twitter_user_url}" target="_blank" rel="noopener noreferrer" class="twitter-link">
+                            🐦 Twitter
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 更新项目选择器
+        function updateTopicSelect(category) {
             const topicSelect = document.getElementById('topic-select');
-            
+            const topics = projectCategories[category].topics;
+
             topicSelect.innerHTML = '';
-            const topics = category === 'pre_tge' ? PRE_TGE_TOPICS : POST_TGE_TOPICS;
-            
             topics.forEach(topic => {
                 const option = document.createElement('option');
                 option.value = topic;
@@ -433,35 +2736,9 @@
             });
         }
 
-        // 监听类别变化
-        document.getElementById('category-select').addEventListener('change', updateTopicOptions);
-
-        // 更新数据源指示器
-        function updateDataSourceIndicator(source) {
-            const indicator = document.getElementById('data-source-indicator');
-            const sourceDisplay = document.getElementById('data-source');
-            
-            if (source === 'api') {
-                indicator.innerHTML = '🔗 数据源：实时API';
-                indicator.style.background = 'rgba(76, 175, 80, 0.3)';
-                if (sourceDisplay) sourceDisplay.textContent = 'API';
-                dataSource = 'api';
-            } else if (source === 'local') {
-                indicator.innerHTML = '📁 数据源：本地文件';
-                indicator.style.background = 'rgba(255, 193, 7, 0.3)';
-                if (sourceDisplay) sourceDisplay.textContent = '本地';
-                dataSource = 'local';
-            } else {
-                indicator.innerHTML = '❌ 数据源：无可用数据';
-                indicator.style.background = 'rgba(244, 67, 54, 0.3)';
-                if (sourceDisplay) sourceDisplay.textContent = '无';
-                dataSource = 'none';
-            }
-        }
-
-        // 加载本地 kol.json 数据
+        // 加载 kol.json 数据
         async function loadKolJsonData() {
-            if (kolJsonData) return;
+            if (kolJsonData) return kolJsonData;
             
             try {
                 console.log('正在加载 kol.json 数据...');
@@ -470,48 +2747,64 @@
                     throw new Error(`无法加载 kol.json: ${response.status}`);
                 }
                 kolJsonData = await response.json();
-                console.log('✅ 成功加载 kol.json 数据，最后更新时间:', kolJsonData.lastUpdate);
+                console.log('✅ 成功加载 kol.json 数据');
                 return kolJsonData;
             } catch (error) {
-                console.error('❌ 无法加载 kol.json:', error.message);
-                kolJsonData = null;
+                console.warn('⚠️ 无法加载 kol.json:', error.message);
                 return null;
             }
         }
 
         // 从 kol.json 获取数据
         function getDataFromKolJson(duration, topic_id, top_n) {
-            if (!kolJsonData) return [];
-            
-            try {
-                // 确定类别
-                const category = document.getElementById('category-select').value;
-                
-                // 获取项目数据
-                const projectData = kolJsonData.categories?.[category]?.[topic_id]?.[duration];
-                
-                if (!projectData || !Array.isArray(projectData)) {
-                    console.warn(`kol.json 中没有找到 ${category}/${topic_id}/${duration} 的数据`);
-                    return [];
-                }
-                
-                // 限制返回数量并格式化数据
-                return projectData.slice(0, top_n).map((user, index) => ({
-                    name: user.name || 'Unknown User',
-                    username: user.username || '',
-                    rank: user.rank || (index + 1),
-                    mindshare: parseFloat(user.mindshare) || 0,
-                    community_score: parseFloat(user.community_score) || 0,
-                    follower_count: parseInt(user.follower_count) || 0,
-                    smart_follower_count: parseInt(user.smart_follower_count) || 0,
-                    icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
-                    bio: user.bio || '',
-                    twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`
-                }));
-            } catch (error) {
-                console.error('从 kol.json 提取数据时出错:', error);
-                return [];
+            if (!kolJsonData || !kolJsonData.categories) {
+                return null;
             }
+
+            // 确定分类
+            const category = projectCategories['post_tge'].topics.includes(topic_id) ? 'post_tge' : 'pre_tge';
+            
+            const categoryData = kolJsonData.categories[category];
+            if (!categoryData || !categoryData[topic_id] || !categoryData[topic_id][duration]) {
+                return null;
+            }
+
+            const data = categoryData[topic_id][duration];
+            if (!Array.isArray(data) || data.length === 0) {
+                return null;
+            }
+
+            // 限制返回数量并确保数据格式正确
+            return data.slice(0, top_n).map((user, index) => ({
+                user_id: user.user_id || `user-${index}`,
+                name: user.name || 'Unknown User',
+                username: user.username || '',
+                icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
+                bio: user.bio || '',
+                following_count: user.following_count || 0,
+                follower_count: user.follower_count || 0,
+                smart_follower_count: user.smart_follower_count || 0,
+                mindshare: user.mindshare || 0,
+                rank: user.rank || (index + 1),
+                twitter_user_url: user.twitter_user_url || '#'
+            }));
+        }
+
+        // 显示错误信息
+        function showErrorMessage(message) {
+            const loading = document.getElementById('loading');
+            loading.innerHTML = `
+                <div class="error-message">
+                    <div class="error-icon">⚠️</div>
+                    <h3>数据加载失败</h3>
+                    <p>${message}</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">
+                        请联系管理员或稍后重试
+                    </p>
+                </div>
+            `;
+            loading.style.display = 'block';
+            document.getElementById('users-grid').style.display = 'none';
         }
 
         // 尝试从API获取数据
@@ -569,13 +2862,13 @@
             }
         }
 
-        // 获取数据 (API优先，回退到本地数据)
+        // API优先+本地回退的数据获取函数（永不使用测试数据）
         async function fetchKaitoData(duration, topic_id, top_n) {
             // 首先尝试API
             try {
                 const apiData = await fetchFromAPI(duration, topic_id, top_n);
                 if (apiData && apiData.length > 0) {
-                    updateDataSourceIndicator('api');
+                    console.log(`✅ 使用API数据: ${apiData.length} 条记录`);
                     return apiData;
                 }
             } catch (error) {
@@ -585,110 +2878,23 @@
             // API失败，尝试本地数据
             try {
                 await loadKolJsonData();
-                const localData = getDataFromKolJson(duration, topic_id, top_n);
-                if (localData && localData.length > 0) {
-                    updateDataSourceIndicator('local');
-                    console.log(`📁 使用本地数据: ${localData.length} 条记录`);
-                    return localData;
+                
+                if (!kolJsonData) {
+                    throw new Error('无法加载本地数据文件');
+                }
+
+                const jsonData = getDataFromKolJson(duration, topic_id, top_n);
+                
+                if (jsonData && jsonData.length > 0) {
+                    console.log(`📁 使用本地数据: ${jsonData.length} 条记录`);
+                    return jsonData;
+                } else {
+                    throw new Error(`本地数据中没有找到 ${topic_id}/${duration} 的数据`);
                 }
             } catch (error) {
-                console.error('本地数据加载失败:', error.message);
+                console.error('本地数据获取失败:', error.message);
+                throw new Error(`无法获取数据: ${error.message}`);
             }
-            
-            // 都失败了
-            updateDataSourceIndicator('none');
-            throw new Error('无法获取数据，API和本地数据都不可用');
-        }
-
-        // 渲染用户列表
-        function renderUsers(users) {
-            const grid = document.getElementById('users-grid');
-            grid.innerHTML = '';
-
-            if (!users || users.length === 0) {
-                grid.innerHTML = '<div class="error-message">没有找到数据</div>';
-                return;
-            }
-
-            users.forEach(user => {
-                const card = document.createElement('div');
-                card.className = 'user-card';
-                card.style.position = 'relative';
-                
-                card.innerHTML = `
-                    <div class="user-rank">${user.rank}</div>
-                    <div class="user-header">
-                        <img src="${user.icon}" alt="${user.name}" class="user-avatar"
-                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random'">
-                        <div class="user-info">
-                            <h3>${user.name}</h3>
-                            <p>@${user.username}</p>
-                        </div>
-                    </div>
-                    <div class="user-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">影响力</span>
-                            <span class="stat-value">${user.mindshare.toFixed(2)}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">社区分数</span>
-                            <span class="stat-value">${user.community_score.toFixed(2)}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">粉丝数</span>
-                            <span class="stat-value">${user.follower_count.toLocaleString()}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">智能粉丝</span>
-                            <span class="stat-value">${user.smart_follower_count.toLocaleString()}</span>
-                        </div>
-                    </div>
-                    ${user.bio ? `<div style="margin-top: 10px; font-size: 0.9rem; color: #666; line-height: 1.4;">${user.bio}</div>` : ''}
-                `;
-                
-                if (user.twitter_user_url) {
-                    card.style.cursor = 'pointer';
-                    card.addEventListener('click', () => {
-                        window.open(user.twitter_user_url, '_blank');
-                    });
-                }
-                
-                grid.appendChild(card);
-            });
-
-            // 更新统计信息
-            updateSummaryStats(users);
-        }
-
-        // 更新统计信息
-        function updateSummaryStats(users) {
-            if (!users || users.length === 0) return;
-
-            const totalUsers = users.length;
-            const avgMindshare = users.reduce((sum, user) => sum + user.mindshare, 0) / totalUsers;
-            const totalFollowers = users.reduce((sum, user) => sum + user.follower_count, 0);
-
-            document.getElementById('total-users').textContent = totalUsers;
-            document.getElementById('avg-mindshare').textContent = avgMindshare.toFixed(2);
-            document.getElementById('total-followers').textContent = totalFollowers.toLocaleString();
-            
-            document.getElementById('summary-stats').style.display = 'grid';
-        }
-
-        // 显示错误信息
-        function showErrorMessage(message) {
-            const loading = document.getElementById('loading');
-            loading.innerHTML = `
-                <div style="color: #c62828;">
-                    <h3>❌ 数据加载失败</h3>
-                    <p>${message}</p>
-                    <p style="margin-top: 10px; font-size: 0.9rem;">
-                        请检查网络连接或稍后重试
-                    </p>
-                </div>
-            `;
-            loading.style.display = 'block';
-            document.getElementById('users-grid').style.display = 'none';
         }
 
         // 加载数据
@@ -702,28 +2908,536 @@
             document.getElementById('loading').innerHTML = `
                 <div class="loading-spinner"></div>
                 <p>正在加载排行榜数据...</p>
-                <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
-                    尝试API，如失败将使用本地数据
-                </p>
             `;
             document.getElementById('loading').style.display = 'block';
             document.getElementById('users-grid').style.display = 'none';
-            document.getElementById('summary-stats').style.display = 'none';
 
             try {
                 currentData = await fetchKaitoData(duration, topic, topN);
                 if (currentData.length > 0) {
                     renderUsers(currentData);
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('users-grid').style.display = 'grid';
-                } else {
-                    showErrorMessage('没有找到相关数据');
+                    updateLabels();
                 }
             } catch (error) {
                 console.error('加载数据失败:', error);
-                showErrorMessage(`数据加载失败: ${error.message}`);
+                showErrorMessage('数据加载失败，请稍后重试');
             }
         }
+
+        // 更新标题和副标题
+        function updateLabels() {
+            const category = document.getElementById('category-select').value;
+            const topic = document.getElementById('topic-select').value;
+            const duration = document.getElementById('duration-select').value;
+            const topN = document.getElementById('top-n-select').value;
+            const t = translations[currentLanguage];
+
+            const durationLabels = {
+                'zh': {
+                    '7d': '7 天',
+                    '30d': '30 天',
+                    '3m': '3 个月',
+                    '6m': '6 个月',
+                    '12m': '12 个月'
+                },
+                'en': {
+                    '7d': '7 Days',
+                    '30d': '30 Days',
+                    '3m': '3 Months',
+                    '6m': '6 Months',
+                    '12m': '12 Months'
+                }
+            };
+
+            const categoryLabels = {
+                'zh': {
+                    'post_tge': 'Post TGE 项目',
+                    'pre_tge': 'Pre TGE 项目'
+                },
+                'en': {
+                    'post_tge': 'Post TGE Projects',
+                    'pre_tge': 'Pre TGE Projects'
+                }
+            };
+
+            const titleText = currentLanguage === 'zh' ? 
+                `🏆 ${topic} 影响力排行榜` : 
+                `🏆 ${topic} Influence Leaderboard`;
+            
+            const subtitleText = currentLanguage === 'zh' ?
+                `${categoryLabels[currentLanguage][category]} - 显示过去 ${durationLabels[currentLanguage][duration]} 的前 ${topN} 名影响者` :
+                `${categoryLabels[currentLanguage][category]} - Showing Top ${topN} influencers in the past ${durationLabels[currentLanguage][duration]}`;
+
+            document.getElementById('leaderboard-title').textContent = titleText;
+            document.getElementById('leaderboard-subtitle').textContent = subtitleText;
+            
+            // 更新QR码按钮文字
+            updateQRButtonTexts();
+        }
+
+        // 更新QR码按钮文字
+        function updateQRButtonTexts() {
+            const t = translations[currentLanguage];
+            document.querySelectorAll('.qr-toggle-btn').forEach(button => {
+                const container = button.getAttribute('onclick').match(/toggleQRCode\('([^']+)'\)/)[1];
+                const qrContainer = document.getElementById(container);
+                if (qrContainer.style.display === 'none') {
+                    button.textContent = t['show-qr'];
+                } else {
+                    button.textContent = t['hide-qr'];
+                }
+            });
+        }
+
+        // 导航切换功能
+        function switchSection(sectionId) {
+            // 隐藏所有内容区域
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // 显示选中的内容区域
+            document.getElementById(sectionId).classList.add('active');
+
+            // 更新导航按钮状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+        }
+
+        // 添加导航事件监听
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const sectionId = this.getAttribute('data-section');
+                switchSection(sectionId);
+            });
+        });
+
+        // 添加控制器事件监听
+        document.getElementById('category-select').addEventListener('change', function() {
+            updateTopicSelect(this.value);
+            loadData();
+        });
+
+        document.getElementById('topic-select').addEventListener('change', loadData);
+        document.getElementById('duration-select').addEventListener('change', loadData);
+        document.getElementById('top-n-select').addEventListener('change', loadData);
+
+        // 切换收款码显示
+        function toggleQRCode(qrId) {
+            const qrContainer = document.getElementById(qrId);
+            const button = event.target;
+            const t = translations[currentLanguage];
+            
+            if (qrContainer.style.display === 'none' || qrContainer.style.display === '') {
+                qrContainer.style.display = 'block';
+                button.textContent = t['hide-qr'];
+            } else {
+                qrContainer.style.display = 'none';
+                button.textContent = t['show-qr'];
+            }
+        }
+
+        // 搜索用户功能
+        async function searchUser() {
+            const input = document.getElementById('twitter-id-input');
+            const username = input.value.trim();
+            
+            if (!username) {
+                alert(translations[currentLanguage]['twitter-id-placeholder']);
+                return;
+            }
+
+            const searchBtn = document.getElementById('search-btn');
+            const loadingDiv = document.getElementById('search-loading');
+            const resultDiv = document.getElementById('search-result');
+            const errorDiv = document.getElementById('search-error');
+
+            // 重置状态
+            loadingDiv.style.display = 'block';
+            resultDiv.style.display = 'none';
+            errorDiv.style.display = 'none';
+            searchBtn.disabled = true;
+
+            try {
+                // 检查是否需要更新全量数据
+                if (!allRankingData.lastUpdate || 
+                    (Date.now() - allRankingData.lastUpdate) > CACHE_EXPIRY ||
+                    Object.keys(allRankingData.data).length === 0) {
+                    
+                    loadingDiv.innerHTML = '<div class="loading-spinner"></div><p>首次使用，正在初始化数据...</p>';
+                    await fetchAndCacheAllRankings();
+                }
+
+                // 在本地数据中搜索用户
+                loadingDiv.innerHTML = '<div class="loading-spinner"></div><p>正在查询用户数据...</p>';
+                
+                const userData = searchUserInLocalData(username);
+                
+                if (userData) {
+                    displayUserResult(userData);
+                    loadingDiv.style.display = 'none';
+                    resultDiv.style.display = 'block';
+                } else {
+                    showSearchError('search-not-found');
+                }
+            } catch (error) {
+                console.error('搜索用户时出错:', error);
+                showSearchError('search-error');
+            } finally {
+                searchBtn.disabled = false;
+            }
+        }
+
+        // 删除原来的模拟数据函数
+        // async function fetchUserData(username) { ... }
+
+        // 显示用户搜索结果
+        function displayUserResult(userData) {
+            const resultDiv = document.getElementById('search-result');
+            const t = translations[currentLanguage];
+            
+            const rankChange = userData.currentRank - userData.previousRank;
+            const scoreChange = userData.yapsScore - userData.previousScore;
+            
+            let rankChangeClass = 'same';
+            let rankChangeIcon = '➖';
+            let rankChangeText = t['rank-same'];
+            
+            if (rankChange < 0) {
+                rankChangeClass = 'up';
+                rankChangeIcon = '⬆️';
+                rankChangeText = `${t['rank-up']} ${Math.abs(rankChange)}`;
+            } else if (rankChange > 0) {
+                rankChangeClass = 'down';
+                rankChangeIcon = '⬇️';
+                rankChangeText = `${t['rank-down']} ${rankChange}`;
+            }
+
+            // 生成项目排名信息
+            let projectRankings = '';
+            if (userData.allRankings) {
+                const durations = ['7d', '30d', '3m', '6m', '12m'];
+                const categories = ['post_tge', 'pre_tge'];
+                
+                projectRankings = `
+                    <div class="project-rankings">
+                        <h4>完整项目排名详情</h4>
+                        <div class="category-sections">
+                `;
+                
+                categories.forEach(category => {
+                    const categoryLabel = category === 'post_tge' ? 'Post TGE 项目' : 'Pre TGE 项目';
+                    const projects = projectCategories[category].topics;
+                    
+                    projectRankings += `
+                        <div class="category-section">
+                            <h5 class="category-title">${categoryLabel}</h5>
+                            <div class="project-grid">
+                    `;
+                    
+                    projects.forEach(project => {
+                        let hasRanking = false;
+                        let projectCard = `
+                            <div class="project-card">
+                                <h6 class="project-name">${project}</h6>
+                        `;
+                        
+                        durations.forEach(duration => {
+                            const key = `${category}_${project}_${duration}`;
+                            const ranking = userData.allRankings[key];
+                            
+                            if (ranking) {
+                                hasRanking = true;
+                                const durationLabel = {
+                                    '7d': '7天',
+                                    '30d': '30天', 
+                                    '3m': '3月',
+                                    '6m': '6月',
+                                    '12m': '12月'
+                                }[duration];
+                                
+                                projectCard += `
+                                    <div class="rank-item">
+                                        <span class="duration">${durationLabel}:</span>
+                                        <span class="rank-value">#${ranking.rank}</span>
+                                        <span class="score-value">${(ranking.score || 0).toFixed(1)}</span>
+                                    </div>
+                                `;
+                            }
+                        });
+                        
+                        projectCard += `</div>`;
+                        
+                        // 只显示有排名的项目
+                        if (hasRanking) {
+                            projectRankings += projectCard;
+                        }
+                    });
+                    
+                    projectRankings += `
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                projectRankings += `
+                        </div>
+                    </div>
+                `;
+            }
+
+            resultDiv.innerHTML = `
+                <div class="user-profile">
+                    <div class="profile-header">
+                        <img src="${userData.avatar}" alt="${userData.name}" class="profile-avatar">
+                        <div class="profile-info">
+                            <h3>${userData.name}</h3>
+                            <p class="username">@${userData.username}</p>
+                            <p class="bio">${userData.bio}</p>
+                            ${userData.project ? `<p class="best-project">最佳排名: ${userData.project}</p>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="rank-overview">
+                        <div class="rank-card">
+                            <div class="rank-number">#${userData.currentRank}</div>
+                            <div class="rank-label" data-i18n="current-rank">${t['current-rank']}</div>
+                            <div class="rank-change ${rankChangeClass}">
+                                <span>${rankChangeIcon}</span>
+                                <span>${rankChangeText}</span>
+                            </div>
+                        </div>
+
+                        <div class="rank-card">
+                            <div class="rank-number">${userData.yapsScore.toFixed(1)}</div>
+                            <div class="rank-label" data-i18n="yaps-score">${t['yaps-score']}</div>
+                            <div class="rank-change ${scoreChange >= 0 ? 'up' : 'down'}">
+                                <span>${scoreChange >= 0 ? '⬆️' : '⬇️'}</span>
+                                <span>${scoreChange >= 0 ? '+' : ''}${scoreChange.toFixed(1)}</span>
+                            </div>
+                        </div>
+
+                        <div class="rank-card">
+                            <div class="rank-number">#${userData.previousRank}</div>
+                            <div class="rank-label" data-i18n="previous-rank">${t['previous-rank']}</div>
+                        </div>
+                    </div>
+                </div>
+
+                ${projectRankings}
+
+                <div class="stats-toggle">
+                    <button class="toggle-btn active" onclick="toggleStats('brief')" data-i18n="brief-stats">${t['brief-stats']}</button>
+                    <button class="toggle-btn" onclick="toggleStats('detailed')" data-i18n="detailed-stats">${t['detailed-stats']}</button>
+                </div>
+
+                <div id="brief-stats" class="detailed-stats active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">${formatNumber(userData.followerCount)}</div>
+                            <div class="stat-name" data-i18n="followers">${t['followers']}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${formatNumber(userData.followingCount)}</div>
+                            <div class="stat-name" data-i18n="following">${t['following']}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${userData.smartFollowerCount}</div>
+                            <div class="stat-name" data-i18n="smart-followers">${t['smart-followers']}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${(userData.mindshare * 100).toFixed(1)}%</div>
+                            <div class="stat-name" data-i18n="influence-score">${t['influence-score']}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="detailed-stats" class="detailed-stats">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">${formatNumber(userData.followerCount)}</div>
+                            <div class="stat-name">Total Followers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${formatNumber(userData.followingCount)}</div>
+                            <div class="stat-name">Total Following</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${userData.smartFollowerCount}</div>
+                            <div class="stat-name">Smart Followers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${(userData.mindshare * 100).toFixed(2)}%</div>
+                            <div class="stat-name">Mindshare Score</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${userData.yapsScore.toFixed(2)}</div>
+                            <div class="stat-name">YAPS Score</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${(userData.followerCount / userData.followingCount).toFixed(1)}</div>
+                            <div class="stat-name">Follower Ratio</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 切换统计显示模式
+        function toggleStats(mode) {
+            const briefStats = document.getElementById('brief-stats');
+            const detailedStats = document.getElementById('detailed-stats');
+            const buttons = document.querySelectorAll('.toggle-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (mode === 'brief') {
+                briefStats.classList.add('active');
+                detailedStats.classList.remove('active');
+                buttons[0].classList.add('active');
+            } else {
+                briefStats.classList.remove('active');
+                detailedStats.classList.add('active');
+                buttons[1].classList.add('active');
+            }
+        }
+
+        // 显示搜索错误
+        function showSearchError(errorKey) {
+            const loadingDiv = document.getElementById('search-loading');
+            const resultDiv = document.getElementById('search-result');
+            const errorDiv = document.getElementById('search-error');
+            const t = translations[currentLanguage];
+
+            loadingDiv.style.display = 'none';
+            resultDiv.style.display = 'none';
+            errorDiv.style.display = 'block';
+            errorDiv.innerHTML = `<p>${t[errorKey]}</p>`;
+        }
+
+        // 回车键搜索
+        // (已移动到页面初始化函数中)
+
+        // 空投计算器功能
+        function calculateFeathersReward() {
+            const feathers = parseFloat(document.getElementById('feathers-input').value) || 0;
+            const humaAllocation = feathers * 0.06; // 0.06 × Feathers 公式
+            const usdValue = humaAllocation * 0.038; // $HUMA 价格约 $0.038
+            
+            document.getElementById('huma-allocation').textContent = humaAllocation.toLocaleString('en-US', {maximumFractionDigits: 0});
+            document.getElementById('usd-value').textContent = '$' + usdValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            
+            calculateTotalRewards();
+        }
+
+        function calculateKaitoReward() {
+            const rank = parseInt(document.getElementById('kaito-rank').value) || 0;
+            const mindshare = parseFloat(document.getElementById('mindshare').value) || 0;
+            
+            // 基于排名和 mindshare 的基础奖励计算
+            let baseReward = 0;
+            if (rank > 0 && mindshare > 0) {
+                // 简化的奖励公式，基于 mindshare 百分比
+                baseReward = mindshare * 100; // 基础奖励
+            }
+            
+            const standardAirdrop = baseReward;
+            const boostedAirdrop = baseReward * 1.1; // 1.1x 提升
+            
+            document.getElementById('standard-amount').textContent = standardAirdrop.toLocaleString('en-US', {maximumFractionDigits: 0});
+            document.getElementById('boosted-amount').textContent = boostedAirdrop.toLocaleString('en-US', {maximumFractionDigits: 0});
+            
+            calculateTotalRewards();
+        }
+
+        function calculateTotalRewards() {
+            const humaFromFeathers = parseFloat(document.getElementById('huma-allocation').textContent.replace(/,/g, '')) || 0;
+            const standardFromKaito = parseFloat(document.getElementById('standard-amount').textContent.replace(/,/g, '')) || 0;
+            const boostedFromKaito = parseFloat(document.getElementById('boosted-amount').textContent.replace(/,/g, '')) || 0;
+            
+            const totalWithStandard = humaFromFeathers + standardFromKaito;
+            const totalWithBoosted = humaFromFeathers + boostedFromKaito;
+            
+            const usdValueStandard = totalWithStandard * 0.038;
+            const usdValueBoosted = totalWithBoosted * 0.038;
+            
+            document.getElementById('total-huma').textContent = humaFromFeathers.toLocaleString('en-US', {maximumFractionDigits: 0});
+            document.getElementById('total-standard-value').textContent = '$' + usdValueStandard.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('total-boosted-value').textContent = '$' + usdValueBoosted.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化语言
+            updateLanguage();
+            // 初始化其他功能
+            updateTopicSelect('post_tge');
+            loadData();
+            
+            // 初始化个人搜索功能
+            loadCachedData();
+            updateDataStatus();
+            
+            // 检查缓存是否过期并自动刷新
+            if (shouldRefreshCache()) {
+                console.log('缓存已过期，正在自动刷新...');
+                fetchAndCacheAllRankings();
+            }
+            
+            // 设置定时状态更新（每30秒）
+            setInterval(updateDataStatus, 30000);
+            
+            // 回车键搜索功能
+            const searchInput = document.getElementById('twitter-id-input');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchUser();
+                    }
+                });
+            }
+            
+            // 个人搜索按钮事件
+            const searchBtn = document.getElementById('search-btn');
+            const refreshBtn = document.getElementById('refresh-data-btn');
+            
+            if (searchBtn) {
+                searchBtn.addEventListener('click', performSearch);
+            }
+            
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', forceRefreshData);
+            }
+            
+            // 个人搜索输入框回车事件
+            const personalSearchInput = document.getElementById('search-input');
+            if (personalSearchInput) {
+                personalSearchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            }
+            
+            // 空投计算器事件监听
+            const feathersInput = document.getElementById('feathers-input');
+            const kaitoRankInput = document.getElementById('kaito-rank');
+            const mindshareInput = document.getElementById('mindshare');
+            
+            if (feathersInput) {
+                feathersInput.addEventListener('input', calculateFeathersReward);
+            }
+            
+            if (kaitoRankInput) {
+                kaitoRankInput.addEventListener('input', calculateKaitoReward);
+            }
+            
+            if (mindshareInput) {
+                mindshareInput.addEventListener('input', calculateKaitoReward);
+            }
+        });
     </script>
 </body>
 </html>

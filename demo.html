@@ -651,33 +651,6 @@
             }
         };
 
-        // 生成不同项目的模拟数据
-        function generateMockData(topic, count = 10) {
-            const names = [
-                'Vitalik Buterin', 'Changpeng Zhao', 'Elon Musk', 'Michael Saylor',
-                'Cathie Wood', 'Anthony Pompliano', 'Andreas Antonopoulos', 'Naval Ravikant',
-                'Balaji Srinivasan', 'Lex Fridman', 'Tim Draper', 'Barry Silbert',
-                'Cameron Winklevoss', 'Tyler Winklevoss', 'Brian Armstrong', 'Gavin Wood',
-                'Charles Hoskinson', 'Dan Larimer', 'Justin Sun', 'Roger Ver',
-                'Erik Voorhees', 'Tone Vays', 'Max Keiser', 'Stacy Herbert',
-                'Preston Pysh', 'Robert Kiyosaki', 'Peter Schiff', 'Raoul Pal'
-            ];
-
-            return Array.from({ length: count }, (_, index) => ({
-                user_id: `${topic}-user-${index}`,
-                name: names[index % names.length] || `${topic} Expert ${index + 1}`,
-                username: `${topic.toLowerCase()}expert${index + 1}`,
-                icon: `https://ui-avatars.com/api/?name=${encodeURIComponent(names[index % names.length] || `${topic} Expert ${index + 1}`)}&background=random`,
-                bio: `${topic} enthusiast and thought leader in the crypto space. Passionate about blockchain technology.`,
-                following_count: Math.floor(Math.random() * 5000) + 500,
-                follower_count: Math.floor(Math.random() * 100000) + 10000,
-                smart_follower_count: Math.floor(Math.random() * 50) + 5,
-                mindshare: Math.random() * 0.1,
-                rank: index + 1,
-                twitter_user_url: `https://x.com/${topic.toLowerCase()}expert${index + 1}`
-            }));
-        }
-
         // 当前显示的数据
         let currentData = [];
 
@@ -763,6 +736,60 @@
         let collectedData = {};
         let isAutoCollecting = false;
         let autoCollectProgress = { current: 0, total: 0 };
+        let kolJsonData = null; // 本地kol.json数据缓存
+
+        // 加载本地 kol.json 数据
+        async function loadKolJsonData() {
+            if (kolJsonData) return kolJsonData;
+            
+            try {
+                console.log('正在加载 kol.json 数据...');
+                const response = await fetch('./kol.json');
+                if (!response.ok) {
+                    throw new Error(`无法加载 kol.json: ${response.status}`);
+                }
+                kolJsonData = await response.json();
+                console.log('✅ 成功加载 kol.json 数据，最后更新时间:', kolJsonData.lastUpdate);
+                return kolJsonData;
+            } catch (error) {
+                console.error('❌ 无法加载 kol.json:', error.message);
+                kolJsonData = null;
+                return null;
+            }
+        }
+
+        // 从 kol.json 获取数据
+        function getDataFromKolJson(duration, topic_id, top_n, category) {
+            if (!kolJsonData) return [];
+            
+            try {
+                // 获取项目数据
+                const projectData = kolJsonData.categories?.[category]?.[topic_id]?.[duration];
+                
+                if (!projectData || !Array.isArray(projectData)) {
+                    console.warn(`kol.json 中没有找到 ${category}/${topic_id}/${duration} 的数据`);
+                    return [];
+                }
+                
+                // 限制返回数量并格式化数据
+                return projectData.slice(0, top_n).map((user, index) => ({
+                    user_id: user.user_id || `user-${index}`,
+                    name: user.name || 'Unknown User',
+                    username: user.username || '',
+                    rank: user.rank || (index + 1),
+                    mindshare: parseFloat(user.mindshare) || 0,
+                    following_count: parseInt(user.following_count) || 0,
+                    follower_count: parseInt(user.follower_count) || 0,
+                    smart_follower_count: parseInt(user.smart_follower_count) || 0,
+                    icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
+                    bio: user.bio || '',
+                    twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`
+                }));
+            } catch (error) {
+                console.error('从 kol.json 提取数据时出错:', error);
+                return [];
+            }
+        }
 
         // 自动收集所有项目数据
         async function startAutoDataCollection() {
@@ -931,8 +958,8 @@
             }
         }
 
-        // 调用真实的 Kaito API 并保存数据
-        async function fetchKaitoData(duration, topic_id, top_n, community_tier, customized_community, community_yaps) {
+        // 尝试直接从API获取数据
+        async function fetchFromDirectAPI(duration, topic_id, top_n, community_tier, customized_community, community_yaps) {
             const url = "https://hub.kaito.ai/api/v1/gateway/ai/kol/mindshare/top-leaderboard";
             const params = new URLSearchParams({
                 duration: duration,
@@ -944,7 +971,7 @@
             });
 
             try {
-                console.log(`调用 Kaito API: ${topic_id} - ${duration}`);
+                console.log(`🔗 调用外部 Kaito API: ${topic_id} - ${duration}`);
                 const response = await fetch(`${url}?${params}`, {
                     method: 'GET',
                     mode: 'cors',
@@ -958,11 +985,11 @@
                 }
                 
                 const data = await response.json();
-                console.log(`成功获取 ${topic_id} 数据:`, data);
+                console.log(`✅ 外部API成功获取 ${topic_id} 数据:`, data.length, '条记录');
 
                 // 处理 API 返回的数据，确保格式正确
                 if (Array.isArray(data) && data.length > 0) {
-                    const formattedData = data.map((user, index) => ({
+                    return data.map((user, index) => ({
                         user_id: user.user_id || `user-${index}`,
                         name: user.name || 'Unknown User',
                         username: user.username || '',
@@ -975,22 +1002,90 @@
                         rank: user.rank || (index + 1),
                         twitter_user_url: user.twitter_user_url || '#'
                     }));
-
-                    // 保存数据到 collectedData 对象中
-                    saveDataToCollection(topic_id, duration, formattedData);
-                    
-                    return formattedData;
                 } else {
-                    console.warn('API 返回空数据或格式不正确:', data);
-                    throw new Error('Empty or invalid API response');
+                    throw new Error('API返回数据格式异常');
                 }
             } catch (error) {
-                console.error('API调用失败:', error.message);
-                // 如果 API 调用失败，使用模拟数据（仅用于测试）
-                const mockData = generateMockData(topic_id, top_n);
-                console.warn('使用模拟数据作为后备方案');
-                return mockData;
+                console.warn(`❌ 外部API请求失败: ${error.message}`);
+                throw error;
             }
+        }
+
+        // 尝试从本地API代理获取数据
+        async function fetchFromLocalAPI(duration, topic_id, top_n) {
+            try {
+                console.log(`🔗 尝试本地API代理: ${topic_id}/${duration}`);
+                
+                const params = new URLSearchParams({
+                    duration: duration,
+                    topic_id: topic_id,
+                    top_n: top_n,
+                    community_tier: 'tier1',
+                    customized_community: 'customized',
+                    community_yaps: 'true'
+                });
+
+                const response = await fetch(`/api/kol/mindshare/top-leaderboard?${params}`);
+                
+                if (!response.ok) {
+                    throw new Error(`本地API请求失败: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log(`✅ 本地API成功返回数据:`, data.length, '条记录');
+                
+                return data;
+            } catch (error) {
+                console.warn(`❌ 本地API请求失败: ${error.message}`);
+                throw error;
+            }
+        }
+
+        // API优先+本地回退的数据获取函数（永不使用测试数据）
+        async function fetchKaitoData(duration, topic_id, top_n, community_tier, customized_community, community_yaps) {
+            // 首先尝试外部API
+            try {
+                const directApiData = await fetchFromDirectAPI(duration, topic_id, top_n, community_tier, customized_community, community_yaps);
+                if (directApiData && directApiData.length > 0) {
+                    console.log(`✅ 使用外部API数据: ${directApiData.length} 条记录`);
+                    // 保存数据到收集对象
+                    saveDataToCollection(topic_id, duration, directApiData);
+                    return directApiData;
+                }
+            } catch (error) {
+                console.warn('外部API获取失败，尝试本地API代理:', error.message);
+            }
+            
+            // 外部API失败，尝试本地API代理
+            try {
+                const localApiData = await fetchFromLocalAPI(duration, topic_id, top_n);
+                if (localApiData && localApiData.length > 0) {
+                    console.log(`✅ 使用本地API代理数据: ${localApiData.length} 条记录`);
+                    return localApiData;
+                }
+            } catch (error) {
+                console.warn('本地API代理失败，尝试本地数据:', error.message);
+            }
+            
+            // API都失败，尝试本地kol.json数据
+            try {
+                await loadKolJsonData();
+                
+                if (kolJsonData) {
+                    const category = document.getElementById('category-select')?.value || 'post_tge';
+                    const localData = getDataFromKolJson(duration, topic_id, top_n, category);
+                    
+                    if (localData && localData.length > 0) {
+                        console.log(`📁 使用本地kol.json数据: ${localData.length} 条记录`);
+                        return localData;
+                    }
+                }
+            } catch (error) {
+                console.error('本地数据获取失败:', error.message);
+            }
+            
+            // 所有数据源都失败
+            throw new Error(`无法获取 ${topic_id}/${duration} 的数据，所有数据源都不可用`);
         }
 
         // 保存数据到收集对象中

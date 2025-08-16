@@ -991,25 +991,93 @@
             document.getElementById('users-grid').style.display = 'none';
         }
 
-        // 从 kol.json 获取数据（生产环境专用 - 只读取，不收集）
-        async function fetchKaitoData(duration, topic_id, top_n) {
-            // 加载 kol.json 数据
-            await loadKolJsonData();
-            
-            if (!kolJsonData) {
-                showErrorMessage('数据文件加载失败');
-                return [];
-            }
+        // 尝试从API获取数据
+        async function fetchFromAPI(duration, topic_id, top_n) {
+            try {
+                console.log(`🔗 尝试从API获取数据: ${topic_id}/${duration}`);
+                
+                const params = new URLSearchParams({
+                    duration: duration,
+                    topic_id: topic_id,
+                    top_n: top_n,
+                    community_tier: 'tier1',
+                    customized_community: 'customized',
+                    community_yaps: 'true'
+                });
 
-            const jsonData = getDataFromKolJson(duration, topic_id, top_n);
+                const apiUrl = `/api/kol/mindshare/top-leaderboard?${params}`;
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`API请求失败: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                // 处理API响应格式
+                let users = [];
+                if (Array.isArray(data)) {
+                    users = data;
+                } else if (data && Array.isArray(data.data)) {
+                    users = data.data;
+                } else {
+                    throw new Error('API返回数据格式异常');
+                }
+
+                console.log(`✅ API成功返回 ${users.length} 条数据`);
+                
+                // 格式化数据
+                return users.slice(0, top_n).map((user, index) => ({
+                    name: user.name || 'Unknown User',
+                    username: user.username || '',
+                    rank: user.rank || (index + 1),
+                    mindshare: parseFloat(user.mindshare) || 0,
+                    community_score: parseFloat(user.last_7_day_avg_llm_insightfulness_score_scaled) || parseFloat(user.community_score) || 0,
+                    follower_count: parseInt(user.follower_count) || 0,
+                    smart_follower_count: parseInt(user.smart_follower_count) || 0,
+                    icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
+                    bio: user.bio || '',
+                    twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`
+                }));
+                
+            } catch (error) {
+                console.warn(`❌ API请求失败: ${error.message}`);
+                throw error;
+            }
+        }
+
+        // API优先+本地回退的数据获取函数（永不使用测试数据）
+        async function fetchKaitoData(duration, topic_id, top_n) {
+            // 首先尝试API
+            try {
+                const apiData = await fetchFromAPI(duration, topic_id, top_n);
+                if (apiData && apiData.length > 0) {
+                    console.log(`✅ 使用API数据: ${apiData.length} 条记录`);
+                    return apiData;
+                }
+            } catch (error) {
+                console.warn('API获取失败，尝试使用本地数据:', error.message);
+            }
             
-            if (jsonData && jsonData.length > 0) {
-                console.log(`✅ 从 kol.json 获取 ${topic_id}/${duration} 数据:`, jsonData.length, '条记录');
-                return jsonData;
-            } else {
-                console.warn(`⚠️ kol.json 中没有 ${topic_id}/${duration} 的数据`);
-                showErrorMessage(`暂无 ${topic_id} 在 ${duration} 时间范围内的数据`);
-                return [];
+            // API失败，尝试本地数据
+            try {
+                await loadKolJsonData();
+                
+                if (!kolJsonData) {
+                    throw new Error('无法加载本地数据文件');
+                }
+
+                const jsonData = getDataFromKolJson(duration, topic_id, top_n);
+                
+                if (jsonData && jsonData.length > 0) {
+                    console.log(`📁 使用本地数据: ${jsonData.length} 条记录`);
+                    return jsonData;
+                } else {
+                    throw new Error(`本地数据中没有找到 ${topic_id}/${duration} 的数据`);
+                }
+            } catch (error) {
+                console.error('本地数据获取失败:', error.message);
+                throw new Error(`无法获取数据: ${error.message}`);
             }
         }
 

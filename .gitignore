@@ -15,6 +15,17 @@ dist/
 .env.test.local
 .env.production.local
 
+# 开发环境专用文件 (不部署到生产环境)
+package-dev.json
+scripts/collectKolData.js
+scripts/testCollect.js
+scripts/testQuery.js
+kol_progress.json
+collect_*.json
+temp_data/
+data_backups/
+.dev/
+
 # IDE files
 .vscode/
 .idea/

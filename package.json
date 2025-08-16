@@ -5,10 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
-    "collect": "node scripts/collectKolData.js",
-    "test-collect": "node scripts/testCollect.js",
-    "test-query": "node scripts/testQuery.js",
+    "dev": "NODE_ENV=development nodemon server.js",
+    "production": "NODE_ENV=production node server.js",
     "query": "node scripts/queryKolData.js",
     "search": "node scripts/queryKolData.js search",
     "stats": "node scripts/queryKolData.js stats",

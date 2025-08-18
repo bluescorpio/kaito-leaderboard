@@ -1,10 +1,35 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const isProduction = process.env.NODE_ENV === 'production';
+
+// PoW (Proof of Work) 计算函数
+function getPowHeaders(challenge, difficulty) {
+    let nonce = 0;
+    const targetDifficulty = Math.floor(difficulty);
+    const fractionalPart = difficulty - targetDifficulty;
+    const hexThreshold = Math.ceil(16 * (1 - fractionalPart)) % 16;
+    const targetPrefix = "0".repeat(targetDifficulty);
+
+    while (true) {
+        const key = `${challenge}:${nonce}`;
+        const hash = crypto.createHash('sha256').update(key).digest('hex');
+        
+        if (hash.startsWith(targetPrefix) && 
+            (fractionalPart === 0 || parseInt(hash[targetDifficulty], 16) < hexThreshold)) {
+            return { 
+                "x-challenge": challenge, 
+                "x-nonce": String(nonce), 
+                "x-hash": hash 
+            };
+        }
+        nonce += 1;
+    }
+}
 
 // 启用 CORS
 app.use(cors());
@@ -20,6 +45,24 @@ if (!isProduction) {
         try {
             const { duration, topic_id, top_n, community_tier, customized_community, community_yaps } = req.query;
             
+            console.log(`🔄 API请求: ${topic_id} (${duration})`);
+            
+            // 1. 获取 challenge
+            const challengeUrl = 'https://hub.kaito.ai/api/v1/anti-crawling/challenge';
+            const challengeResponse = await fetch(challengeUrl);
+            
+            if (!challengeResponse.ok) {
+                throw new Error(`Challenge request failed: ${challengeResponse.status}`);
+            }
+            
+            const challengeData = await challengeResponse.json();
+            console.log('✅ 获取 challenge 成功');
+            
+            // 2. 计算 PoW headers
+            const powHeaders = getPowHeaders(challengeData.challenge, challengeData.difficulty);
+            console.log('✅ PoW 计算完成');
+            
+            // 3. 构造请求参数
             const params = new URLSearchParams({
                 duration: duration || '7d',
                 topic_id: topic_id || 'APT',
@@ -31,17 +74,29 @@ if (!isProduction) {
 
             const apiUrl = `https://hub.kaito.ai/api/v1/gateway/ai/kol/mindshare/top-leaderboard?${params}`;
             
-            const response = await fetch(apiUrl);
+            // 4. 发送带 PoW headers 的请求
+            const response = await fetch(apiUrl, {
+                headers: {
+                    ...powHeaders,
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             
             const data = await response.json();
-            res.json(data);
+            console.log(`✅ 成功获取数据: ${Array.isArray(data) ? data.length : (data.data?.length || 0)} 条记录`);
+            
+            // 标准化响应格式：如果是数组，包装成 {data: array} 格式
+            const standardizedData = Array.isArray(data) ? { data: data } : data;
+            res.json(standardizedData);
             
         } catch (error) {
-            console.error('API Error:', error);
+            console.error('❌ API Error:', error);
             res.status(500).json({ 
                 error: 'Failed to fetch data from Kaito API',
                 message: error.message 

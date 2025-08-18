@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs').promises;
 const path = require('path');
+const crypto = require('crypto');
 
 // 环境检测 - 防止在生产环境运行
 const ENV_CHECK = {
@@ -34,6 +35,39 @@ function checkEnvironmentSafety() {
 
 // Kaito API 配置
 const BASE_URL = 'https://hub.kaito.ai/api/v1/gateway/ai/kol/mindshare/top-leaderboard';
+const CHALLENGE_URL = 'https://hub.kaito.ai/api/v1/anti-crawling/challenge';
+
+// PoW (Proof of Work) 计算函数
+function getPowHeaders(challenge, difficulty) {
+    let nonce = 0;
+    const targetDifficulty = Math.floor(difficulty);
+    const fractionalPart = difficulty - targetDifficulty;
+    const hexThreshold = Math.ceil(16 * (1 - fractionalPart)) % 16;
+    const targetPrefix = "0".repeat(targetDifficulty);
+
+    console.log(`🔍 开始 PoW 计算: challenge=${challenge.substring(0, 8)}..., difficulty=${difficulty}`);
+
+    while (true) {
+        const key = `${challenge}:${nonce}`;
+        const hash = crypto.createHash('sha256').update(key).digest('hex');
+        
+        if (hash.startsWith(targetPrefix) && 
+            (fractionalPart === 0 || parseInt(hash[targetDifficulty], 16) < hexThreshold)) {
+            console.log(`✅ PoW 完成: nonce=${nonce}, hash=${hash.substring(0, 16)}...`);
+            return { 
+                "x-challenge": challenge, 
+                "x-nonce": String(nonce), 
+                "x-hash": hash 
+            };
+        }
+        nonce += 1;
+        
+        // 每 10000 次显示进度
+        if (nonce % 10000 === 0) {
+            console.log(`⏳ PoW 进度: nonce=${nonce}`);
+        }
+    }
+}
 
 // 频率控制配置
 const RATE_LIMIT_CONFIG = {
@@ -126,6 +160,23 @@ async function fetchWithRetry(url, params, retries = RATE_LIMIT_CONFIG.maxRetrie
         try {
             console.log(`📡 请求: ${params.topic_id} - ${params.duration} (尝试 ${i + 1}/${retries})`);
             
+            // 1. 获取 challenge
+            console.log(`🔄 获取 challenge...`);
+            const challengeResponse = await axios.get(CHALLENGE_URL, {
+                timeout: 10000,
+                headers: {
+                    'Accept': 'application/json',
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+                }
+            });
+            
+            const challengeData = challengeResponse.data;
+            console.log(`✅ 获取 challenge 成功: difficulty=${challengeData.difficulty}`);
+            
+            // 2. 计算 PoW headers
+            const powHeaders = getPowHeaders(challengeData.challenge, challengeData.difficulty);
+            
+            // 3. 发送主请求
             const response = await axios.get(url, {
                 params: {
                     ...params,
@@ -133,8 +184,9 @@ async function fetchWithRetry(url, params, retries = RATE_LIMIT_CONFIG.maxRetrie
                     customized_community: 'customized',
                     community_yaps: 'true'
                 },
-                timeout: 20000,  // 增加超时时间
+                timeout: 20000,
                 headers: {
+                    ...powHeaders,
                     'Accept': 'application/json',
                     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
                     'Cache-Control': 'no-cache',
@@ -142,15 +194,18 @@ async function fetchWithRetry(url, params, retries = RATE_LIMIT_CONFIG.maxRetrie
                 }
             });
 
-            console.log(`✅ 成功: ${params.topic_id} - ${params.duration}`);
-            return response.data;
+            console.log(`✅ 成功: ${params.topic_id} - ${params.duration} (${Array.isArray(response.data) ? response.data.length : (response.data?.data?.length || 0)} 条记录)`);
+            
+            // 标准化响应格式：如果是数组，包装成 {data: array} 格式
+            const standardizedData = Array.isArray(response.data) ? { data: response.data } : response.data;
+            return standardizedData;
         } catch (error) {
             const statusCode = error.response?.status;
             console.warn(`❌ 请求失败 (${i + 1}/${retries}): ${error.message} (状态码: ${statusCode || 'N/A'})`);
             
             // 特殊处理不同类型的错误
             if (statusCode === 401) {
-                console.warn(`🔐 认证错误 - 可能需要API密钥或权限`);
+                console.warn(`🔐 认证错误 - PoW 可能计算错误或 challenge 过期`);
                 if (i === retries - 1) {
                     throw new Error(`认证失败: ${error.message}`);
                 }

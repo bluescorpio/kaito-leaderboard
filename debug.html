@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Debug Test</title>
+</head>
+<body>
+    <h1>API 调试测试</h1>
+    <button onclick="testAPI()">测试 API 调用</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>正在测试...</p>';
+            
+            try {
+                console.log('开始 API 测试...');
+                
+                const apiUrl = `/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=5&community_tier=tier1&customized_community=customized&community_yaps=true`;
+                console.log('API URL:', apiUrl);
+                
+                const response = await fetch(apiUrl);
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Raw data:', data);
+                console.log('Data type:', typeof data);
+                console.log('Is array:', Array.isArray(data));
+                console.log('Data.data type:', typeof data.data);
+                console.log('Data.data is array:', Array.isArray(data.data));
+                
+                let users = [];
+                if (Array.isArray(data)) {
+                    users = data;
+                    console.log('使用直接数组格式');
+                } else if (data && Array.isArray(data.data)) {
+                    users = data.data;
+                    console.log('使用 data.data 格式');
+                } else {
+                    throw new Error('数据格式不正确');
+                }
+                
+                console.log('用户数量:', users.length);
+                console.log('第一个用户:', users[0]);
+                
+                resultDiv.innerHTML = `
+                    <h2>测试成功！</h2>
+                    <p>获取到 ${users.length} 条数据</p>
+                    <p>第一个用户: ${users[0]?.name}</p>
+                    <pre>${JSON.stringify(users[0], null, 2)}</pre>
+                `;
+                
+            } catch (error) {
+                console.error('测试失败:', error);
+                resultDiv.innerHTML = `
+                    <h2>测试失败</h2>
+                    <p>错误: ${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

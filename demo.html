@@ -1644,7 +1644,7 @@
             </div>
 
             <div class="leaderboard-header">
-                <h3 id="leaderboard-title">APT 影响力排行榜</h3>
+                <h3 id="leaderboard-title">🏆 KAITO 影响力排行榜</h3>
                 <p class="subtitle" id="leaderboard-subtitle">Post TGE 项目 - 显示过去 7 天 的前 10 名影响者</p>
             </div>
 
@@ -1914,6 +1914,18 @@
     </footer>
 
     <script>
+        // 全局错误处理
+        window.addEventListener('error', function(e) {
+            console.error('💥 JavaScript Error:', e.error);
+            console.error('💥 Error message:', e.message);
+            console.error('💥 Error filename:', e.filename);
+            console.error('💥 Error line:', e.lineno);
+        });
+
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('💥 Unhandled Promise Rejection:', e.reason);
+        });
+
         // 多语言文本数据
         const translations = {
             'zh': {
@@ -2680,7 +2692,7 @@
             
             grid.innerHTML = users.map((user, index) => `
                 <div class="user-card">
-                    <div class="rank-badge">#${user.rank}</div>
+                    <div class="rank-badge">#${user.rank || (index + 1)}</div>
                     
                     <div class="user-avatar">
                         <img src="${user.icon}" alt="${user.name}" 
@@ -2688,9 +2700,9 @@
                     </div>
 
                     <div class="user-info">
-                        <h3 class="user-name">${user.name}</h3>
-                        <p class="user-username">@${user.username}</p>
-                        <p class="user-bio">${user.bio}</p>
+                        <h3 class="user-name">${user.name || 'Unknown User'}</h3>
+                        <p class="user-username">@${user.username || 'unknown'}</p>
+                        <p class="user-bio">${(user.bio || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;').substring(0, 100)}${user.bio && user.bio.length > 100 ? '...' : ''}</p>
                     </div>
 
                     <div class="user-stats">
@@ -2852,6 +2864,7 @@
                     mindshare: parseFloat(user.mindshare) || 0,
                     community_score: parseFloat(user.last_7_day_avg_llm_insightfulness_score_scaled) || parseFloat(user.community_score) || 0,
                     follower_count: parseInt(user.follower_count) || 0,
+                    following_count: parseInt(user.following_count) || 0,
                     smart_follower_count: parseInt(user.smart_follower_count) || 0,
                     icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
                     bio: user.bio || '',
@@ -2866,15 +2879,25 @@
 
         // API优先+本地回退的数据获取函数（永不使用测试数据）
         async function fetchKaitoData(duration, topic_id, top_n) {
+            console.log(`🔍 开始获取数据: ${topic_id}/${duration}, top_n=${top_n}`);
+            
             // 首先尝试API
             try {
+                console.log('📡 尝试 API 调用...');
                 const apiData = await fetchFromAPI(duration, topic_id, top_n);
+                console.log('📡 API 调用完成，数据类型:', typeof apiData, '是否为数组:', Array.isArray(apiData));
+                
                 if (apiData && apiData.length > 0) {
                     console.log(`✅ 使用API数据: ${apiData.length} 条记录`);
+                    console.log('🔍 第一条数据示例:', apiData[0]);
                     return apiData;
+                } else {
+                    console.warn('⚠️ API 返回空数据或格式错误');
+                    throw new Error('API 返回数据为空');
                 }
             } catch (error) {
-                console.warn('API获取失败，尝试使用本地数据:', error.message);
+                console.warn('❌ API获取失败，尝试使用本地数据:', error.message);
+                console.error('❌ API错误详情:', error);
             }
             
             // API失败，尝试本地数据
@@ -2901,10 +2924,14 @@
 
         // 加载数据
         async function loadData() {
+            console.log('🚀 loadData 函数被调用');
+            
             const category = document.getElementById('category-select').value;
             const topic = document.getElementById('topic-select').value;
             const duration = document.getElementById('duration-select').value;
             const topN = parseInt(document.getElementById('top-n-select').value);
+
+            console.log(`📋 当前选择: category=${category}, topic=${topic}, duration=${duration}, topN=${topN}`);
 
             // 显示加载状态
             document.getElementById('loading').innerHTML = `
@@ -3372,10 +3399,28 @@
 
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // 初始化语言
+            // 先初始化语言（这会设置所有选项，但可能重置选择器）
             updateLanguage();
-            // 初始化其他功能
+            
+            // 确保分类选择器设置为 post_tge
+            const categorySelect = document.getElementById('category-select');
+            if (categorySelect) {
+                categorySelect.value = 'post_tge';
+            }
+            
+            // 然后初始化项目选择器
             updateTopicSelect('post_tge');
+            
+            // 设置默认选中的项目为 KAITO（在 post_tge 列表中）
+            const topicSelect = document.getElementById('topic-select');
+            if (topicSelect) {
+                topicSelect.value = 'KAITO';
+            }
+            
+            // 最后更新标题以反映当前选择
+            updateLabels();
+            
+            // 加载数据
             loadData();
             
             // 初始化个人搜索功能

@@ -169,9 +169,8 @@ const Leaderboard: React.FC = () => {
                                 <img
                                     src={user.icon}
                                     alt={user.name}
-                                    onError={(e) => {
-                                        const target = e.target as HTMLImageElement;
-                                        target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`;
+                                    onError={(e: any) => {
+                                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`;
                                     }}
                                 />
                             ) : (

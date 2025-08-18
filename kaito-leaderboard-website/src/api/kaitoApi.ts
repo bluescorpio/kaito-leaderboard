@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-// Kaito API 配置
-const BASE_URL = 'https://hub.kaito.ai/api/v1/gateway/ai/kol/mindshare/top-leaderboard';
+// 开发环境使用本地代理，生产环境使用静态数据
+const BASE_URL = process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:3000/api/kol/mindshare/top-leaderboard'
+    : 'https://hub.kaito.ai/api/v1/gateway/ai/kol/mindshare/top-leaderboard';
 
 // 定义 API 响应的数据类型
 export interface KaitoUser {

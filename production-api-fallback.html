@@ -1672,15 +1672,6 @@
                             </button>
                         </div>
                     </div>
-                    
-                    <div class="data-controls">
-                        <button id="refresh-data-btn" class="refresh-button" onclick="forceRefreshData()">
-                            <span>🔄 更新全量数据</span>
-                        </button>
-                        <div id="data-status" class="data-status">
-                            <span id="data-info">数据状态：检查中...</span>
-                        </div>
-                    </div>
                 </div>
 
                 <div id="search-loading" class="search-loading" style="display: none;">
@@ -1988,20 +1979,6 @@
                 'detailed-stats': '详细统计',
                 'brief-stats': '简要统计',
                 
-                // 数据管理
-                'refresh-data': '🔄 更新全量数据',
-                'data-status-init': '数据状态：未初始化',
-                'data-status-just-updated': '数据状态：刚刚更新',
-                'data-status-minutes-ago': '数据状态：%d分钟前更新',
-                'data-status-hours-ago': '数据状态：%d小时前更新',
-                'data-status-need-update': '数据状态：需要更新',
-                'data-updating': '正在更新全量数据...',
-                'data-update-complete': '数据更新完成！',
-                'data-update-failed': '数据更新失败，请稍后重试',
-                'updating': '🔄 更新中...',
-                'kol-count': '%d 个KOL',
-                'record-count': '%d 条记录',
-                
                 // 空投估算
                 'airdrop-title': '💰 HUMA 空投估算器',
                 'airdrop-description': '基于 Feathers 和 Kaito 排名估算您的 HUMA 代币空投数量',
@@ -2105,20 +2082,6 @@
                 'score-change': 'Score Change',
                 'detailed-stats': 'Detailed Stats',
                 'brief-stats': 'Brief Stats',
-                
-                // 数据管理
-                'refresh-data': '🔄 Refresh All Data',
-                'data-status-init': 'Data Status: Not initialized',
-                'data-status-just-updated': 'Data Status: Just updated',
-                'data-status-minutes-ago': 'Data Status: %d minutes ago',
-                'data-status-hours-ago': 'Data Status: %d hours ago', 
-                'data-status-need-update': 'Data Status: Need update',
-                'data-updating': 'Updating all data...',
-                'data-update-complete': 'Data update completed!',
-                'data-update-failed': 'Data update failed, please try again later',
-                'updating': '🔄 Updating...',
-                'kol-count': '%d KOLs',
-                'record-count': '%d records',
                 
                 // 空投估算
                 'airdrop-title': '💰 HUMA Airdrop Calculator',
@@ -2518,88 +2481,15 @@
             }
         }
 
-        // 强制刷新全量数据
-        async function forceRefreshData() {
-            const refreshBtn = document.getElementById('refresh-data-btn');
-            const dataInfo = document.getElementById('data-info');
-            
-            if (refreshBtn.disabled) return;
-            
-            refreshBtn.disabled = true;
-            refreshBtn.innerHTML = `<span>${translations[currentLanguage]['updating']}</span>`;
-            dataInfo.textContent = translations[currentLanguage]['data-updating'];
-            
-            try {
-                // 清除缓存
-                localStorage.removeItem('allRankingData');
-                allRankingData = { lastUpdate: null, data: {} };
-                
-                // 重新获取数据
-                await fetchAndCacheAllRankings();
-                
-                // 更新状态显示
-                updateDataStatus();
-                
-                dataInfo.textContent = translations[currentLanguage]['data-update-complete'];
-                
-            } catch (error) {
-                console.error('强制刷新数据失败:', error);
-                dataInfo.textContent = translations[currentLanguage]['data-update-failed'];
-            } finally {
-                refreshBtn.disabled = false;
-                refreshBtn.innerHTML = `<span>${translations[currentLanguage]['refresh-data']}</span>`;
-            }
-        }
+        // 强制刷新全量数据功能已在生产环境中移除
+        // async function forceRefreshData() {
+        //     // 此功能仅供开发环境使用
+        // }
 
-        // 更新数据状态显示
+        // 更新数据状态显示 - 生产环境简化版本
         function updateDataStatus() {
-            const dataInfo = document.getElementById('data-info');
-            
-            if (!allRankingData.lastUpdate) {
-                dataInfo.textContent = translations[currentLanguage]['data-status-init'];
-                return;
-            }
-            
-            const now = Date.now();
-            const updateTime = new Date(allRankingData.lastUpdate);
-            const timeDiff = now - allRankingData.lastUpdate;
-            const uniqueKOLs = Object.keys(allRankingData.data || {}).length;
-            
-            // 检查数据完整性
-            const completeness = checkDataCompleteness();
-            
-            let totalRankings = 0;
-            Object.values(allRankingData.data || {}).forEach(user => {
-                totalRankings += Object.keys(user.rankings || {}).length;
-            });
-            
-            let statusText = '';
-            const kolText = translations[currentLanguage]['kol-count'].replace('%d', uniqueKOLs);
-            const recordText = translations[currentLanguage]['record-count'].replace('%d', totalRankings);
-            const completenessText = `${completeness.projectsCovered}/95项目`;
-            
-            if (timeDiff < 60000) { // 1分钟内
-                statusText = `${translations[currentLanguage]['data-status-just-updated']} | ${kolText} | ${recordText} | ${completenessText}`;
-            } else if (timeDiff < 3600000) { // 1小时内
-                const minutes = Math.floor(timeDiff / 60000);
-                const statusBase = translations[currentLanguage]['data-status-minutes-ago'].replace('%d', minutes);
-                statusText = `${statusBase} | ${kolText} | ${recordText} | ${completenessText}`;
-            } else if (timeDiff < CACHE_EXPIRY) { // 缓存有效期内
-                const hours = Math.floor(timeDiff / 3600000);
-                const statusBase = translations[currentLanguage]['data-status-hours-ago'].replace('%d', hours);
-                statusText = `${statusBase} | ${kolText} | ${recordText} | ${completenessText}`;
-            } else { // 缓存过期
-                statusText = `${translations[currentLanguage]['data-status-need-update']} | ${kolText} | ${recordText} | ${completenessText}`;
-            }
-            
-            dataInfo.textContent = statusText;
-            
-            // 如果数据不完整，添加视觉提示
-            if (!completeness.isComplete) {
-                dataInfo.style.color = '#f39c12'; // 橙色警告
-            } else {
-                dataInfo.style.color = '#10ac84'; // 绿色正常
-            }
+            // 生产环境中不显示技术状态信息
+            return;
         }
 
         // 从本地数据中搜索用户
@@ -3386,14 +3276,9 @@
             
             // 个人搜索按钮事件
             const searchBtn = document.getElementById('search-btn');
-            const refreshBtn = document.getElementById('refresh-data-btn');
             
             if (searchBtn) {
                 searchBtn.addEventListener('click', performSearch);
-            }
-            
-            if (refreshBtn) {
-                refreshBtn.addEventListener('click', forceRefreshData);
             }
             
             // 个人搜索输入框回车事件

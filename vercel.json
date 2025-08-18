@@ -8,12 +8,20 @@
     {
       "src": "demo.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "kol.json",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
       "dest": "/server.js"
+    },
+    {
+      "src": "/kol.json",
+      "dest": "/kol.json"
     },
     {
       "src": "/(.*)",

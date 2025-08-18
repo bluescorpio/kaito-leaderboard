@@ -10,7 +10,9 @@
     "query": "node scripts/queryKolData.js",
     "search": "node scripts/queryKolData.js search",
     "stats": "node scripts/queryKolData.js stats",
-    "projects": "node scripts/queryKolData.js projects"
+    "projects": "node scripts/queryKolData.js projects",
+    "update-data": "node scripts/update-kol-data.js",
+    "test-update": "node scripts/update-kol-data.js --dry-run"
   },
   "dependencies": {
     "express": "^4.18.2",

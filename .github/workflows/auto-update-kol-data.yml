@@ -1,0 +1,74 @@
+name: Auto Update KOL Data
+
+on:
+  schedule:
+    # 每6小时更新一次 (北京时间: 2:00, 8:00, 14:00, 20:00)
+    - cron: '0 18,0,6,12 * * *'
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Make scripts executable
+      run: chmod +x scripts/update-kol-data.js
+      
+    - name: Update KOL data
+      run: node scripts/update-kol-data.js
+      
+    - name: Check for changes
+      id: verify-changed-files
+      run: |
+        if git diff --quiet kol.json; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Commit and push changes
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action Bot"
+        git add kol.json
+        
+        # 获取文件大小和统计信息
+        FILE_SIZE=$(ls -lh kol.json | awk '{print $5}')
+        TOTAL_LINES=$(wc -l < kol.json)
+        UPDATE_TIME=$(date '+%Y-%m-%d %H:%M:%S UTC')
+        
+        git commit -m "🤖 自动更新KOL数据 - ${UPDATE_TIME}
+
+📊 数据统计:
+- 文件大小: ${FILE_SIZE}
+- 总行数: ${TOTAL_LINES}
+- 更新时间: ${UPDATE_TIME}
+- 触发方式: 定时任务
+
+🔄 本次更新包含最新的个人影响力排行榜数据"
+        
+        git push
+        
+    - name: Update summary
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        echo "✅ KOL数据更新成功并已推送到GitHub" >> $GITHUB_STEP_SUMMARY
+        echo "📅 更新时间: $(date '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+        echo "📊 文件大小: $(ls -lh kol.json | awk '{print $5}')" >> $GITHUB_STEP_SUMMARY
+        
+    - name: No changes summary
+      if: steps.verify-changed-files.outputs.changed == 'false'
+      run: |
+        echo "ℹ️ 数据无变化，跳过提交" >> $GITHUB_STEP_SUMMARY
+        echo "📅 检查时间: $(date '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY

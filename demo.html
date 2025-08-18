@@ -1914,6 +1914,9 @@
         </p>
     </footer>
 
+    <!-- 引入配置文件 -->
+    <script src="config.js"></script>
+
     <script>
         // 全局错误处理
         window.addEventListener('error', function(e) {
@@ -2273,24 +2276,15 @@
             `;
         }
 
-        // 项目分类数据
+        // 项目分类数据 - 使用配置文件
         const projectCategories = {
             'pre_tge': {
                 label: 'Pre TGE 项目',
-                topics: ["0G", "ALLORA", "ANOMA", "BILLIONS", "BLS", "BOUNDLESS", "CAMP", "CYSIC", "FALCON", "FOGO", "HANAHANA",
-                        "GOATNETWORK", "INFINEX", "INFINIT", "IRYS", "KAT", "LOMBARD", "LUMITERRA", "MEGAETH",
-                        "MEMEX", "MIRA", "MITOSIS", "MOMENTUM", "MONAD", "MULTIBANK", "MULTIPLI", "NYT", "NOYA", "OPENLEDGER",
-                        "PARADEX", "PORTALPORTAL", "PUFFPAW", "SAPIEN", "SOMNIA", "SO",
-                        "SURF", "SYMPHONY", "THEORIQ", "THRIVE", "TURTLECLUB", "UNION", "WARP", "YEET"]
+                topics: KAITO_CONFIG.PRE_TGE_PROJECTS
             },
             'post_tge': {
                 label: 'Post TGE 项目',
-                topics: ["KAITO", "ANIME", "APT", "ARB", "BERA", "BLUE", "BOOPBOOPFUN", "BYBITTRADFI", "CALDERA",
-                        "CORN", "CREATORBID", "DEFIAPP", "DYDX", "ECLIPSE", "FRAX", "FUEL", "HUMAFINANCE",
-                        "HUMANITY", "INITIA", "INJ", "IQ", "KAIA", "KINTO", "MNT", "OM", "MAPLESTORYUNIVERSE",
-                        "MOVEMENT", "NEAR", "NEWTON", "ORDERLYNETWORK", "PEAQ", "PENGU", "DOT", "POL", "PYTH",
-                        "QUAI", "SATLAYER", "SEI", "SIDEKICK", "SKATE", "S", "SOON", "SOPHON", "STARKNET", "STORYPROTOCOL", "SUCCINCT", "UXLINK",
-                        "VIRTUALECOSYSTEM", "WAL", "WAYFINDER", "XION", "ZEC"]
+                topics: KAITO_CONFIG.POST_TGE_PROJECTS
             }
         };
 

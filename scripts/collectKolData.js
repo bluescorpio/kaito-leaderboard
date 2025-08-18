@@ -3,6 +3,9 @@ const fs = require('fs').promises;
 const path = require('path');
 const crypto = require('crypto');
 
+// 导入配置文件
+const CONFIG = require('../config.js');
+
 // 环境检测 - 防止在生产环境运行
 const ENV_CHECK = {
     isDevelopment: process.env.NODE_ENV !== 'production',
@@ -83,25 +86,10 @@ const RATE_LIMIT_CONFIG = {
     hourlyLimit: 20               // 每小时API调用限制
 };
 
-// 项目分类
-const PRE_TGE_TOPICS = [
-    "0G", "ALLORA", "ANOMA", "BILLIONS", "BLS", "BOUNDLESS", "CAMP", "CYSIC", "FALCON", "FOGO", "HANAHANA",
-    "GOATNETWORK", "INFINEX", "INFINIT", "IRYS", "KAT", "LOMBARD", "LUMITERRA", "MEGAETH",
-    "MEMEX", "MIRA", "MITOSIS", "MOMENTUM", "MONAD", "MULTIBANK", "MULTIPLI", "NYT", "NOYA", "OPENLEDGER",
-    "PARADEX", "PORTALPORTAL", "PUFFPAW", "SAPIEN", "SOMNIA", "SO",
-    "SURF", "SYMPHONY", "THEORIQ", "THRIVE", "TURTLECLUB", "UNION", "WARP", "YEET"
-];
-
-const POST_TGE_TOPICS = [
-    "KAITO", "ANIME", "APT", "ARB", "BERA", "BLUE", "BOOPBOOPFUN", "BYBITTRADFI", "CALDERA",
-    "CORN", "CREATORBID", "DEFIAPP", "DYDX", "ECLIPSE", "FRAX", "FUEL", "HUMAFINANCE",
-    "HUMANITY", "INITIA", "INJ", "IQ", "KAIA", "KINTO", "MNT", "OM", "MAPLESTORYUNIVERSE",
-    "MOVEMENT", "NEAR", "NEWTON", "ORDERLYNETWORK", "PEAQ", "PENGU", "DOT", "POL", "PYTH",
-    "QUAI", "SATLAYER", "SEI", "SIDEKICK", "SKATE", "S", "SOON", "SOPHON", "STARKNET", "STORYPROTOCOL", "SUCCINCT", "UXLINK",
-    "VIRTUALECOSYSTEM", "WAL", "WAYFINDER", "XION", "ZEC"
-];
-
-const DURATIONS = ["7d", "30d", "3m", "6m", "12m"];
+// 使用配置文件中的项目分类
+const PRE_TGE_TOPICS = CONFIG.PRE_TGE_PROJECTS;
+const POST_TGE_TOPICS = CONFIG.POST_TGE_PROJECTS;
+const DURATIONS = CONFIG.DURATIONS;
 
 // 延迟函数，避免请求过于频繁
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));

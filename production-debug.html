@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生产环境调试工具</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .test-item { margin: 15px 0; padding: 15px; border: 1px solid #ddd; border-radius: 4px; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .warning { background: #fff3cd; border-color: #ffeaa7; }
+        .loading { background: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+        .log { max-height: 200px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 生产环境调试工具</h1>
+        <p>这个工具帮助诊断生产环境中数据加载的问题</p>
+        
+        <div class="test-item loading" id="environment-check">
+            <h3>📍 环境检测</h3>
+            <p id="env-info">正在检测环境...</p>
+        </div>
+        
+        <div class="test-item" id="kol-json-test">
+            <h3>📄 kol.json 文件测试</h3>
+            <button onclick="testKolJson()">测试 kol.json 加载</button>
+            <div id="kol-json-result"></div>
+        </div>
+        
+        <div class="test-item" id="api-test">
+            <h3>🔗 API 连接测试</h3>
+            <button onclick="testAPI()">测试 API 连接</button>
+            <div id="api-result"></div>
+        </div>
+        
+        <div class="test-item" id="data-load-test">
+            <h3>📊 数据加载测试</h3>
+            <button onclick="testDataLoad()">测试完整数据加载流程</button>
+            <div id="data-load-result"></div>
+        </div>
+        
+        <div class="test-item" id="console-logs">
+            <h3>📝 控制台日志</h3>
+            <button onclick="clearLogs()">清空日志</button>
+            <div id="log-container" class="log"></div>
+        </div>
+    </div>
+
+    <script>
+        let logs = [];
+
+        // 拦截 console 输出
+        const originalLog = console.log;
+        const originalWarn = console.warn;
+        const originalError = console.error;
+
+        function addLog(type, message) {
+            const timestamp = new Date().toLocaleTimeString();
+            logs.push(`[${timestamp}] ${type}: ${message}`);
+            updateLogDisplay();
+        }
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addLog('LOG', args.join(' '));
+        };
+
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addLog('WARN', args.join(' '));
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addLog('ERROR', args.join(' '));
+        };
+
+        function updateLogDisplay() {
+            const container = document.getElementById('log-container');
+            container.innerHTML = '<pre>' + logs.slice(-20).join('\n') + '</pre>';
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function clearLogs() {
+            logs = [];
+            updateLogDisplay();
+        }
+
+        // 环境检测
+        function detectEnvironment() {
+            const envInfo = document.getElementById('env-info');
+            const envCheck = document.getElementById('environment-check');
+            
+            const info = {
+                domain: window.location.hostname,
+                protocol: window.location.protocol,
+                port: window.location.port,
+                pathname: window.location.pathname,
+                userAgent: navigator.userAgent.substring(0, 100) + '...'
+            };
+            
+            envInfo.innerHTML = `
+                <strong>当前环境信息:</strong><br>
+                域名: ${info.domain}<br>
+                协议: ${info.protocol}<br>
+                端口: ${info.port || '默认'}<br>
+                路径: ${info.pathname}<br>
+                <small>浏览器: ${info.userAgent}</small>
+            `;
+            
+            if (info.domain === 'localhost' || info.domain === '127.0.0.1') {
+                envCheck.className = 'test-item warning';
+                envInfo.innerHTML += '<br><strong>⚠️ 检测到本地环境</strong>';
+            } else {
+                envCheck.className = 'test-item success';
+                envInfo.innerHTML += '<br><strong>✅ 检测到生产环境</strong>';
+            }
+            
+            console.log('环境检测完成:', info);
+        }
+
+        // 测试 kol.json 加载
+        async function testKolJson() {
+            const result = document.getElementById('kol-json-result');
+            result.innerHTML = '<p>正在测试 kol.json...</p>';
+            
+            try {
+                console.log('开始测试 kol.json 加载...');
+                const response = await fetch('./kol.json');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                result.innerHTML = `
+                    <div class="success">
+                        <p><strong>✅ kol.json 加载成功</strong></p>
+                        <p>文件大小: ${response.headers.get('content-length') || '未知'} bytes</p>
+                        <p>项目总数: ${data.totalProjects || '未知'}</p>
+                        <p>最后更新: ${data.lastUpdate || '未知'}</p>
+                        <p>数据类别: ${data.categories ? Object.keys(data.categories).length : 0} 个</p>
+                    </div>
+                `;
+                console.log('✅ kol.json 测试成功', data);
+                
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="error">
+                        <p><strong>❌ kol.json 加载失败</strong></p>
+                        <p>错误: ${error.message}</p>
+                        <p><strong>解决方案:</strong></p>
+                        <ul>
+                            <li>确保 kol.json 文件存在于网站根目录</li>
+                            <li>检查文件权限和服务器配置</li>
+                            <li>确认文件格式正确</li>
+                        </ul>
+                    </div>
+                `;
+                console.error('❌ kol.json 测试失败:', error);
+            }
+        }
+
+        // 测试 API 连接
+        async function testAPI() {
+            const result = document.getElementById('api-result');
+            result.innerHTML = '<p>正在测试 API 连接...</p>';
+            
+            try {
+                console.log('开始测试 API 连接...');
+                const testUrl = '/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=BITCOIN&top_n=10&community_tier=tier1&customized_community=customized&community_yaps=true';
+                const response = await fetch(testUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                result.innerHTML = `
+                    <div class="success">
+                        <p><strong>✅ API 连接成功</strong></p>
+                        <p>返回数据条数: ${Array.isArray(data) ? data.length : '非数组格式'}</p>
+                        <p>数据示例: ${JSON.stringify(data).substring(0, 100)}...</p>
+                    </div>
+                `;
+                console.log('✅ API 测试成功', data);
+                
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="warning">
+                        <p><strong>⚠️ API 连接失败 (这在纯静态部署中是正常的)</strong></p>
+                        <p>错误: ${error.message}</p>
+                        <p><strong>说明:</strong> 生产环境通常使用本地 JSON 文件而不是 API</p>
+                    </div>
+                `;
+                console.warn('⚠️ API 测试失败 (预期):', error);
+            }
+        }
+
+        // 测试完整数据加载流程
+        async function testDataLoad() {
+            const result = document.getElementById('data-load-result');
+            result.innerHTML = '<p>正在测试数据加载流程...</p>';
+            
+            try {
+                console.log('开始测试完整数据加载流程...');
+                
+                // 模拟实际的数据加载过程
+                let kolJsonData = null;
+                
+                // 1. 尝试加载 kol.json
+                try {
+                    const response = await fetch('./kol.json');
+                    if (response.ok) {
+                        kolJsonData = await response.json();
+                        console.log('✅ 成功加载 kol.json');
+                    } else {
+                        throw new Error(`无法加载 kol.json: ${response.status}`);
+                    }
+                } catch (error) {
+                    console.error('❌ kol.json 加载失败:', error);
+                    throw error;
+                }
+                
+                // 2. 测试数据提取
+                if (kolJsonData && kolJsonData.categories) {
+                    const categories = Object.keys(kolJsonData.categories);
+                    console.log('可用数据类别:', categories);
+                    
+                    // 尝试获取第一个类别的数据
+                    if (categories.length > 0) {
+                        const firstCategory = kolJsonData.categories[categories[0]];
+                        const projects = Object.keys(firstCategory);
+                        console.log(`类别 ${categories[0]} 包含项目:`, projects.slice(0, 5));
+                        
+                        if (projects.length > 0) {
+                            const firstProject = firstCategory[projects[0]];
+                            const durations = Object.keys(firstProject);
+                            console.log(`项目 ${projects[0]} 包含时间段:`, durations);
+                        }
+                    }
+                }
+                
+                result.innerHTML = `
+                    <div class="success">
+                        <p><strong>✅ 数据加载流程测试成功</strong></p>
+                        <p>数据文件: kol.json 正常</p>
+                        <p>数据结构: 完整</p>
+                        <p><strong>建议:</strong> 数据加载功能正常，可能是前端渲染逻辑问题</p>
+                    </div>
+                `;
+                console.log('✅ 数据加载流程测试成功');
+                
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="error">
+                        <p><strong>❌ 数据加载流程失败</strong></p>
+                        <p>错误: ${error.message}</p>
+                        <p><strong>解决方案:</strong></p>
+                        <ul>
+                            <li>检查 kol.json 文件是否正确部署</li>
+                            <li>确认网站可以访问静态文件</li>
+                            <li>检查浏览器网络面板中的具体错误</li>
+                        </ul>
+                    </div>
+                `;
+                console.error('❌ 数据加载流程失败:', error);
+            }
+        }
+
+        // 页面加载时自动执行环境检测
+        window.addEventListener('load', function() {
+            detectEnvironment();
+            console.log('🔧 生产环境调试工具已加载');
+        });
+    </script>
+</body>
+</html>

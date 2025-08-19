@@ -2322,12 +2322,20 @@
 
         // 格式化数字
         function formatNumber(num) {
-            if (num >= 1000000) {
-                return (num / 1000000).toFixed(1) + 'M';
-            } else if (num >= 1000) {
-                return (num / 1000).toFixed(1) + 'K';
+            // 检查num是否为有效数字
+            if (num === null || num === undefined || isNaN(num)) {
+                return '0';
             }
-            return num.toString();
+            
+            // 确保num是数字类型
+            const numValue = Number(num);
+            
+            if (numValue >= 1000000) {
+                return (numValue / 1000000).toFixed(1) + 'M';
+            } else if (numValue >= 1000) {
+                return (numValue / 1000).toFixed(1) + 'K';
+            }
+            return numValue.toString();
         }
 
         // 检查数据完整性
@@ -2944,7 +2952,8 @@
                 }
             } catch (error) {
                 console.error('加载数据失败:', error);
-                showErrorMessage('数据加载失败，请稍后重试');
+                console.error('错误堆栈:', error.stack);
+                showErrorMessage(`数据加载失败: ${error.message}`);
             }
         }
 

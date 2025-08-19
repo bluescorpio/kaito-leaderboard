@@ -2261,12 +2261,20 @@
 
         // 格式化数字
         function formatNumber(num) {
-            if (num >= 1000000) {
-                return (num / 1000000).toFixed(1) + 'M';
-            } else if (num >= 1000) {
-                return (num / 1000).toFixed(1) + 'K';
+            // 检查num是否为有效数字
+            if (num === null || num === undefined || isNaN(num)) {
+                return '0';
             }
-            return num.toString();
+            
+            // 确保num是数字类型
+            const numValue = Number(num);
+            
+            if (numValue >= 1000000) {
+                return (numValue / 1000000).toFixed(1) + 'M';
+            } else if (numValue >= 1000) {
+                return (numValue / 1000).toFixed(1) + 'K';
+            }
+            return numValue.toString();
         }
 
         // 检查数据完整性
@@ -2788,14 +2796,23 @@
             document.getElementById('users-grid').style.display = 'none';
 
             try {
+                console.log(`开始加载数据: ${topic} - ${duration} - ${topN}条`);
                 currentData = await fetchKaitoData(duration, topic, topN);
-                if (currentData.length > 0) {
+                console.log(`获取到数据:`, currentData);
+                
+                if (currentData && currentData.length > 0) {
+                    console.log(`✅ 准备渲染 ${currentData.length} 条数据`);
                     renderUsers(currentData);
                     updateLabels();
+                    console.log(`✅ 数据渲染完成`);
+                } else {
+                    console.warn(`⚠️ 未获取到数据: ${topic}/${duration}`);
+                    showErrorMessage(`未找到 ${topic} 项目的 ${duration} 数据`);
                 }
             } catch (error) {
                 console.error('加载数据失败:', error);
-                showErrorMessage('数据加载失败，请稍后重试');
+                console.error('错误堆栈:', error.stack);
+                showErrorMessage(`数据加载失败: ${error.message}`);
             }
         }
 
@@ -3245,24 +3262,44 @@
 
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // 初始化语言
-            updateLanguage();
-            // 初始化其他功能
-            updateTopicSelect('post_tge');
-            loadData();
+            console.log('🚀 页面DOM加载完成');
             
-            // 初始化个人搜索功能
-            loadCachedData();
-            updateDataStatus();
-            
-            // 检查缓存是否过期并自动刷新
-            if (shouldRefreshCache()) {
-                console.log('缓存已过期，正在自动刷新...');
-                fetchAndCacheAllRankings();
+            // 等待配置加载完成
+            function initializeWhenReady() {
+                if (typeof KAITO_CONFIG === 'undefined') {
+                    console.log('⏳ 等待KAITO_CONFIG加载...');
+                    setTimeout(initializeWhenReady, 100);
+                    return;
+                }
+                
+                console.log('✅ KAITO_CONFIG已加载，开始初始化');
+                
+                // 初始化语言
+                updateLanguage();
+                // 初始化其他功能
+                updateTopicSelect('post_tge');
+                
+                // 延迟加载数据，确保所有初始化完成
+                setTimeout(() => {
+                    console.log('🔄 开始加载初始数据');
+                    loadData();
+                }, 500);
+                
+                // 初始化个人搜索功能
+                loadCachedData();
+                updateDataStatus();
+                
+                // 检查缓存是否过期并自动刷新
+                if (shouldRefreshCache()) {
+                    console.log('缓存已过期，正在自动刷新...');
+                    fetchAndCacheAllRankings();
+                }
+                
+                // 设置定时状态更新（每30秒）
+                setInterval(updateDataStatus, 30000);
             }
             
-            // 设置定时状态更新（每30秒）
-            setInterval(updateDataStatus, 30000);
+            initializeWhenReady();
             
             // 回车键搜索功能
             const searchInput = document.getElementById('twitter-id-input');

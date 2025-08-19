@@ -37,19 +37,6 @@
             z-index: 1000;
         }
 
-        /* 数据源指示器样式 */
-        .data-source-indicator {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
         .lang-btn {
             display: flex;
             align-items: center;
@@ -1491,11 +1478,6 @@
 </head>
 <body>
     <header class="app-header">
-        <!-- 数据源指示器 -->
-        <div class="data-source-indicator" id="data-source-indicator">
-            📊 数据源：正在检测...
-        </div>
-        
         <!-- 语言切换按钮 -->
         <div class="language-switcher">
             <button id="lang-btn" class="lang-btn" onclick="toggleLanguage()">
@@ -2232,24 +2214,6 @@
         let kolJsonData = null;
         
         // 更新数据源指示器
-        function updateDataSourceIndicator(source) {
-            const indicator = document.getElementById('data-source-indicator');
-            
-            if (source === 'api') {
-                indicator.innerHTML = '🔗 数据源：实时API';
-                indicator.style.background = 'rgba(76, 175, 80, 0.3)';
-                indicator.style.borderColor = 'rgba(76, 175, 80, 0.5)';
-            } else if (source === 'local') {
-                indicator.innerHTML = '📁 数据源：本地文件';
-                indicator.style.background = 'rgba(255, 193, 7, 0.3)';
-                indicator.style.borderColor = 'rgba(255, 193, 7, 0.5)';
-            } else {
-                indicator.innerHTML = '❌ 数据源：无可用数据';
-                indicator.style.background = 'rgba(244, 67, 54, 0.3)';
-                indicator.style.borderColor = 'rgba(244, 67, 54, 0.5)';
-            }
-        }
-        
         // 本地存储的所有排名数据
         let allRankingData = {
             lastUpdate: null,
@@ -2261,12 +2225,20 @@
 
         // 格式化数字
         function formatNumber(num) {
-            if (num >= 1000000) {
-                return (num / 1000000).toFixed(1) + 'M';
-            } else if (num >= 1000) {
-                return (num / 1000).toFixed(1) + 'K';
+            // 检查num是否为有效数字
+            if (num === null || num === undefined || isNaN(num)) {
+                return '0';
             }
-            return num.toString();
+            
+            // 确保num是数字类型
+            const numValue = Number(num);
+            
+            if (numValue >= 1000000) {
+                return (numValue / 1000000).toFixed(1) + 'M';
+            } else if (numValue >= 1000) {
+                return (numValue / 1000).toFixed(1) + 'K';
+            }
+            return numValue.toString();
         }
 
         // 检查数据完整性
@@ -2795,7 +2767,8 @@
                 }
             } catch (error) {
                 console.error('加载数据失败:', error);
-                showErrorMessage('数据加载失败，请稍后重试');
+                console.error('错误堆栈:', error.stack);
+                showErrorMessage(`数据加载失败: ${error.message}`);
             }
         }
 

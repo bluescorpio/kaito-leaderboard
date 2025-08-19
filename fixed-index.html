@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOL排行榜 - 修复版本</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .control-group { display: flex; flex-direction: column; gap: 5px; }
+        select, button { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007bff; color: white; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .status { margin: 20px 0; padding: 15px; border-radius: 4px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .loading { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        .kol-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .kol-card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .kol-rank { font-size: 24px; font-weight: bold; color: #007bff; margin-bottom: 10px; }
+        .kol-name { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+        .kol-username { color: #666; margin-bottom: 10px; }
+        .kol-bio { font-size: 14px; color: #777; margin-bottom: 15px; max-height: 60px; overflow: hidden; }
+        .kol-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat { text-align: center; padding: 10px; background: #f8f9fa; border-radius: 4px; }
+        .stat-value { font-size: 16px; font-weight: bold; }
+        .stat-label { font-size: 12px; color: #666; }
+        .avatar { width: 60px; height: 60px; border-radius: 50%; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 KOL排行榜</h1>
+            <p>实时数据驱动的KOL影响力排行榜</p>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>项目类别</label>
+                <select id="category-select">
+                    <option value="post_tge">Post TGE 项目</option>
+                    <option value="pre_tge">Pre TGE 项目</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>具体项目</label>
+                <select id="topic-select">
+                    <option value="KAITO">KAITO</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>时间周期</label>
+                <select id="duration-select">
+                    <option value="7d">7天</option>
+                    <option value="30d">30天</option>
+                    <option value="3m">3个月</option>
+                    <option value="6m">6个月</option>
+                    <option value="12m">12个月</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>显示数量</label>
+                <select id="top-n-select">
+                    <option value="10">前10名</option>
+                    <option value="20">前20名</option>
+                    <option value="50">前50名</option>
+                    <option value="100">前100名</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>&nbsp;</label>
+                <button onclick="loadKolData()">🔄 刷新数据</button>
+            </div>
+        </div>
+        
+        <div id="status" class="status loading">正在初始化...</div>
+        <div id="kol-container" class="kol-grid"></div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        let currentData = null;
+        
+        // 安全的数据获取
+        async function fetchKolData(duration, topic_id, top_n) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = '🔄 正在获取数据...';
+            statusDiv.className = 'status loading';
+            
+            try {
+                // 1. 尝试API
+                const apiUrl = `/api/kol/mindshare/top-leaderboard?duration=${duration}&topic_id=${topic_id}&top_n=${top_n}&community_tier=tier1&customized_community=customized&community_yaps=true`;
+                console.log('🌐 尝试API请求:', apiUrl);
+                
+                const response = await fetch(apiUrl);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.length > 0) {
+                        console.log('✅ API数据获取成功:', data.length, '条记录');
+                        return data;
+                    }
+                }
+                
+                // 2. API失败，尝试本地数据
+                console.log('⚠️ API失败，尝试本地数据...');
+                const localResponse = await fetch('./kol.json');
+                if (localResponse.ok) {
+                    const localData = await localResponse.json();
+                    
+                    // 确定项目分类
+                    const category = (KAITO_CONFIG?.POST_TGE_PROJECTS?.includes(topic_id)) ? 'post_tge' : 'pre_tge';
+                    const projectData = localData.categories?.[category]?.[topic_id]?.[duration];
+                    
+                    if (projectData && projectData.length > 0) {
+                        const limitedData = projectData.slice(0, parseInt(top_n));
+                        console.log('✅ 本地数据获取成功:', limitedData.length, '条记录');
+                        return limitedData;
+                    }
+                }
+                
+                throw new Error('无法获取数据');
+                
+            } catch (error) {
+                console.error('❌ 数据获取失败:', error);
+                throw error;
+            }
+        }
+        
+        // 渲染KOL数据
+        function renderKolData(data) {
+            const container = document.getElementById('kol-container');
+            const statusDiv = document.getElementById('status');
+            
+            if (!data || data.length === 0) {
+                statusDiv.innerHTML = '❌ 暂无数据';
+                statusDiv.className = 'status error';
+                container.innerHTML = '';
+                return;
+            }
+            
+            statusDiv.innerHTML = `✅ 成功加载 ${data.length} 条数据`;
+            statusDiv.className = 'status success';
+            
+            container.innerHTML = data.map((kol, index) => {
+                // 数据安全处理
+                const safeKol = {
+                    rank: kol.rank || (index + 1),
+                    name: kol.name || kol.username || 'Unknown',
+                    username: kol.username || '',
+                    bio: (kol.bio || 'No bio available').substring(0, 100),
+                    icon: kol.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(kol.name || 'U')}&background=random`,
+                    mindshare: Number(kol.mindshare || 0),
+                    follower_count: Number(kol.follower_count || 0),
+                    smart_follower_count: Number(kol.smart_follower_count || 0),
+                    community_score: Number(kol.community_score || 0),
+                    twitter_user_url: kol.twitter_user_url || '#'
+                };
+                
+                return `
+                    <div class="kol-card">
+                        <div class="kol-rank">#${safeKol.rank}</div>
+                        <img src="${safeKol.icon}" alt="${safeKol.name}" class="avatar" 
+                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(safeKol.name)}&background=random'">
+                        <div class="kol-name">${safeKol.name}</div>
+                        <div class="kol-username">@${safeKol.username}</div>
+                        <div class="kol-bio">${safeKol.bio}</div>
+                        
+                        <div class="kol-stats">
+                            <div class="stat">
+                                <div class="stat-value">${(safeKol.mindshare * 100).toFixed(2)}%</div>
+                                <div class="stat-label">影响力</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${safeKol.follower_count.toLocaleString()}</div>
+                                <div class="stat-label">粉丝数</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${safeKol.smart_follower_count.toLocaleString()}</div>
+                                <div class="stat-label">智能粉丝</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${safeKol.community_score}</div>
+                                <div class="stat-label">社区评分</div>
+                            </div>
+                        </div>
+                        
+                        ${safeKol.twitter_user_url !== '#' ? 
+                            `<a href="${safeKol.twitter_user_url}" target="_blank" style="display: block; margin-top: 10px; text-align: center; color: #007bff;">🐦 查看Twitter</a>` : 
+                            ''
+                        }
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // 更新项目选择器
+        function updateTopicSelect() {
+            const categorySelect = document.getElementById('category-select');
+            const topicSelect = document.getElementById('topic-select');
+            const category = categorySelect.value;
+            
+            if (!KAITO_CONFIG) {
+                console.warn('KAITO_CONFIG未加载');
+                return;
+            }
+            
+            const projects = category === 'post_tge' ? 
+                KAITO_CONFIG.POST_TGE_PROJECTS : 
+                KAITO_CONFIG.PRE_TGE_PROJECTS;
+            
+            topicSelect.innerHTML = projects.map(project => 
+                `<option value="${project}">${project}</option>`
+            ).join('');
+        }
+        
+        // 加载KOL数据
+        async function loadKolData() {
+            const duration = document.getElementById('duration-select').value;
+            const topic = document.getElementById('topic-select').value;
+            const topN = document.getElementById('top-n-select').value;
+            
+            try {
+                const data = await fetchKolData(duration, topic, topN);
+                currentData = data;
+                renderKolData(data);
+            } catch (error) {
+                const statusDiv = document.getElementById('status');
+                statusDiv.innerHTML = `❌ 加载失败: ${error.message}`;
+                statusDiv.className = 'status error';
+                document.getElementById('kol-container').innerHTML = '';
+            }
+        }
+        
+        // 初始化
+        function initialize() {
+            const statusDiv = document.getElementById('status');
+            
+            if (typeof KAITO_CONFIG === 'undefined') {
+                statusDiv.innerHTML = '⏳ 等待配置加载...';
+                setTimeout(initialize, 100);
+                return;
+            }
+            
+            console.log('✅ 初始化完成');
+            updateTopicSelect();
+            loadKolData();
+            
+            // 绑定事件
+            document.getElementById('category-select').addEventListener('change', () => {
+                updateTopicSelect();
+                loadKolData();
+            });
+            
+            ['topic-select', 'duration-select', 'top-n-select'].forEach(id => {
+                document.getElementById(id).addEventListener('change', loadKolData);
+            });
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initialize);
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{
+  "analysis_time": "2025-08-18T15:30:44.187Z",
+  "file_update_time": "2025-08-18T10:28:21.578Z",
+  "statistics": {
+    "total_projects": 96,
+    "total_timeframes": 480,
+    "total_records": 31918,
+    "total_unique_kols": 3235,
+    "category_stats": {
+      "pre_tge": {
+        "projects": 44,
+        "total_records": 16526,
+        "unique_kols": 1738
+      },
+      "post_tge": {
+        "projects": 52,
+        "total_records": 15392,
+        "unique_kols": 2290
+      }
+    },
+    "timeframe_stats": {
+      "7d": {
+        "projects": 96,
+        "total_kols": 5002,
+        "unique_kols": 2043
+      },
+      "30d": {
+        "projects": 96,
+        "total_kols": 6127,
+        "unique_kols": 2358
+      },
+      "3m": {
+        "projects": 96,
+        "total_kols": 6884,
+        "unique_kols": 2593
+      },
+      "6m": {
+        "projects": 96,
+        "total_kols": 6952,
+        "unique_kols": 2652
+      },
+      "12m": {
+        "projects": 96,
+        "total_kols": 6953,
+        "unique_kols": 2667
+      }
+    },
+    "data_quality": {
+      "recordsWithSmartFollowers": 31918,
+      "recordsWithMindshare": 31918,
+      "recordsWithCommunityScore": 31918,
+      "recordsWithBio": 31758,
+      "recordsWithIcon": 31918
+    }
+  }
+}

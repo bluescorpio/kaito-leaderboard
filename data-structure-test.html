@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据结构对比测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        pre { background: #f5f5f5; padding: 10px; overflow: auto; max-height: 300px; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>数据结构对比</h1>
+    
+    <div class="section">
+        <h2>API数据结构</h2>
+        <div id="api-structure">加载中...</div>
+    </div>
+    
+    <div class="section">
+        <h2>本地JSON数据结构</h2>
+        <div id="local-structure">加载中...</div>
+    </div>
+    
+    <div class="section">
+        <h2>数据转换测试</h2>
+        <div id="conversion-test">测试中...</div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        async function compareDataStructures() {
+            // 1. 获取API数据
+            try {
+                const apiResponse = await fetch('/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=5&community_tier=tier1&customized_community=customized&community_yaps=true');
+                
+                if (apiResponse.ok) {
+                    const apiData = await apiResponse.json();
+                    document.getElementById('api-structure').innerHTML = `
+                        <div class="success">✅ API数据获取成功 (${apiData.length}条)</div>
+                        <h3>第一条记录结构:</h3>
+                        <pre>${JSON.stringify(apiData[0], null, 2)}</pre>
+                        <h3>字段列表:</h3>
+                        <pre>${Object.keys(apiData[0] || {}).join(', ')}</pre>
+                    `;
+                    
+                    // 测试数据转换
+                    testDataConversion(apiData[0], 'api');
+                } else {
+                    throw new Error(`API请求失败: ${apiResponse.status}`);
+                }
+            } catch (error) {
+                document.getElementById('api-structure').innerHTML = `
+                    <div class="error">❌ API数据获取失败: ${error.message}</div>
+                `;
+            }
+            
+            // 2. 获取本地数据
+            try {
+                const localResponse = await fetch('./kol.json');
+                if (localResponse.ok) {
+                    const localData = await localResponse.json();
+                    const kaitoData = localData.categories?.post_tge?.KAITO?.['7d'];
+                    
+                    if (kaitoData && kaitoData.length > 0) {
+                        document.getElementById('local-structure').innerHTML = `
+                            <div class="success">✅ 本地数据获取成功 (${kaitoData.length}条)</div>
+                            <h3>第一条记录结构:</h3>
+                            <pre>${JSON.stringify(kaitoData[0], null, 2)}</pre>
+                            <h3>字段列表:</h3>
+                            <pre>${Object.keys(kaitoData[0] || {}).join(', ')}</pre>
+                        `;
+                        
+                        // 测试数据转换
+                        testDataConversion(kaitoData[0], 'local');
+                    } else {
+                        throw new Error('本地数据中没有KAITO 7d数据');
+                    }
+                } else {
+                    throw new Error(`本地数据加载失败: ${localResponse.status}`);
+                }
+            } catch (error) {
+                document.getElementById('local-structure').innerHTML = `
+                    <div class="error">❌ 本地数据获取失败: ${error.message}</div>
+                `;
+            }
+        }
+        
+        function testDataConversion(sampleData, source) {
+            const testDiv = document.getElementById('conversion-test');
+            
+            try {
+                // 测试关键字段是否存在
+                const requiredFields = ['name', 'username', 'rank', 'mindshare', 'icon'];
+                const missingFields = requiredFields.filter(field => !(field in sampleData));
+                
+                let result = `<h3>${source.toUpperCase()}数据转换测试:</h3>`;
+                
+                if (missingFields.length === 0) {
+                    result += `<div class="success">✅ 所有必需字段都存在</div>`;
+                } else {
+                    result += `<div class="error">❌ 缺失字段: ${missingFields.join(', ')}</div>`;
+                }
+                
+                // 测试数据类型
+                result += `<h4>字段类型检查:</h4><ul>`;
+                Object.entries(sampleData).forEach(([key, value]) => {
+                    result += `<li><strong>${key}</strong>: ${typeof value} = ${JSON.stringify(value)}</li>`;
+                });
+                result += `</ul>`;
+                
+                // 模拟渲染测试
+                try {
+                    const mockRender = {
+                        rank: sampleData.rank || 'N/A',
+                        name: sampleData.name || 'Unknown',
+                        username: sampleData.username || 'unknown',
+                        icon: sampleData.icon || '',
+                        bio: sampleData.bio || 'No bio available',
+                        mindshare: sampleData.mindshare || 0,
+                        follower_count: sampleData.follower_count || 0,
+                        smart_follower_count: sampleData.smart_follower_count || 0,
+                        community_score: sampleData.community_score || 0
+                    };
+                    
+                    result += `<h4>模拟渲染数据:</h4>`;
+                    result += `<pre>${JSON.stringify(mockRender, null, 2)}</pre>`;
+                    result += `<div class="success">✅ 数据渲染测试通过</div>`;
+                } catch (renderError) {
+                    result += `<div class="error">❌ 渲染测试失败: ${renderError.message}</div>`;
+                }
+                
+                testDiv.innerHTML += result;
+                
+            } catch (error) {
+                testDiv.innerHTML += `<div class="error">❌ ${source}数据转换测试失败: ${error.message}</div>`;
+            }
+        }
+        
+        window.addEventListener('load', compareDataStructures);
+    </script>
+</body>
+</html>

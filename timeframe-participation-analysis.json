@@ -1,0 +1,2381 @@
+{
+  "results": [
+    {
+      "project": "0G",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 69,
+        "30d": 82,
+        "3m": 92,
+        "6m": 92,
+        "12m": 92
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 69,
+      "max_participation": 92,
+      "avg_participation": 85.4
+    },
+    {
+      "project": "ALLORA",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 49,
+        "30d": 68,
+        "3m": 72,
+        "6m": 72,
+        "12m": 72
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 49,
+      "max_participation": 72,
+      "avg_participation": 66.6
+    },
+    {
+      "project": "ANOMA",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "BILLIONS",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "BLS",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "BOUNDLESS",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 99,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 99,
+      "max_participation": 100,
+      "avg_participation": 99.8
+    },
+    {
+      "project": "CAMP",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "CYSIC",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 57,
+        "30d": 67,
+        "3m": 68,
+        "6m": 68,
+        "12m": 68
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 57,
+      "max_participation": 68,
+      "avg_participation": 65.6
+    },
+    {
+      "project": "EVERLYN",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 44,
+        "30d": 44,
+        "3m": 44,
+        "6m": 44,
+        "12m": 44
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 44,
+      "max_participation": 44,
+      "avg_participation": 44
+    },
+    {
+      "project": "FALCON",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 64,
+        "30d": 66,
+        "3m": 66,
+        "6m": 66,
+        "12m": 66
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 64,
+      "max_participation": 66,
+      "avg_participation": 65.6
+    },
+    {
+      "project": "FOGO",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 20,
+        "30d": 29,
+        "3m": 38,
+        "6m": 39,
+        "12m": 39
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 20,
+      "max_participation": 39,
+      "avg_participation": 33
+    },
+    {
+      "project": "HANAHANA",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 53,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 53,
+      "max_participation": 100,
+      "avg_participation": 90.6
+    },
+    {
+      "project": "GOATNETWORK",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "INFINEX",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 83,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 83,
+      "max_participation": 100,
+      "avg_participation": 96.6
+    },
+    {
+      "project": "INFINIT",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "IRYS",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "KAT",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 65,
+        "30d": 82,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 65,
+      "max_participation": 100,
+      "avg_participation": 89.4
+    },
+    {
+      "project": "LOMBARD",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 47,
+        "30d": 74,
+        "3m": 90,
+        "6m": 90,
+        "12m": 90
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 47,
+      "max_participation": 90,
+      "avg_participation": 78.2
+    },
+    {
+      "project": "LUMITERRA",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 45,
+        "30d": 57,
+        "3m": 69,
+        "6m": 69,
+        "12m": 69
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 45,
+      "max_participation": 69,
+      "avg_participation": 61.8
+    },
+    {
+      "project": "MEGAETH",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 91,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 91,
+      "max_participation": 100,
+      "avg_participation": 98.2
+    },
+    {
+      "project": "MEMEX",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 25,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 25,
+      "max_participation": 100,
+      "avg_participation": 85
+    },
+    {
+      "project": "MIRA",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 56,
+        "30d": 88,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 56,
+      "max_participation": 100,
+      "avg_participation": 88.8
+    },
+    {
+      "project": "MITOSIS",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 70,
+        "30d": 91,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 70,
+      "max_participation": 100,
+      "avg_participation": 92.2
+    },
+    {
+      "project": "MOMENTUM",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 40,
+        "30d": 46,
+        "3m": 47,
+        "6m": 47,
+        "12m": 47
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 40,
+      "max_participation": 47,
+      "avg_participation": 45.4
+    },
+    {
+      "project": "MONAD",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "MULTIBANK",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 32,
+        "30d": 39,
+        "3m": 45,
+        "6m": 45,
+        "12m": 45
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 32,
+      "max_participation": 45,
+      "avg_participation": 41.2
+    },
+    {
+      "project": "MULTIPLI",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 54,
+        "30d": 61,
+        "3m": 65,
+        "6m": 65,
+        "12m": 65
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 54,
+      "max_participation": 65,
+      "avg_participation": 62
+    },
+    {
+      "project": "NYT",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 53,
+        "30d": 77,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 53,
+      "max_participation": 100,
+      "avg_participation": 86
+    },
+    {
+      "project": "NOYA",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 37,
+        "30d": 65,
+        "3m": 85,
+        "6m": 85,
+        "12m": 85
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 37,
+      "max_participation": 85,
+      "avg_participation": 71.4
+    },
+    {
+      "project": "OPENLEDGER",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 97,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 97,
+      "max_participation": 100,
+      "avg_participation": 99.4
+    },
+    {
+      "project": "PARADEX",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 9,
+        "30d": 15,
+        "3m": 22,
+        "6m": 22,
+        "12m": 22
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 2,
+      "very_low_participation_count": 1,
+      "empty_count": 0,
+      "min_participation": 9,
+      "max_participation": 22,
+      "avg_participation": 18
+    },
+    {
+      "project": "PORTALPORTAL",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "PUFFPAW",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 30,
+        "30d": 53,
+        "3m": 59,
+        "6m": 59,
+        "12m": 59
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 30,
+      "max_participation": 59,
+      "avg_participation": 52
+    },
+    {
+      "project": "SAPIEN",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 22,
+        "30d": 26,
+        "3m": 27,
+        "6m": 27,
+        "12m": 27
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 22,
+      "max_participation": 27,
+      "avg_participation": 25.8
+    },
+    {
+      "project": "SOMNIA",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 68,
+        "30d": 89,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 68,
+      "max_participation": 100,
+      "avg_participation": 91.4
+    },
+    {
+      "project": "SO",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 31,
+        "30d": 41,
+        "3m": 70,
+        "6m": 70,
+        "12m": 70
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 31,
+      "max_participation": 70,
+      "avg_participation": 56.4
+    },
+    {
+      "project": "SURF",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 73,
+        "30d": 89,
+        "3m": 90,
+        "6m": 90,
+        "12m": 90
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 73,
+      "max_participation": 90,
+      "avg_participation": 86.4
+    },
+    {
+      "project": "SYMPHONY",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 17,
+        "30d": 25,
+        "3m": 28,
+        "6m": 28,
+        "12m": 28
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 1,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 17,
+      "max_participation": 28,
+      "avg_participation": 25.2
+    },
+    {
+      "project": "THEORIQ",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "THRIVE",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 9,
+        "30d": 14,
+        "3m": 19,
+        "6m": 19,
+        "12m": 19
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 5,
+      "very_low_participation_count": 1,
+      "empty_count": 0,
+      "min_participation": 9,
+      "max_participation": 19,
+      "avg_participation": 16
+    },
+    {
+      "project": "TURTLECLUB",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 47,
+        "30d": 64,
+        "3m": 78,
+        "6m": 78,
+        "12m": 78
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 47,
+      "max_participation": 78,
+      "avg_participation": 69
+    },
+    {
+      "project": "UNION",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 81,
+        "30d": 95,
+        "3m": 97,
+        "6m": 97,
+        "12m": 97
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 81,
+      "max_participation": 97,
+      "avg_participation": 93.4
+    },
+    {
+      "project": "WARP",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 92,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 92,
+      "max_participation": 100,
+      "avg_participation": 98.4
+    },
+    {
+      "project": "YEET",
+      "category": "pre_tge",
+      "timeframes": {
+        "7d": 16,
+        "30d": 23,
+        "3m": 32,
+        "6m": 32,
+        "12m": 32
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 1,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 16,
+      "max_participation": 32,
+      "avg_participation": 27
+    },
+    {
+      "project": "KAITO",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "ANIME",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 32,
+        "30d": 38,
+        "3m": 50,
+        "6m": 50,
+        "12m": 50
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 32,
+      "max_participation": 50,
+      "avg_participation": 44
+    },
+    {
+      "project": "APT",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "ARB",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "BERA",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 50,
+        "30d": 82,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 50,
+      "max_participation": 100,
+      "avg_participation": 86.4
+    },
+    {
+      "project": "BLUE",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 17,
+        "30d": 25,
+        "3m": 25,
+        "6m": 25,
+        "12m": 25
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 1,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 17,
+      "max_participation": 25,
+      "avg_participation": 23.4
+    },
+    {
+      "project": "BOOPBOOPFUN",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 6,
+        "30d": 11,
+        "3m": 18,
+        "6m": 18,
+        "12m": 18
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 5,
+      "very_low_participation_count": 1,
+      "empty_count": 0,
+      "min_participation": 6,
+      "max_participation": 18,
+      "avg_participation": 14.2
+    },
+    {
+      "project": "BYBITTRADFI",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 3,
+        "30d": 23,
+        "3m": 25,
+        "6m": 25,
+        "12m": 25
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 1,
+      "very_low_participation_count": 1,
+      "empty_count": 0,
+      "min_participation": 3,
+      "max_participation": 25,
+      "avg_participation": 20.2
+    },
+    {
+      "project": "CALDERA",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 32,
+        "30d": 80,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 32,
+      "max_participation": 100,
+      "avg_participation": 82.4
+    },
+    {
+      "project": "CORN",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 0,
+        "30d": 0,
+        "3m": 4,
+        "6m": 4,
+        "12m": 4
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 5,
+      "very_low_participation_count": 5,
+      "empty_count": 2,
+      "min_participation": 0,
+      "max_participation": 4,
+      "avg_participation": 2.4
+    },
+    {
+      "project": "CREATORBID",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 14,
+        "30d": 28,
+        "3m": 34,
+        "6m": 34,
+        "12m": 34
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 1,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 14,
+      "max_participation": 34,
+      "avg_participation": 28.8
+    },
+    {
+      "project": "DEFIAPP",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "DYDX",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 22,
+        "30d": 36,
+        "3m": 73,
+        "6m": 73,
+        "12m": 73
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 22,
+      "max_participation": 73,
+      "avg_participation": 55.4
+    },
+    {
+      "project": "ECLIPSE",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 11,
+        "30d": 56,
+        "3m": 89,
+        "6m": 90,
+        "12m": 90
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 1,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 11,
+      "max_participation": 90,
+      "avg_participation": 67.2
+    },
+    {
+      "project": "FRAX",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 6,
+        "30d": 9,
+        "3m": 18,
+        "6m": 18,
+        "12m": 18
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 5,
+      "very_low_participation_count": 2,
+      "empty_count": 0,
+      "min_participation": 6,
+      "max_participation": 18,
+      "avg_participation": 13.8
+    },
+    {
+      "project": "FUEL",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 3,
+        "30d": 8,
+        "3m": 12,
+        "6m": 12,
+        "12m": 12
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 5,
+      "very_low_participation_count": 2,
+      "empty_count": 0,
+      "min_participation": 3,
+      "max_participation": 12,
+      "avg_participation": 9.4
+    },
+    {
+      "project": "HUMAFINANCE",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "HUMANITY",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 13,
+        "30d": 50,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 1,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 13,
+      "max_participation": 100,
+      "avg_participation": 72.6
+    },
+    {
+      "project": "INITIA",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 21,
+        "30d": 37,
+        "3m": 68,
+        "6m": 68,
+        "12m": 68
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 21,
+      "max_participation": 68,
+      "avg_participation": 52.4
+    },
+    {
+      "project": "INJ",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 39,
+        "30d": 49,
+        "3m": 62,
+        "6m": 62,
+        "12m": 62
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 39,
+      "max_participation": 62,
+      "avg_participation": 54.8
+    },
+    {
+      "project": "IQ",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 2,
+        "30d": 4,
+        "3m": 7,
+        "6m": 7,
+        "12m": 7
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 5,
+      "very_low_participation_count": 5,
+      "empty_count": 0,
+      "min_participation": 2,
+      "max_participation": 7,
+      "avg_participation": 5.4
+    },
+    {
+      "project": "KAIA",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 8,
+        "30d": 15,
+        "3m": 27,
+        "6m": 27,
+        "12m": 27
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 2,
+      "very_low_participation_count": 1,
+      "empty_count": 0,
+      "min_participation": 8,
+      "max_participation": 27,
+      "avg_participation": 20.8
+    },
+    {
+      "project": "KINTO",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 6,
+        "30d": 9,
+        "3m": 13,
+        "6m": 13,
+        "12m": 13
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 5,
+      "very_low_participation_count": 2,
+      "empty_count": 0,
+      "min_participation": 6,
+      "max_participation": 13,
+      "avg_participation": 10.8
+    },
+    {
+      "project": "MNT",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 60,
+        "30d": 94,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 60,
+      "max_participation": 100,
+      "avg_participation": 90.8
+    },
+    {
+      "project": "OM",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 9,
+        "30d": 11,
+        "3m": 15,
+        "6m": 14,
+        "12m": 14
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 5,
+      "very_low_participation_count": 1,
+      "empty_count": 0,
+      "min_participation": 9,
+      "max_participation": 15,
+      "avg_participation": 12.6
+    },
+    {
+      "project": "MAPLESTORYUNIVERSE",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 19,
+        "30d": 38,
+        "3m": 78,
+        "6m": 78,
+        "12m": 78
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 1,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 19,
+      "max_participation": 78,
+      "avg_participation": 58.2
+    },
+    {
+      "project": "MOVEMENT",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 1,
+        "30d": 4,
+        "3m": 12,
+        "6m": 12,
+        "12m": 12
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 5,
+      "very_low_participation_count": 2,
+      "empty_count": 0,
+      "min_participation": 1,
+      "max_participation": 12,
+      "avg_participation": 8.2
+    },
+    {
+      "project": "NEAR",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 50,
+        "30d": 67,
+        "3m": 75,
+        "6m": 75,
+        "12m": 75
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 50,
+      "max_participation": 75,
+      "avg_participation": 68.4
+    },
+    {
+      "project": "NEWTON",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 40,
+        "30d": 97,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 40,
+      "max_participation": 100,
+      "avg_participation": 87.4
+    },
+    {
+      "project": "ORDERLYNETWORK",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 11,
+        "30d": 13,
+        "3m": 14,
+        "6m": 14,
+        "12m": 14
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 5,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 11,
+      "max_participation": 14,
+      "avg_participation": 13.2
+    },
+    {
+      "project": "PEAQ",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 35,
+        "30d": 39,
+        "3m": 40,
+        "6m": 40,
+        "12m": 40
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 35,
+      "max_participation": 40,
+      "avg_participation": 38.8
+    },
+    {
+      "project": "PENGU",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "DOT",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 45,
+        "30d": 59,
+        "3m": 66,
+        "6m": 66,
+        "12m": 66
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 45,
+      "max_participation": 66,
+      "avg_participation": 60.4
+    },
+    {
+      "project": "POL",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "PYTH",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 16,
+        "30d": 31,
+        "3m": 38,
+        "6m": 38,
+        "12m": 38
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 1,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 16,
+      "max_participation": 38,
+      "avg_participation": 32.2
+    },
+    {
+      "project": "QUAI",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 9,
+        "30d": 9,
+        "3m": 11,
+        "6m": 11,
+        "12m": 11
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 5,
+      "very_low_participation_count": 2,
+      "empty_count": 0,
+      "min_participation": 9,
+      "max_participation": 11,
+      "avg_participation": 10.2
+    },
+    {
+      "project": "SATLAYER",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 90,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 90,
+      "max_participation": 100,
+      "avg_participation": 98
+    },
+    {
+      "project": "SEI",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 83,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 83,
+      "max_participation": 100,
+      "avg_participation": 96.6
+    },
+    {
+      "project": "SIDEKICK",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "SKATE",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 4,
+        "30d": 18,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 2,
+      "very_low_participation_count": 1,
+      "empty_count": 0,
+      "min_participation": 4,
+      "max_participation": 100,
+      "avg_participation": 64.4
+    },
+    {
+      "project": "S",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "SOON",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 12,
+        "30d": 17,
+        "3m": 59,
+        "6m": 59,
+        "12m": 59
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 2,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 12,
+      "max_participation": 59,
+      "avg_participation": 41.2
+    },
+    {
+      "project": "SOPHON",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 25,
+        "30d": 60,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 25,
+      "max_participation": 100,
+      "avg_participation": 77
+    },
+    {
+      "project": "STARKNET",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 29,
+        "30d": 47,
+        "3m": 68,
+        "6m": 69,
+        "12m": 70
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 29,
+      "max_participation": 70,
+      "avg_participation": 56.6
+    },
+    {
+      "project": "STORYPROTOCOL",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 43,
+        "30d": 64,
+        "3m": 73,
+        "6m": 74,
+        "12m": 74
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 43,
+      "max_participation": 74,
+      "avg_participation": 65.6
+    },
+    {
+      "project": "SUCCINCT",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "UXLINK",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 61,
+        "30d": 67,
+        "3m": 79,
+        "6m": 79,
+        "12m": 79
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 61,
+      "max_participation": 79,
+      "avg_participation": 73
+    },
+    {
+      "project": "VIRTUALECOSYSTEM",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "WAL",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 100,
+        "30d": 100,
+        "3m": 100,
+        "6m": 100,
+        "12m": 100
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 100,
+      "max_participation": 100,
+      "avg_participation": 100
+    },
+    {
+      "project": "WAYFINDER",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 18,
+        "30d": 26,
+        "3m": 39,
+        "6m": 39,
+        "12m": 39
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 1,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 18,
+      "max_participation": 39,
+      "avg_participation": 32.2
+    },
+    {
+      "project": "XION",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 82,
+        "30d": 94,
+        "3m": 30,
+        "6m": 95,
+        "12m": 95
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 30,
+      "max_participation": 95,
+      "avg_participation": 79.2
+    },
+    {
+      "project": "ZEC",
+      "category": "post_tge",
+      "timeframes": {
+        "7d": 30,
+        "30d": 42,
+        "3m": 59,
+        "6m": 59,
+        "12m": 59
+      },
+      "total_timeframes": 5,
+      "low_participation_count": 0,
+      "very_low_participation_count": 0,
+      "empty_count": 0,
+      "min_participation": 30,
+      "max_participation": 59,
+      "avg_participation": 49.8
+    }
+  ],
+  "summary": {
+    "total_projects": 96,
+    "total_timeframes": 480,
+    "low_participation_cases": [
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 0
+      },
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 0
+      },
+      {
+        "project": "MOVEMENT",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 1
+      },
+      {
+        "project": "IQ",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 2
+      },
+      {
+        "project": "BYBITTRADFI",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 3
+      },
+      {
+        "project": "FUEL",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 3
+      },
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 4
+      },
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 4
+      },
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 4
+      },
+      {
+        "project": "IQ",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 4
+      },
+      {
+        "project": "MOVEMENT",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 4
+      },
+      {
+        "project": "SKATE",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 4
+      },
+      {
+        "project": "BOOPBOOPFUN",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 6
+      },
+      {
+        "project": "FRAX",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 6
+      },
+      {
+        "project": "KINTO",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 6
+      },
+      {
+        "project": "IQ",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 7
+      },
+      {
+        "project": "IQ",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 7
+      },
+      {
+        "project": "IQ",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 7
+      },
+      {
+        "project": "FUEL",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 8
+      },
+      {
+        "project": "KAIA",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 8
+      },
+      {
+        "project": "PARADEX",
+        "category": "pre_tge",
+        "timeframe": "7d",
+        "participant_count": 9
+      },
+      {
+        "project": "THRIVE",
+        "category": "pre_tge",
+        "timeframe": "7d",
+        "participant_count": 9
+      },
+      {
+        "project": "FRAX",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 9
+      },
+      {
+        "project": "KINTO",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 9
+      },
+      {
+        "project": "OM",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 9
+      },
+      {
+        "project": "QUAI",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 9
+      },
+      {
+        "project": "QUAI",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 9
+      },
+      {
+        "project": "BOOPBOOPFUN",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 11
+      },
+      {
+        "project": "ECLIPSE",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 11
+      },
+      {
+        "project": "OM",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 11
+      },
+      {
+        "project": "ORDERLYNETWORK",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 11
+      },
+      {
+        "project": "QUAI",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 11
+      },
+      {
+        "project": "QUAI",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 11
+      },
+      {
+        "project": "QUAI",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 11
+      },
+      {
+        "project": "FUEL",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 12
+      },
+      {
+        "project": "FUEL",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 12
+      },
+      {
+        "project": "FUEL",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 12
+      },
+      {
+        "project": "MOVEMENT",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 12
+      },
+      {
+        "project": "MOVEMENT",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 12
+      },
+      {
+        "project": "MOVEMENT",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 12
+      },
+      {
+        "project": "SOON",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 12
+      },
+      {
+        "project": "HUMANITY",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 13
+      },
+      {
+        "project": "KINTO",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 13
+      },
+      {
+        "project": "KINTO",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 13
+      },
+      {
+        "project": "KINTO",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 13
+      },
+      {
+        "project": "ORDERLYNETWORK",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 13
+      },
+      {
+        "project": "THRIVE",
+        "category": "pre_tge",
+        "timeframe": "30d",
+        "participant_count": 14
+      },
+      {
+        "project": "CREATORBID",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 14
+      },
+      {
+        "project": "OM",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 14
+      },
+      {
+        "project": "OM",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 14
+      },
+      {
+        "project": "ORDERLYNETWORK",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 14
+      },
+      {
+        "project": "ORDERLYNETWORK",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 14
+      },
+      {
+        "project": "ORDERLYNETWORK",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 14
+      },
+      {
+        "project": "PARADEX",
+        "category": "pre_tge",
+        "timeframe": "30d",
+        "participant_count": 15
+      },
+      {
+        "project": "KAIA",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 15
+      },
+      {
+        "project": "OM",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 15
+      },
+      {
+        "project": "YEET",
+        "category": "pre_tge",
+        "timeframe": "7d",
+        "participant_count": 16
+      },
+      {
+        "project": "PYTH",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 16
+      },
+      {
+        "project": "SYMPHONY",
+        "category": "pre_tge",
+        "timeframe": "7d",
+        "participant_count": 17
+      },
+      {
+        "project": "BLUE",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 17
+      },
+      {
+        "project": "SOON",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 17
+      },
+      {
+        "project": "BOOPBOOPFUN",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 18
+      },
+      {
+        "project": "BOOPBOOPFUN",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 18
+      },
+      {
+        "project": "BOOPBOOPFUN",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 18
+      },
+      {
+        "project": "FRAX",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 18
+      },
+      {
+        "project": "FRAX",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 18
+      },
+      {
+        "project": "FRAX",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 18
+      },
+      {
+        "project": "SKATE",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 18
+      },
+      {
+        "project": "WAYFINDER",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 18
+      },
+      {
+        "project": "THRIVE",
+        "category": "pre_tge",
+        "timeframe": "3m",
+        "participant_count": 19
+      },
+      {
+        "project": "THRIVE",
+        "category": "pre_tge",
+        "timeframe": "6m",
+        "participant_count": 19
+      },
+      {
+        "project": "THRIVE",
+        "category": "pre_tge",
+        "timeframe": "12m",
+        "participant_count": 19
+      },
+      {
+        "project": "MAPLESTORYUNIVERSE",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 19
+      }
+    ],
+    "very_low_participation_cases": [
+      {
+        "project": "PARADEX",
+        "category": "pre_tge",
+        "timeframe": "7d",
+        "participant_count": 9
+      },
+      {
+        "project": "THRIVE",
+        "category": "pre_tge",
+        "timeframe": "7d",
+        "participant_count": 9
+      },
+      {
+        "project": "BOOPBOOPFUN",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 6
+      },
+      {
+        "project": "BYBITTRADFI",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 3
+      },
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 0
+      },
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 0
+      },
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 4
+      },
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 4
+      },
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 4
+      },
+      {
+        "project": "FRAX",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 6
+      },
+      {
+        "project": "FRAX",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 9
+      },
+      {
+        "project": "FUEL",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 3
+      },
+      {
+        "project": "FUEL",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 8
+      },
+      {
+        "project": "IQ",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 2
+      },
+      {
+        "project": "IQ",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 4
+      },
+      {
+        "project": "IQ",
+        "category": "post_tge",
+        "timeframe": "3m",
+        "participant_count": 7
+      },
+      {
+        "project": "IQ",
+        "category": "post_tge",
+        "timeframe": "6m",
+        "participant_count": 7
+      },
+      {
+        "project": "IQ",
+        "category": "post_tge",
+        "timeframe": "12m",
+        "participant_count": 7
+      },
+      {
+        "project": "KAIA",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 8
+      },
+      {
+        "project": "KINTO",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 6
+      },
+      {
+        "project": "KINTO",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 9
+      },
+      {
+        "project": "OM",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 9
+      },
+      {
+        "project": "MOVEMENT",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 1
+      },
+      {
+        "project": "MOVEMENT",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 4
+      },
+      {
+        "project": "QUAI",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 9
+      },
+      {
+        "project": "QUAI",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 9
+      },
+      {
+        "project": "SKATE",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 4
+      }
+    ],
+    "empty_cases": [
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "7d",
+        "participant_count": 0
+      },
+      {
+        "project": "CORN",
+        "category": "post_tge",
+        "timeframe": "30d",
+        "participant_count": 0
+      }
+    ],
+    "timeframe_stats": {
+      "7d": {
+        "total": 96,
+        "low": 25,
+        "avg": 52.104166666666664
+      },
+      "30d": {
+        "total": 96,
+        "low": 15,
+        "avg": 63.822916666666664
+      },
+      "3m": {
+        "total": 96,
+        "low": 11,
+        "avg": 71.70833333333333
+      },
+      "6m": {
+        "total": 96,
+        "low": 11,
+        "avg": 72.41666666666667
+      },
+      "12m": {
+        "total": 96,
+        "low": 11,
+        "avg": 72.42708333333333
+      }
+    }
+  }
+}

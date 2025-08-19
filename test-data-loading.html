@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据加载测试</title>
+</head>
+<body>
+    <h1>数据加载测试</h1>
+    <div id="status">正在测试...</div>
+    <div id="error" style="color: red;"></div>
+    <div id="result"></div>
+
+    <script>
+        async function testDataLoading() {
+            const statusDiv = document.getElementById('status');
+            const errorDiv = document.getElementById('error');
+            const resultDiv = document.getElementById('result');
+
+            try {
+                statusDiv.textContent = '正在加载 kol.json...';
+                
+                // 测试加载 kol.json
+                const response = await fetch('./kol.json');
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP错误: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Data loaded:', data);
+                
+                statusDiv.textContent = '✅ 数据加载成功！';
+                resultDiv.innerHTML = `
+                    <h3>数据概况:</h3>
+                    <p>更新时间: ${data.lastUpdate}</p>
+                    <p>总项目数: ${data.totalProjects}</p>
+                    <p>总时间周期: ${data.totalDurations}</p>
+                    <p>类别数: ${Object.keys(data.categories || {}).length}</p>
+                `;
+                
+                // 测试KAITO项目数据
+                if (data.categories && data.categories.post_tge && data.categories.post_tge.KAITO) {
+                    const kaitoData = data.categories.post_tge.KAITO;
+                    const duration7d = kaitoData['7d'] || [];
+                    resultDiv.innerHTML += `
+                        <h3>KAITO项目7天数据:</h3>
+                        <p>KOL数量: ${duration7d.length}</p>
+                        ${duration7d.length > 0 ? `<p>第一位: ${duration7d[0].name || duration7d[0].username}</p>` : ''}
+                    `;
+                } else {
+                    resultDiv.innerHTML += `<p>⚠️ 未找到KAITO项目数据</p>`;
+                }
+                
+            } catch (error) {
+                console.error('加载失败:', error);
+                statusDiv.textContent = '❌ 数据加载失败';
+                errorDiv.textContent = `错误: ${error.message}`;
+            }
+        }
+
+        // 页面加载完成后测试
+        window.addEventListener('load', testDataLoading);
+    </script>
+</body>
+</html>

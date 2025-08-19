@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>详细调试页面</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .error { color: red; }
+        .success { color: green; }
+        pre { background: #f5f5f5; padding: 10px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>KOL 排行榜调试页面</h1>
+    
+    <div class="section">
+        <h2>1. 配置文件检查</h2>
+        <div id="config-status">检查中...</div>
+    </div>
+    
+    <div class="section">
+        <h2>2. API 测试</h2>
+        <div id="api-status">检查中...</div>
+    </div>
+    
+    <div class="section">
+        <h2>3. 本地数据测试</h2>
+        <div id="local-status">检查中...</div>
+    </div>
+    
+    <div class="section">
+        <h2>4. 错误日志</h2>
+        <pre id="error-log"></pre>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        let errorLog = [];
+        
+        function log(message, isError = false) {
+            console.log(message);
+            errorLog.push(`${new Date().toLocaleTimeString()}: ${message}`);
+            if (isError) {
+                console.error(message);
+            }
+            document.getElementById('error-log').textContent = errorLog.join('\n');
+        }
+        
+        // 1. 检查配置
+        function checkConfig() {
+            const statusDiv = document.getElementById('config-status');
+            
+            try {
+                if (typeof KAITO_CONFIG === 'undefined') {
+                    throw new Error('KAITO_CONFIG 未定义');
+                }
+                
+                log('✅ KAITO_CONFIG 已加载');
+                log(`PRE_TGE 项目数: ${KAITO_CONFIG.PRE_TGE_PROJECTS?.length || 0}`);
+                log(`POST_TGE 项目数: ${KAITO_CONFIG.POST_TGE_PROJECTS?.length || 0}`);
+                
+                const hasKaito = KAITO_CONFIG.POST_TGE_PROJECTS?.includes('KAITO');
+                log(`KAITO 项目是否在配置中: ${hasKaito}`);
+                
+                statusDiv.innerHTML = '<span class="success">✅ 配置文件正常</span>';
+                return true;
+            } catch (error) {
+                log(`❌ 配置检查失败: ${error.message}`, true);
+                statusDiv.innerHTML = `<span class="error">❌ ${error.message}</span>`;
+                return false;
+            }
+        }
+        
+        // 2. 测试API
+        async function testAPI() {
+            const statusDiv = document.getElementById('api-status');
+            statusDiv.innerHTML = '测试中...';
+            
+            try {
+                const apiUrl = '/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=10&community_tier=tier1&customized_community=customized&community_yaps=true';
+                log(`尝试API请求: ${apiUrl}`);
+                
+                const response = await fetch(apiUrl);
+                log(`API响应状态: ${response.status}`);
+                
+                if (!response.ok) {
+                    throw new Error(`API请求失败: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                log(`✅ API数据获取成功: ${data.length} 条记录`);
+                
+                if (data.length > 0) {
+                    log(`第一条记录: ${JSON.stringify(data[0], null, 2)}`);
+                }
+                
+                statusDiv.innerHTML = `<span class="success">✅ API正常 (${data.length} 条记录)</span>`;
+                return data;
+            } catch (error) {
+                log(`❌ API测试失败: ${error.message}`, true);
+                statusDiv.innerHTML = `<span class="error">❌ API失败: ${error.message}</span>`;
+                return null;
+            }
+        }
+        
+        // 3. 测试本地数据
+        async function testLocalData() {
+            const statusDiv = document.getElementById('local-status');
+            statusDiv.innerHTML = '测试中...';
+            
+            try {
+                log('尝试加载 kol.json...');
+                const response = await fetch('./kol.json');
+                log(`kol.json 响应状态: ${response.status}`);
+                
+                if (!response.ok) {
+                    throw new Error(`无法加载 kol.json: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                log(`✅ kol.json 加载成功`);
+                log(`更新时间: ${data.lastUpdate}`);
+                log(`总项目数: ${data.totalProjects}`);
+                
+                // 检查KAITO项目数据
+                const kaitoData = data.categories?.post_tge?.KAITO;
+                if (kaitoData) {
+                    const duration7d = kaitoData['7d'] || [];
+                    log(`✅ KAITO 7d 数据: ${duration7d.length} 条记录`);
+                    
+                    if (duration7d.length > 0) {
+                        log(`第一条KAITO记录: ${JSON.stringify(duration7d[0], null, 2)}`);
+                    }
+                    
+                    statusDiv.innerHTML = `<span class="success">✅ 本地数据正常 (KAITO: ${duration7d.length} 条记录)</span>`;
+                } else {
+                    throw new Error('未找到KAITO项目数据');
+                }
+                
+                return data;
+            } catch (error) {
+                log(`❌ 本地数据测试失败: ${error.message}`, true);
+                statusDiv.innerHTML = `<span class="error">❌ 本地数据失败: ${error.message}</span>`;
+                return null;
+            }
+        }
+        
+        // 运行所有测试
+        async function runAllTests() {
+            log('开始调试测试...');
+            
+            const configOk = checkConfig();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            const apiData = await testAPI();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            const localData = await testLocalData();
+            
+            log('调试测试完成');
+            
+            if (apiData || localData) {
+                log('✅ 至少有一种数据源可用');
+            } else {
+                log('❌ 所有数据源都不可用', true);
+            }
+        }
+        
+        // 页面加载完成后运行测试
+        window.addEventListener('load', runAllTests);
+    </script>
+</body>
+</html>

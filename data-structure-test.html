@@ -35,7 +35,10 @@
         async function compareDataStructures() {
             // 1. 获取API数据
             try {
-                const apiResponse = await fetch('/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=5&community_tier=tier1&customized_community=customized&community_yaps=true');
+                const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? '/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=5&community_tier=tier1&customized_community=customized&community_yaps=true'
+                    : 'https://yaps.kaito.ai/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=5&community_tier=tier1&customized_community=customized&community_yaps=true';
+                const apiResponse = await fetch(apiUrl);
                 
                 if (apiResponse.ok) {
                     const apiData = await apiResponse.json();

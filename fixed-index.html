@@ -95,8 +95,10 @@
             statusDiv.className = 'status loading';
             
             try {
-                // 1. 尝试API
-                const apiUrl = `/api/kol/mindshare/top-leaderboard?duration=${duration}&topic_id=${topic_id}&top_n=${top_n}&community_tier=tier1&customized_community=customized&community_yaps=true`;
+                // 1. 尝试API - 智能路径选择
+                const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? `/api/kol/mindshare/top-leaderboard?duration=${duration}&topic_id=${topic_id}&top_n=${top_n}&community_tier=tier1&customized_community=customized&community_yaps=true`
+                    : `https://yaps.kaito.ai/api/kol/mindshare/top-leaderboard?duration=${duration}&topic_id=${topic_id}&top_n=${top_n}&community_tier=tier1&customized_community=customized&community_yaps=true`;
                 console.log('🌐 尝试API请求:', apiUrl);
                 
                 const response = await fetch(apiUrl);

@@ -79,7 +79,9 @@
             statusDiv.innerHTML = '测试中...';
             
             try {
-                const apiUrl = '/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=10&community_tier=tier1&customized_community=customized&community_yaps=true';
+                const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? '/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=10&community_tier=tier1&customized_community=customized&community_yaps=true'
+                    : 'https://yaps.kaito.ai/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=10&community_tier=tier1&customized_community=customized&community_yaps=true';
                 log(`尝试API请求: ${apiUrl}`);
                 
                 const response = await fetch(apiUrl);

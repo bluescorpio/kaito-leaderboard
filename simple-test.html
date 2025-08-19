@@ -39,7 +39,10 @@
                 
                 // 步骤2: 测试API
                 details += '<h3>步骤2: 测试API</h3>';
-                const apiUrl = '/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=10&community_tier=tier1&customized_community=customized&community_yaps=true';
+                const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? '/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=10&community_tier=tier1&customized_community=customized&community_yaps=true'
+                    : 'https://yaps.kaito.ai/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=KAITO&top_n=10&community_tier=tier1&customized_community=customized&community_yaps=true';
+                details += `<p>使用API: ${apiUrl}</p>`;
                 
                 const response = await fetch(apiUrl);
                 details += `<p>API响应状态: ${response.status}</p>`;

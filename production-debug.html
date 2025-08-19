@@ -176,7 +176,11 @@
             
             try {
                 console.log('开始测试 API 连接...');
-                const testUrl = '/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=BITCOIN&top_n=10&community_tier=tier1&customized_community=customized&community_yaps=true';
+                // 智能选择 API URL
+                const testUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? '/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=BITCOIN&top_n=10&community_tier=tier1&customized_community=customized&community_yaps=true'
+                    : 'https://yaps.kaito.ai/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=BITCOIN&top_n=10&community_tier=tier1&customized_community=customized&community_yaps=true';
+                console.log('测试 API URL:', testUrl);
                 const response = await fetch(testUrl);
                 
                 if (!response.ok) {

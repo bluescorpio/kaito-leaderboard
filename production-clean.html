@@ -2203,6 +2203,18 @@
             `;
         }
 
+        // 项目配置数据
+        const KAITO_CONFIG = {
+            PRE_TGE_PROJECTS: [
+                'bitcoin', 'ethereum', 'solana', 'cardano', 'polkadot', 
+                'chainlink', 'avalanche', 'polygon', 'fantom', 'cosmos'
+            ],
+            POST_TGE_PROJECTS: [
+                'APT', 'SUI', 'SEI', 'TIA', 'STRK', 'EIGEN', 'W', 'ENA', 
+                'ONDO', 'PENDLE', 'JUP', 'WIF', 'BONK', 'PYTH', 'JTO'
+            ]
+        };
+
         // 项目分类数据
         const projectCategories = {
             'pre_tge': {
@@ -2779,21 +2791,143 @@
             document.getElementById('loading').innerHTML = `
                 <div class="loading-spinner"></div>
                 <p>正在加载排行榜数据...</p>
+                <p style="font-size: 12px; color: #666; margin-top: 10px;">如果长时间加载，请刷新页面重试</p>
             `;
             document.getElementById('loading').style.display = 'block';
             document.getElementById('users-grid').style.display = 'none';
 
+            // 添加15秒超时
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('加载超时 - 请刷新页面重试')), 15000);
+            });
+
             try {
-                currentData = await fetchKaitoData(duration, topic, topN);
+                currentData = await Promise.race([
+                    fetchKaitoData(duration, topic, topN),
+                    timeoutPromise
+                ]);
                 if (currentData.length > 0) {
                     renderUsers(currentData);
                     updateLabels();
+                } else {
+                    showErrorMessage('没有找到相关数据，请选择其他条件');
                 }
             } catch (error) {
                 console.error('加载数据失败:', error);
                 console.error('错误堆栈:', error.stack);
                 showErrorMessage(`数据加载失败: ${error.message}`);
             }
+        }
+
+        // 快速初始化加载：优先本地数据
+        async function loadDataFast() {
+            const category = document.getElementById('category-select').value;
+            const topic = document.getElementById('topic-select').value;
+            const duration = document.getElementById('duration-select').value;
+            const topN = parseInt(document.getElementById('top-n-select').value);
+
+            // 显示加载状态
+            document.getElementById('loading').innerHTML = `
+                <div class="loading-spinner"></div>
+                <p>正在快速加载数据...</p>
+            `;
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('users-grid').style.display = 'none';
+
+            try {
+                // 首先尝试本地数据（快速）
+                console.log('🚀 快速加载：尝试本地数据...');
+                await loadKolJsonData();
+                
+                if (kolJsonData) {
+                    const localData = getDataFromKolJson(duration, topic, topN);
+                    if (localData && localData.length > 0) {
+                        console.log('✅ 快速加载成功：使用本地数据');
+                        currentData = localData;
+                        renderUsers(currentData);
+                        updateLabels();
+                        
+                        // 在后台尝试更新API数据
+                        setTimeout(() => {
+                            console.log('🔄 后台更新：尝试获取最新API数据...');
+                            updateWithAPIData(duration, topic, topN);
+                        }, 1000);
+                        return;
+                    }
+                }
+                
+                // 本地数据不可用，退回到正常加载流程
+                console.log('⚠️ 本地数据不可用，使用标准加载...');
+                await loadData();
+                
+            } catch (error) {
+                console.error('快速加载失败:', error);
+                // 退回到正常加载流程
+                await loadData();
+            }
+        }
+
+        // 后台更新API数据
+        async function updateWithAPIData(duration, topic, topN) {
+            try {
+                const apiData = await fetchFromAPI(duration, topic, topN);
+                if (apiData && apiData.length > 0) {
+                    console.log('🔄 后台更新成功：使用最新API数据');
+                    currentData = apiData;
+                    renderUsers(currentData);
+                    updateLabels();
+                    
+                    // 显示更新提示
+                    const loadingDiv = document.getElementById('loading');
+                    if (loadingDiv.style.display === 'none') {
+                        // 在右上角显示更新提示
+                        showUpdateNotification('数据已更新为最新版本');
+                    }
+                }
+            } catch (error) {
+                console.log('🔄 后台更新失败，继续使用本地数据:', error.message);
+            }
+        }
+
+        // 显示更新通知
+        function showUpdateNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 10000;
+                font-size: 14px;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            // 添加动画样式
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // 3秒后自动移除
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
         }
 
         // 更新标题和副标题
@@ -3246,7 +3380,9 @@
             updateLanguage();
             // 初始化其他功能
             updateTopicSelect('post_tge');
-            loadData();
+            
+            // 快速初始化：优先显示本地数据，然后在后台更新API数据
+            loadDataFast();
             
             // 初始化个人搜索功能
             loadCachedData();

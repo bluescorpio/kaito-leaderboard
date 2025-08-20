@@ -1839,11 +1839,6 @@
                         <option value="mindshare">影响力分数</option>
                     </select>
                 </div>
-                <div class="control-group">
-                    <button id="refresh-ict-btn" class="control-button" onclick="loadICTList()">
-                        <span data-i18n="refresh-data">� 刷新数据</span>
-                    </button>
-                </div>
             </div>
 
             <div class="leaderboard-header">
@@ -3127,7 +3122,7 @@
             });
             document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
             
-            // 特殊处理：如果切换到ICT页面且数据未加载，则自动加载
+            // ICT页面：自动加载数据，无需手动刷新按钮
             if (sectionId === 'ict-list' && ictKolList.length === 0) {
                 loadICTList();
             }

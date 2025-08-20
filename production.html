@@ -2329,9 +2329,9 @@
             };
         }
 
-        // 获取并缓存所有排名数据
+        // 快速加载策略：优先本地数据，后台更新
         async function fetchAndCacheAllRankings() {
-            console.log('开始获取所有排名数据...');
+            console.log('开始智能加载排名数据...');
             const loadingElement = document.getElementById('loading');
             
             try {
@@ -2342,59 +2342,82 @@
                     const now = Date.now();
                     if (parsed.lastUpdate && (now - parsed.lastUpdate) < CACHE_EXPIRY) {
                         allRankingData = parsed;
-                        console.log('使用缓存的排名数据');
+                        console.log('✅ 使用缓存的排名数据');
                         return;
                     }
                 }
 
-                // 获取所有项目和时间周期的数据
-                const durations = ['7d', '30d', '3m', '6m', '12m'];
-                const categories = ['post_tge', 'pre_tge'];
+                // 快速策略：优先加载本地数据
+                console.log('🚀 快速加载策略：优先使用本地数据...');
+                await loadFromKolJsonFirst();
                 
+                // 如果本地数据加载成功，后台更新热门数据
+                if (Object.keys(allRankingData.data).length > 0) {
+                    console.log('📁 本地数据加载完成，开始后台更新热门项目...');
+                    // 异步更新，不阻塞用户使用
+                    updateHotProjectsInBackground();
+                    return;
+                }
+
+                // 本地数据不可用，显示加载进度
+                if (loadingElement && loadingElement.style.display !== 'none') {
+                    loadingElement.innerHTML = '<div class="loading-spinner"></div><p>正在获取排名数据...</p>';
+                }
+
+                // 兜底策略：获取核心项目数据
+                await loadCoreProjectsData();
+
+            } catch (error) {
+                console.error('获取排名数据时出错:', error);
+            }
+        }
+
+        // 加载核心项目数据（兜底策略）
+        async function loadCoreProjectsData() {
+            try {
+                console.log('📊 加载核心项目数据...');
+                
+                const coreProjects = {
+                    'post_tge': ['apt', 'sui', 'sei', 'arb', 'op', 'polygon', 'avax', 'solana'],
+                    'pre_tge': ['babylon', 'grass', 'hyperliquid', 'monad', 'berachain', 'story', 'movement', 'initia']
+                };
+                
+                const durations = ['7d', '30d'];
                 allRankingData.data = {};
                 allRankingData.lastUpdate = Date.now();
 
-                // 显示加载进度
-                if (loadingElement && loadingElement.style.display !== 'none') {
-                    loadingElement.innerHTML = '<div class="loading-spinner"></div><p>正在获取全量排名数据...</p>';
-                }
-
                 let totalRequests = 0;
                 let completedRequests = 0;
-                let totalKOLsFound = 0;
 
                 // 计算总请求数
-                for (const category of categories) {
-                    const projects = projectCategories[category].topics;
+                for (const [category, projects] of Object.entries(coreProjects)) {
                     totalRequests += projects.length * durations.length;
                 }
 
-                console.log(`总计需要获取 ${totalRequests} 个数据集`);
+                console.log(`核心数据加载：总计 ${totalRequests} 个请求`);
 
-                for (const category of categories) {
-                    const projects = projectCategories[category].topics;
-                    console.log(`处理 ${category} 类别，包含 ${projects.length} 个项目`);
-                    
+                for (const [category, projects] of Object.entries(coreProjects)) {
                     for (const project of projects) {
                         for (const duration of durations) {
                             completedRequests++;
                             
                             try {
-                                console.log(`获取数据 (${completedRequests}/${totalRequests}): ${category} - ${project} - ${duration}`);
+                                console.log(`加载核心数据 (${completedRequests}/${totalRequests}): ${project}/${duration}`);
                                 const data = await fetchKaitoData(duration, project, 100, category);
                                 
                                 if (data && data.length > 0) {
-                                    console.log(`${category}-${project}-${duration}: 找到 ${data.length} 个KOL`);
+                                    console.log(`${project}/${duration}: 找到 ${data.length} 个KOL`);
                                     
                                     data.forEach((user, index) => {
-                                        const username = user.username.toLowerCase();
+                                        const username = user.username?.toLowerCase();
+                                        if (!username) return;
                                         
                                         // 初始化用户数据结构
                                         if (!allRankingData.data[username]) {
                                             allRankingData.data[username] = {
-                                                name: user.name,
+                                                name: user.name || user.username,
                                                 username: user.username,
-                                                icon: user.icon,
+                                                icon: user.icon || '',
                                                 bio: user.bio || '',
                                                 follower_count: user.follower_count || 0,
                                                 following_count: user.following_count || 0,
@@ -2403,58 +2426,37 @@
                                                 rankings: {},
                                                 firstSeen: Date.now()
                                             };
-                                            totalKOLsFound++;
-                                        } else {
-                                            // 更新用户基本信息（取最新的）
-                                            allRankingData.data[username].name = user.name || allRankingData.data[username].name;
-                                            allRankingData.data[username].icon = user.icon || allRankingData.data[username].icon;
-                                            allRankingData.data[username].bio = user.bio || allRankingData.data[username].bio;
-                                            allRankingData.data[username].follower_count = user.follower_count || allRankingData.data[username].follower_count;
-                                            allRankingData.data[username].following_count = user.following_count || allRankingData.data[username].following_count;
-                                            allRankingData.data[username].smart_follower_count = user.smart_follower_count || allRankingData.data[username].smart_follower_count;
-                                            allRankingData.data[username].twitter_user_url = user.twitter_user_url || allRankingData.data[username].twitter_user_url;
                                         }
 
-                                        // 记录该项目该周期的排名信息
+                                        // 记录排名信息
                                         const key = `${category}_${project}_${duration}`;
                                         allRankingData.data[username].rankings[key] = {
-                                            rank: user.rank || index + 1,
+                                            rank: index + 1,
                                             mindshare: user.mindshare || 0,
                                             score: (user.mindshare || 0) * 100,
                                             category: category,
                                             project: project,
                                             duration: duration,
                                             timestamp: Date.now(),
-                                            // 保存完整的原始数据
-                                            rawData: {
-                                                follower_count: user.follower_count,
-                                                following_count: user.following_count,
-                                                smart_follower_count: user.smart_follower_count,
-                                                mindshare: user.mindshare,
-                                                bio: user.bio,
-                                                icon: user.icon
-                                            }
+                                            rawData: user
                                         };
                                     });
-                                } else {
-                                    console.warn(`${category}-${project}-${duration}: 未获取到数据`);
                                 }
                             } catch (error) {
-                                console.error(`获取 ${category}-${project}-${duration} 数据失败:`, error);
+                                console.error(`获取 ${project}/${duration} 数据失败:`, error);
                             }
+                        }
+                    }
+                }
 
-                            completedRequests++;
-                            
-                            // 更新进度
-                            if (loadingElement && loadingElement.style.display !== 'none') {
-                                const progress = Math.round((completedRequests / totalRequests) * 100);
-                                loadingElement.innerHTML = `
-                                    <div class="loading-spinner"></div>
-                                    <p>正在获取全量排名数据... ${progress}%</p>
-                                    <p>${completedRequests}/${totalRequests} 请求完成</p>
-                                    <p>已发现 ${totalKOLsFound} 个唯一KOL</p>
-                                `;
-                            }
+                // 保存核心数据
+                const uniqueKOLs = Object.keys(allRankingData.data).length;
+                console.log(`✅ 核心数据加载完成！加载了 ${uniqueKOLs} 个用户的数据`);
+                localStorage.setItem('allRankingData', JSON.stringify(allRankingData));
+                
+            } catch (error) {
+                console.error('加载核心数据失败:', error);
+                throw error;
 
                             // 添加延迟避免API限制
                             await new Promise(resolve => setTimeout(resolve, 200));
@@ -2462,37 +2464,146 @@
                     }
                 }
 
-                // 统计信息
+                // 保存核心数据
                 const uniqueKOLs = Object.keys(allRankingData.data).length;
-                let totalRankings = 0;
-                Object.values(allRankingData.data).forEach(user => {
-                    totalRankings += Object.keys(user.rankings).length;
-                });
+                console.log(`✅ 核心数据加载完成！加载了 ${uniqueKOLs} 个用户的数据`);
+                localStorage.setItem('allRankingData', JSON.stringify(allRankingData));
+                
+            } catch (error) {
+                console.error('加载核心数据失败:', error);
+                throw error;
+            }
+        }
 
-                console.log(`=== 数据获取完成 ===`);
-                console.log(`唯一KOL数量: ${uniqueKOLs}`);
-                console.log(`总排名记录数: ${totalRankings}`);
-                console.log(`平均每个KOL的排名记录: ${(totalRankings / uniqueKOLs).toFixed(1)}`);
+        // 快速从 kol.json 加载数据
+        async function loadFromKolJsonFirst() {
+            try {
+                console.log('🚀 开始快速加载本地数据...');
+                await loadKolJsonData();
+                
+                if (!kolJsonData || !kolJsonData.categories) {
+                    throw new Error('本地数据不可用');
+                }
 
-                // 保存到本地存储
-                try {
-                    const dataToSave = JSON.stringify(allRankingData);
-                    localStorage.setItem('allRankingData', dataToSave);
-                    console.log(`数据已保存到本地存储，大小: ${(dataToSave.length / 1024 / 1024).toFixed(2)} MB`);
-                } catch (storageError) {
-                    console.error('保存到本地存储失败:', storageError);
-                    // 如果数据太大，尝试清理旧数据
-                    localStorage.clear();
-                    try {
-                        localStorage.setItem('allRankingData', JSON.stringify(allRankingData));
-                        console.log('清理存储后重新保存成功');
-                    } catch (retryError) {
-                        console.error('重新保存仍然失败:', retryError);
+                allRankingData.data = {};
+                allRankingData.lastUpdate = Date.now();
+
+                const durations = ['7d', '30d', '3m', '6m', '12m'];
+                let totalUsers = 0;
+
+                // 遍历所有分类和项目
+                for (const [categoryKey, categoryData] of Object.entries(kolJsonData.categories)) {
+                    for (const [projectKey, projectData] of Object.entries(categoryData)) {
+                        for (const [durationKey, durationData] of Object.entries(projectData)) {
+                            if (durationData && durationData.data && Array.isArray(durationData.data)) {
+                                durationData.data.forEach((user, index) => {
+                                    const username = user.username?.toLowerCase();
+                                    if (!username) return;
+
+                                    // 初始化用户数据
+                                    if (!allRankingData.data[username]) {
+                                        allRankingData.data[username] = {
+                                            name: user.name || user.username,
+                                            username: user.username,
+                                            icon: user.icon || '',
+                                            bio: user.bio || '',
+                                            follower_count: user.follower_count || 0,
+                                            following_count: user.following_count || 0,
+                                            smart_follower_count: user.smart_follower_count || 0,
+                                            twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`,
+                                            rankings: {},
+                                            firstSeen: Date.now()
+                                        };
+                                        totalUsers++;
+                                    }
+
+                                    // 添加排名记录
+                                    const key = `${categoryKey}_${projectKey}_${durationKey}`;
+                                    allRankingData.data[username].rankings[key] = {
+                                        rank: index + 1,
+                                        mindshare: user.mindshare || 0,
+                                        score: (user.mindshare || 0) * 100,
+                                        category: categoryKey,
+                                        project: projectKey,
+                                        duration: durationKey,
+                                        timestamp: Date.now(),
+                                        rawData: user
+                                    };
+                                });
+                            }
+                        }
                     }
+                }
+
+                console.log(`✅ 快速加载完成！加载了 ${totalUsers} 个用户的数据`);
+                
+                // 保存到缓存
+                localStorage.setItem('allRankingData', JSON.stringify(allRankingData));
+                
+            } catch (error) {
+                console.error('快速加载失败:', error);
+                throw error;
+            }
+        }
+
+        // 后台更新热门项目数据
+        async function updateHotProjectsInBackground() {
+            try {
+                console.log('🔄 开始后台更新热门项目数据...');
+                
+                // 定义热门项目（最常查询的项目）
+                const hotProjects = {
+                    'post_tge': ['apt', 'sui', 'sei', 'arb', 'op'],
+                    'pre_tge': ['babylon', 'grass', 'hyperliquid', 'monad', 'berachain']
+                };
+
+                const durations = ['7d', '30d']; // 只更新常用时间周期
+                let updatedCount = 0;
+
+                for (const [category, projects] of Object.entries(hotProjects)) {
+                    for (const project of projects) {
+                        for (const duration of durations) {
+                            try {
+                                // 静默更新，失败也不影响使用
+                                const apiData = await fetchFromAPI(duration, project, 100);
+                                if (apiData && apiData.length > 0) {
+                                    // 更新用户数据
+                                    apiData.forEach((user, index) => {
+                                        const username = user.username?.toLowerCase();
+                                        if (username && allRankingData.data[username]) {
+                                            const key = `${category}_${project}_${duration}`;
+                                            allRankingData.data[username].rankings[key] = {
+                                                rank: index + 1,
+                                                mindshare: user.mindshare || 0,
+                                                score: (user.mindshare || 0) * 100,
+                                                category: category,
+                                                project: project,
+                                                duration: duration,
+                                                timestamp: Date.now(),
+                                                rawData: user
+                                            };
+                                        }
+                                    });
+                                    updatedCount++;
+                                    console.log(`🔄 已更新: ${project}/${duration}`);
+                                }
+                            } catch (error) {
+                                // 静默失败，不影响整体使用
+                                console.warn(`更新失败 ${project}/${duration}:`, error.message);
+                            }
+                        }
+                    }
+                }
+
+                if (updatedCount > 0) {
+                    // 保存更新后的数据
+                    allRankingData.lastUpdate = Date.now();
+                    localStorage.setItem('allRankingData', JSON.stringify(allRankingData));
+                    console.log(`✅ 后台更新完成！成功更新 ${updatedCount} 个数据集`);
                 }
                 
             } catch (error) {
-                console.error('获取全量数据时出错:', error);
+                console.warn('后台更新出错:', error);
             }
         }
 

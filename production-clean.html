@@ -1813,13 +1813,41 @@
         <section id="ict-list" class="content-section">
             <div class="section-header">
                 <h2 class="section-title" data-i18n="ict-title">📋 ICT 名单</h2>
-                <p class="section-description" data-i18n="ict-description">Initial Community Token 项目列表和详细信息</p>
+                <div class="author-info">
+                    <div>made by <a href="https://x.com/wang_xiaolou" target="_blank" rel="noopener noreferrer">@wang_xiaolou</a></div>
+                    <div>powered by <a href="https://x.com/Flywheel_DAO" target="_blank" rel="noopener noreferrer">@Flywheel_DAO</a></div>
+                </div>
+                <p class="section-description" data-i18n="ict-description">特别关注的KOL名单，按Smart Follower数量排序</p>
             </div>
 
-            <div class="coming-soon">
-                <div class="coming-soon-icon">🚧</div>
-                <h3 data-i18n="coming-soon">功能开发中</h3>
-                <p data-i18n="coming-soon-desc">ICT 名单功能正在开发中，敬请期待...</p>
+            <div class="controls-section">
+                <div class="control-group">
+                    <label for="ict-sort-select" data-i18n="sort-by">排序方式:</label>
+                    <select id="ict-sort-select" class="control-select" onchange="updateICTList()">
+                        <option value="smart_follower_count">Smart Follower 数量</option>
+                        <option value="follower_count">总粉丝数</option>
+                        <option value="mindshare">影响力分数</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <button id="refresh-ict-btn" class="control-button" onclick="loadICTList()">
+                        <span data-i18n="refresh-data">� 刷新数据</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="leaderboard-header">
+                <h3 id="ict-title-display">ICT KOL 名单</h3>
+                <p class="subtitle" id="ict-subtitle">按 Smart Follower 数量排序显示</p>
+            </div>
+
+            <div id="ict-loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p data-i18n="loading-text">正在加载ICT名单数据...</p>
+            </div>
+            <div id="ict-users-grid" class="users-grid" style="display: none;"></div>
+            <div id="ict-error" class="search-error" style="display: none;">
+                <p data-i18n="ict-error">加载ICT名单失败，请检查ict.txt文件是否存在</p>
             </div>
         </section>
 

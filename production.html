@@ -1813,13 +1813,41 @@
         <section id="ict-list" class="content-section">
             <div class="section-header">
                 <h2 class="section-title" data-i18n="ict-title">📋 ICT 名单</h2>
-                <p class="section-description" data-i18n="ict-description">Initial Community Token 项目列表和详细信息</p>
+                <div class="author-info">
+                    <div>made by <a href="https://x.com/wang_xiaolou" target="_blank" rel="noopener noreferrer">@wang_xiaolou</a></div>
+                    <div>powered by <a href="https://x.com/Flywheel_DAO" target="_blank" rel="noopener noreferrer">@Flywheel_DAO</a></div>
+                </div>
+                <p class="section-description" data-i18n="ict-description">特别关注的KOL名单，按Smart Follower数量排序</p>
             </div>
 
-            <div class="coming-soon">
-                <div class="coming-soon-icon">🚧</div>
-                <h3 data-i18n="coming-soon">功能开发中</h3>
-                <p data-i18n="coming-soon-desc">ICT 名单功能正在开发中，敬请期待...</p>
+            <div class="controls-section">
+                <div class="control-group">
+                    <label for="ict-sort-select" data-i18n="sort-by">排序方式:</label>
+                    <select id="ict-sort-select" class="control-select" onchange="updateICTList()">
+                        <option value="smart_follower_count">Smart Follower 数量</option>
+                        <option value="follower_count">总粉丝数</option>
+                        <option value="mindshare">影响力分数</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <button id="refresh-ict-btn" class="control-button" onclick="loadICTList()">
+                        <span data-i18n="refresh-data">� 刷新数据</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="leaderboard-header">
+                <h3 id="ict-title-display">ICT KOL 名单</h3>
+                <p class="subtitle" id="ict-subtitle">按 Smart Follower 数量排序显示</p>
+            </div>
+
+            <div id="ict-loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p data-i18n="loading-text">正在加载ICT名单数据...</p>
+            </div>
+            <div id="ict-users-grid" class="users-grid" style="display: none;"></div>
+            <div id="ict-error" class="search-error" style="display: none;">
+                <p data-i18n="ict-error">加载ICT名单失败，请检查ict.txt文件是否存在</p>
             </div>
         </section>
 
@@ -1906,7 +1934,12 @@
                 
                 // 其他页面
                 'ict-title': '📋 ICT 名单',
-                'ict-description': 'Initial Community Token 项目列表和详细信息',
+                'ict-description': '特别关注的KOL名单，按Smart Follower数量排序',
+                'sort-by': '排序方式:',
+                'refresh-data': '🔄 刷新数据',
+                'ict-error': '加载ICT名单失败，请检查ict.txt文件是否存在',
+                'loading-ict': '正在加载ICT名单...',
+                'refresh-ict': '刷新名单',
                 'rewards-title': '⏰ 项目奖励时间线',
                 'rewards-description': '各个项目的奖励机制和代币解锁时间安排',
                 'research-title': '📊 投资机构研报',
@@ -2010,7 +2043,12 @@
                 
                 // 其他页面
                 'ict-title': '📋 ICT Lists',
-                'ict-description': 'Initial Community Token project lists and detailed information',
+                'ict-description': 'Special KOL watchlist sorted by Smart Follower count',
+                'sort-by': 'Sort by:',
+                'refresh-data': '🔄 Refresh Data',
+                'ict-error': 'Failed to load ICT list, please check if ict.txt file exists',
+                'loading-ict': 'Loading ICT list...',
+                'refresh-ict': 'Refresh List',
                 'rewards-title': '⏰ Project Reward Timeline',
                 'rewards-description': 'Reward mechanisms and token unlock schedules for various projects',
                 'research-title': '📊 Investment Institution Reports',
@@ -2834,6 +2872,11 @@
                 item.classList.remove('active');
             });
             document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+            
+            // 特殊处理：如果切换到ICT页面且数据未加载，则自动加载
+            if (sectionId === 'ict-list' && ictKolList.length === 0) {
+                loadICTList();
+            }
         }
 
         // 添加导航事件监听
@@ -3149,6 +3192,181 @@
 
         // 回车键搜索
         // (已移动到页面初始化函数中)
+
+        // ICT 名单功能
+        let ictKolList = [];
+
+        // 加载 ICT 名单
+        async function loadICTList() {
+            const loading = document.getElementById('ict-loading');
+            const usersGrid = document.getElementById('ict-users-grid');
+            const errorDiv = document.getElementById('ict-error');
+            
+            // 显示加载状态
+            loading.style.display = 'block';
+            usersGrid.style.display = 'none';
+            errorDiv.style.display = 'none';
+            
+            try {
+                // 1. 加载 ict.txt 文件
+                console.log('正在加载 ict.txt 文件...');
+                const ictResponse = await fetch('./ict.txt');
+                if (!ictResponse.ok) {
+                    throw new Error('无法加载 ict.txt 文件');
+                }
+                const ictText = await ictResponse.text();
+                
+                // 解析用户名列表（忽略注释和空行）
+                const usernames = ictText
+                    .split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line && !line.startsWith('#'))
+                    .map(line => line.toLowerCase());
+                
+                console.log('ICT 名单用户名:', usernames);
+                
+                if (usernames.length === 0) {
+                    throw new Error('ICT 名单为空');
+                }
+                
+                // 2. 加载 kol.json 数据
+                await loadKolJsonData();
+                if (!kolJsonData) {
+                    throw new Error('无法加载 KOL 数据');
+                }
+                
+                // 3. 匹配用户数据
+                const matchedUsers = [];
+                const processedUsernames = new Set();
+                
+                // 遍历所有分类和项目来查找匹配的用户
+                Object.keys(kolJsonData.categories || {}).forEach(category => {
+                    Object.keys(kolJsonData.categories[category] || {}).forEach(project => {
+                        Object.keys(kolJsonData.categories[category][project] || {}).forEach(duration => {
+                            const users = kolJsonData.categories[category][project][duration];
+                            if (Array.isArray(users)) {
+                                users.forEach(user => {
+                                    const username = (user.username || '').toLowerCase();
+                                    if (username && usernames.includes(username) && !processedUsernames.has(username)) {
+                                        processedUsernames.add(username);
+                                        matchedUsers.push({
+                                            name: user.name || 'Unknown User',
+                                            username: user.username || '',
+                                            icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
+                                            bio: user.bio || '',
+                                            follower_count: user.follower_count || 0,
+                                            smart_follower_count: user.smart_follower_count || 0,
+                                            following_count: user.following_count || 0,
+                                            mindshare: user.mindshare || 0,
+                                            twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    });
+                });
+                
+                console.log(`找到 ${matchedUsers.length} 个匹配的用户`);
+                
+                if (matchedUsers.length === 0) {
+                    throw new Error('在 KOL 数据中未找到匹配的用户');
+                }
+                
+                // 4. 保存数据并显示
+                ictKolList = matchedUsers;
+                updateICTList();
+                
+            } catch (error) {
+                console.error('加载 ICT 名单失败:', error);
+                loading.style.display = 'none';
+                errorDiv.style.display = 'block';
+                errorDiv.innerHTML = `<p>加载失败: ${error.message}</p>`;
+            }
+        }
+
+        // 更新 ICT 名单显示
+        function updateICTList() {
+            if (ictKolList.length === 0) {
+                return;
+            }
+            
+            const sortBy = document.getElementById('ict-sort-select').value;
+            const loading = document.getElementById('ict-loading');
+            const usersGrid = document.getElementById('ict-users-grid');
+            const titleDisplay = document.getElementById('ict-title-display');
+            const subtitle = document.getElementById('ict-subtitle');
+            
+            // 排序用户列表
+            const sortedUsers = [...ictKolList].sort((a, b) => {
+                const aValue = a[sortBy] || 0;
+                const bValue = b[sortBy] || 0;
+                return bValue - aValue; // 降序排列
+            });
+            
+            // 更新标题
+            const sortLabels = {
+                'smart_follower_count': 'Smart Follower 数量',
+                'follower_count': '总粉丝数',
+                'mindshare': '影响力分数'
+            };
+            
+            if (titleDisplay) titleDisplay.textContent = 'ICT KOL 名单';
+            if (subtitle) subtitle.textContent = `按${sortLabels[sortBy]}排序显示 (共${sortedUsers.length}人)`;
+            
+            // 渲染用户卡片
+            renderICTUsers(sortedUsers);
+            
+            // 显示结果
+            loading.style.display = 'none';
+            usersGrid.style.display = 'grid';
+        }
+
+        // 渲染 ICT 用户列表
+        function renderICTUsers(users) {
+            const grid = document.getElementById('ict-users-grid');
+            const t = translations[currentLanguage];
+            
+            grid.innerHTML = users.map((user, index) => `
+                <div class="user-card">
+                    <div class="rank-badge">#${index + 1}</div>
+                    
+                    <div class="user-avatar">
+                        <img src="${user.icon}" alt="${user.name}" 
+                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random'">
+                    </div>
+
+                    <div class="user-info">
+                        <h3 class="user-name">${user.name}</h3>
+                        <p class="user-username">@${user.username}</p>
+                        <p class="user-bio">${user.bio}</p>
+                    </div>
+
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">${t['influence-score'] || '影响力分数'}</span>
+                            <span class="stat-value mindshare-score">${(user.mindshare * 100).toFixed(2)}%</span>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <span class="stat-label">${t['followers'] || '粉丝数'}</span>
+                            <span class="stat-value">${formatNumber(user.follower_count)}</span>
+                        </div>
+
+                        <div class="stat-item">
+                            <span class="stat-label">${t['smart-followers'] || 'Smart 粉丝'}</span>
+                            <span class="stat-value">${formatNumber(user.smart_follower_count)}</span>
+                        </div>
+                    </div>
+
+                    <div class="user-actions">
+                        <a href="${user.twitter_user_url}" target="_blank" rel="noopener noreferrer" class="twitter-link">
+                            🐦 Twitter
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
 
         // 空投计算器功能
         function calculateFeathersReward() {

@@ -1516,10 +1516,13 @@
                     <div class="address-content">
                         <span class="address-value">97vJtSUYM2BpLTo8sLXzRAU9CZGBERFBAohuFLoXGwa2</span>
                         <div id="sol-qr" class="qr-code-container" style="display: none;">
-                            <img src="images/sol.png" alt="SOL 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <img src="./images/sol.png" alt="SOL 收款码" class="qr-code-img" 
+                                 onload="console.log('SOL QR码加载成功')" 
+                                 onerror="console.error('SOL QR码加载失败:', this.src); this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <div class="qr-error" style="display: none;">
-                                <p>收款码图片未找到</p>
-                                <small>请将 SOL 收款码保存为 images/sol.png</small>
+                                <p>收款码图片加载失败</p>
+                                <small>图片路径: ./images/sol.png</small>
+                                <small>请检查网络连接或联系管理员</small>
                             </div>
                         </div>
                     </div>
@@ -1532,10 +1535,13 @@
                     <div class="address-content">
                         <span class="address-value">0x90ea00E3c00606ee52ADD1c2468F83C927065584</span>
                         <div id="evm-qr" class="qr-code-container" style="display: none;">
-                            <img src="images/evm.png" alt="EVM 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <img src="./images/evm.png" alt="EVM 收款码" class="qr-code-img" 
+                                 onload="console.log('EVM QR码加载成功')" 
+                                 onerror="console.error('EVM QR码加载失败:', this.src); this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <div class="qr-error" style="display: none;">
-                                <p>收款码图片未找到</p>
-                                <small>请将 EVM 收款码保存为 images/evm.png</small>
+                                <p>收款码图片加载失败</p>
+                                <small>图片路径: ./images/evm.png</small>
+                                <small>请检查网络连接或联系管理员</small>
                             </div>
                         </div>
                     </div>
@@ -1828,11 +1834,6 @@
                         <option value="follower_count">总粉丝数</option>
                         <option value="mindshare">影响力分数</option>
                     </select>
-                </div>
-                <div class="control-group">
-                    <button id="refresh-ict-btn" class="control-button" onclick="loadICTList()">
-                        <span data-i18n="refresh-data">� 刷新数据</span>
-                    </button>
                 </div>
             </div>
 
@@ -3062,9 +3063,21 @@
             });
             document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
             
-            // 特殊处理：如果切换到ICT页面且数据未加载，则自动加载
-            if (sectionId === 'ict-list' && ictKolList.length === 0) {
-                loadICTList();
+            // 移除自动加载逻辑 - 让用户手动点击刷新按钮加载数据
+            // 原逻辑：if (sectionId === 'ict-list' && ictKolList.length === 0) { loadICTList(); }
+            
+            // 如果是ICT页面，自动加载数据
+            if (sectionId === 'ict-list') {
+                if (ictKolList.length === 0) {
+                    // 自动加载ICT数据
+                    loadICTList();
+                } else {
+                    // 如果有数据，直接显示
+                    const ictLoading = document.getElementById('ict-loading');
+                    const ictGrid = document.getElementById('ict-users-grid');
+                    ictLoading.style.display = 'none';
+                    ictGrid.style.display = 'block';
+                }
             }
         }
 

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>临时修复版 - Kaito排行榜</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border-radius: 10px;
+        }
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        select, button {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .users-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .user-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .rank {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            min-width: 50px;
+        }
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .user-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .user-info .username {
+            color: #666;
+            font-size: 14px;
+            margin: 0 0 5px 0;
+        }
+        .user-info .stats {
+            font-size: 12px;
+            color: #888;
+        }
+        .debug-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Kaito KOL 排行榜</h1>
+            <p>临时修复版 - 用于诊断和修复加载问题</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="category-select">分类:</label>
+                <select id="category-select" onchange="updateTopicSelect(this.value)">
+                    <option value="post_tge">Post TGE</option>
+                    <option value="pre_tge">Pre TGE</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="topic-select">项目:</label>
+                <select id="topic-select">
+                    <option value="APT">APT</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="duration-select">时间范围:</label>
+                <select id="duration-select">
+                    <option value="7d">7天</option>
+                    <option value="30d">30天</option>
+                    <option value="3m">3个月</option>
+                    <option value="6m">6个月</option>
+                    <option value="12m">12个月</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="top-n-select">显示条数:</label>
+                <select id="top-n-select">
+                    <option value="10">Top 10</option>
+                    <option value="20">Top 20</option>
+                    <option value="50">Top 50</option>
+                    <option value="100">Top 100</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>&nbsp;</label>
+                <button onclick="loadData()">加载数据</button>
+            </div>
+        </div>
+
+        <div id="debug-info" class="debug-info" style="display: none;"></div>
+        <div id="loading" class="loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>正在加载排行榜数据...</p>
+        </div>
+        <div id="users-grid" class="users-grid"></div>
+    </div>
+
+    <script>
+        // 配置数据
+        const KAITO_CONFIG = {
+            PRE_TGE_PROJECTS: [
+                "0G", "ALLORA", "ANOMA", "BILLIONS", "BLS", "BOUNDLESS", "CAMP", "CYSIC", 
+                "EVERLYN", "FALCON", "FOGO", "HANAHANA", "GOATNETWORK", "INFINEX", "IRYS", 
+                "KAT", "LOMBARD", "LUMITERRA", "MAVRYK", "MEGAETH", "MEMEX", "MIRA", "MITOSIS", 
+                "MOMENTUM", "MONAD", "MOONBIRDS", "MULTIBANK", "MULTIPLI", "NYT", "NOYA", "OPENLEDGER",
+                "PARADEX", "PORTALPORTAL", "PUFFPAW", "SAPIEN", "SOMNIA", "SO", "SURF", 
+                "SYMPHONY", "THEORIQ", "THRIVE", "TURTLECLUB", "UNION", "WARP", "YEET"
+            ],
+            POST_TGE_PROJECTS: [
+                "KAITO", "ANIME", "APT", "ARB", "BERA", "BLUE", "BOOPBOOPFUN", "BYBITTRADFI", 
+                "CALDERA", "CORN", "CREATORBID", "DEFIAPP", "DYDX", "ECLIPSE", "ETH", "FRAX", 
+                "FUEL", "HUMAFINANCE", "HUMANITY", "INFINIT", "INITIA", "INJ", "IQ", "KAIA", 
+                "KINTO", "MNT", "OM", "MAPLESTORYUNIVERSE", "MOVEMENT", "NEAR", "NEWTON", 
+                "ORDERLYNETWORK", "PEAQ", "PENGU", "DOT", "POL", "PYTH", "QUAI", "SATLAYER", 
+                "SEI", "SIDEKICK", "SKATE", "S", "SOON", "SOPHON", "STARKNET", "STORYPROTOCOL", 
+                "SUCCINCT", "UXLINK", "VIRTUALECOSYSTEM", "WAL", "WAYFINDER", "XION", "ZEC"
+            ]
+        };
+
+        let kolJsonData = null;
+
+        function log(message, type = 'info') {
+            console.log(message);
+            const debugDiv = document.getElementById('debug-info');
+            debugDiv.style.display = 'block';
+            const timestamp = new Date().toLocaleTimeString();
+            const color = {info: '#333', error: '#d32f2f', success: '#388e3c', warning: '#f57c00'}[type] || '#333';
+            debugDiv.innerHTML += `<div style="color: ${color}; margin: 2px 0;">[${timestamp}] ${message}</div>`;
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+        }
+
+        function updateTopicSelect(category) {
+            const topicSelect = document.getElementById('topic-select');
+            const projects = KAITO_CONFIG[category === 'pre_tge' ? 'PRE_TGE_PROJECTS' : 'POST_TGE_PROJECTS'];
+            
+            topicSelect.innerHTML = '';
+            projects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project;
+                option.textContent = project;
+                topicSelect.appendChild(option);
+            });
+            
+            log(`更新项目列表: ${category} (${projects.length} 个项目)`);
+        }
+
+        async function loadKolJsonData() {
+            if (kolJsonData) return kolJsonData;
+            
+            try {
+                log('开始加载 kol.json 数据...');
+                const response = await fetch('./kol.json');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const size = response.headers.get('Content-Length');
+                log(`kol.json 响应成功: ${response.status} ${size ? `(${(size/1024/1024).toFixed(2)} MB)` : ''}`);
+                
+                kolJsonData = await response.json();
+                
+                log(`数据解析成功: ${Object.keys(kolJsonData.categories?.pre_tge || {}).length} Pre + ${Object.keys(kolJsonData.categories?.post_tge || {}).length} Post 项目`, 'success');
+                
+                return kolJsonData;
+            } catch (error) {
+                log(`kol.json 加载失败: ${error.message}`, 'error');
+                throw error;
+            }
+        }
+
+        async function loadData() {
+            const category = document.getElementById('category-select').value;
+            const topic = document.getElementById('topic-select').value;
+            const duration = document.getElementById('duration-select').value;
+            const topN = parseInt(document.getElementById('top-n-select').value);
+
+            const loadingDiv = document.getElementById('loading');
+            const usersGrid = document.getElementById('users-grid');
+
+            log(`开始加载数据: ${category} -> ${topic} -> ${duration} -> Top${topN}`);
+
+            // 显示加载状态
+            loadingDiv.style.display = 'block';
+            usersGrid.style.display = 'none';
+            usersGrid.innerHTML = '';
+
+            try {
+                // 加载 kol.json 数据
+                const data = await loadKolJsonData();
+                
+                // 获取对应的数据
+                const categoryData = data.categories?.[category];
+                if (!categoryData) {
+                    throw new Error(`未找到分类: ${category}`);
+                }
+                
+                const projectData = categoryData[topic];
+                if (!projectData) {
+                    throw new Error(`未找到项目数据: ${topic}`);
+                }
+                
+                const durationData = projectData[duration];
+                if (!durationData || !Array.isArray(durationData)) {
+                    throw new Error(`未找到时间段数据: ${topic} -> ${duration}`);
+                }
+
+                log(`找到数据: ${durationData.length} 条记录`, 'success');
+
+                // 获取前N条数据
+                const displayData = durationData.slice(0, topN);
+                
+                // 渲染数据
+                renderUsers(displayData);
+                
+                loadingDiv.style.display = 'none';
+                usersGrid.style.display = 'block';
+
+                log(`数据渲染完成: 显示 ${displayData.length} 条记录`, 'success');
+
+            } catch (error) {
+                log(`加载失败: ${error.message}`, 'error');
+                
+                loadingDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ 数据加载失败</h3>
+                        <p><strong>错误:</strong> ${error.message}</p>
+                        <p><strong>参数:</strong> ${category} / ${topic} / ${duration} / Top${topN}</p>
+                        <button onclick="loadData()">重试</button>
+                        <button onclick="location.reload()">刷新页面</button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderUsers(users) {
+            const usersGrid = document.getElementById('users-grid');
+            
+            usersGrid.innerHTML = users.map((user, index) => `
+                <div class="user-card">
+                    <div class="rank">#${user.rank || (index + 1)}</div>
+                    <img class="avatar" src="${user.icon || ''}" alt="${user.name}" 
+                         onerror="this.src='data:image/svg+xml,<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"50\\" height=\\"50\\" viewBox=\\"0 0 50 50\\"><rect width=\\"50\\" height=\\"50\\" fill=\\"%23ddd\\"/><text x=\\"25\\" y=\\"30\\" text-anchor=\\"middle\\" fill=\\"white\\" font-size=\\"20\\">?</text></svg>'">
+                    <div class="user-info">
+                        <h3>${user.name || 'Unknown User'}</h3>
+                        <p class="username">@${user.username || 'unknown'}</p>
+                        <p class="stats">
+                            Mindshare: <strong>${((user.mindshare || 0) * 100).toFixed(3)}%</strong> | 
+                            Followers: <strong>${(user.follower_count || 0).toLocaleString()}</strong> | 
+                            Community Score: <strong>${(user.community_score || 0).toFixed(1)}</strong>
+                        </p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            log('页面加载完成，开始初始化...');
+            
+            // 初始化项目选择
+            updateTopicSelect('post_tge');
+            
+            // 自动加载默认数据
+            setTimeout(() => {
+                log('自动加载默认数据 (APT 7d Top 10)...');
+                loadData();
+            }, 500);
+        });
+
+        // 全局错误处理
+        window.addEventListener('error', function(event) {
+            log(`全局错误: ${event.error?.message || event.message}`, 'error');
+        });
+
+        window.addEventListener('unhandledrejection', function(event) {
+            log(`未处理的Promise拒绝: ${event.reason}`, 'error');
+        });
+
+        log('临时修复版本初始化完成');
+    </script>
+</body>
+</html>

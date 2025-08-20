@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调试诊断 - Kaito排行榜加载问题</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: green; background: #f0fff0; }
+        .error { color: red; background: #fff0f0; }
+        .warning { color: orange; background: #fff8f0; }
+        .info { color: blue; background: #f0f8ff; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; border-radius: 3px; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        #console-logs { background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 5px; max-height: 200px; overflow-y: auto; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Kaito排行榜加载问题诊断工具</h1>
+        
+        <div class="grid">
+            <div class="debug-section">
+                <h2>1. 配置检查</h2>
+                <button onclick="checkConfig()">检查配置</button>
+                <div id="config-result"></div>
+            </div>
+
+            <div class="debug-section">
+                <h2>2. 文件状态</h2>
+                <button onclick="checkFiles()">检查文件</button>
+                <div id="files-result"></div>
+            </div>
+
+            <div class="debug-section">
+                <h2>3. 数据加载</h2>
+                <button onclick="testDataLoading()">测试数据</button>
+                <div id="data-result"></div>
+            </div>
+
+            <div class="debug-section">
+                <h2>4. DOM 检查</h2>
+                <button onclick="checkDOM()">检查页面元素</button>
+                <div id="dom-result"></div>
+            </div>
+        </div>
+
+        <div class="debug-section">
+            <h2>5. 完整诊断</h2>
+            <button onclick="runFullDiagnosis()">运行完整诊断</button>
+            <div id="full-result"></div>
+        </div>
+
+        <div class="debug-section">
+            <h2>6. 控制台日志</h2>
+            <button onclick="clearLogs()">清除日志</button>
+            <div id="console-logs"></div>
+        </div>
+    </div>
+
+    <script>
+        // 项目配置
+        const KAITO_CONFIG = {
+            PRE_TGE_PROJECTS: [
+                "0G", "ALLORA", "ANOMA", "BILLIONS", "BLS", "BOUNDLESS", "CAMP", "CYSIC", 
+                "EVERLYN", "FALCON", "FOGO", "HANAHANA", "GOATNETWORK", "INFINEX", "IRYS", 
+                "KAT", "LOMBARD", "LUMITERRA", "MAVRYK", "MEGAETH", "MEMEX", "MIRA", "MITOSIS", 
+                "MOMENTUM", "MONAD", "MOONBIRDS", "MULTIBANK", "MULTIPLI", "NYT", "NOYA", "OPENLEDGER",
+                "PARADEX", "PORTALPORTAL", "PUFFPAW", "SAPIEN", "SOMNIA", "SO", "SURF", 
+                "SYMPHONY", "THEORIQ", "THRIVE", "TURTLECLUB", "UNION", "WARP", "YEET"
+            ],
+            POST_TGE_PROJECTS: [
+                "KAITO", "ANIME", "APT", "ARB", "BERA", "BLUE", "BOOPBOOPFUN", "BYBITTRADFI", 
+                "CALDERA", "CORN", "CREATORBID", "DEFIAPP", "DYDX", "ECLIPSE", "ETH", "FRAX", 
+                "FUEL", "HUMAFINANCE", "HUMANITY", "INFINIT", "INITIA", "INJ", "IQ", "KAIA", 
+                "KINTO", "MNT", "OM", "MAPLESTORYUNIVERSE", "MOVEMENT", "NEAR", "NEWTON", 
+                "ORDERLYNETWORK", "PEAQ", "PENGU", "DOT", "POL", "PYTH", "QUAI", "SATLAYER", 
+                "SEI", "SIDEKICK", "SKATE", "S", "SOON", "SOPHON", "STARKNET", "STORYPROTOCOL", 
+                "SUCCINCT", "UXLINK", "VIRTUALECOSYSTEM", "WAL", "WAYFINDER", "XION", "ZEC"
+            ]
+        };
+
+        let kolJsonData = null;
+
+        // 拦截console输出
+        const originalConsole = { ...console };
+        
+        console.log = function(...args) {
+            originalConsole.log.apply(console, args);
+            logToConsole('INFO', args.join(' '));
+        };
+        
+        console.error = function(...args) {
+            originalConsole.error.apply(console, args);
+            logToConsole('ERROR', args.join(' '));
+        };
+        
+        console.warn = function(...args) {
+            originalConsole.warn.apply(console, args);
+            logToConsole('WARN', args.join(' '));
+        };
+
+        function logToConsole(level, message) {
+            const logsDiv = document.getElementById('console-logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = {INFO: '#4CAF50', ERROR: '#f44336', WARN: '#ff9800'}[level] || '#2196F3';
+            logsDiv.innerHTML += `<div style="color: ${color}; margin: 2px 0;">[${timestamp}] ${level}: ${message}</div>`;
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function clearLogs() {
+            document.getElementById('console-logs').innerHTML = '';
+        }
+
+        function checkConfig() {
+            const result = document.getElementById('config-result');
+            result.innerHTML = '<p>检查中...</p>';
+            
+            try {
+                console.log('开始检查 KAITO_CONFIG...');
+                
+                const checks = [
+                    { name: 'KAITO_CONFIG 已定义', pass: typeof KAITO_CONFIG !== 'undefined' },
+                    { name: 'PRE_TGE_PROJECTS 存在', pass: KAITO_CONFIG?.PRE_TGE_PROJECTS?.length > 0 },
+                    { name: 'POST_TGE_PROJECTS 存在', pass: KAITO_CONFIG?.POST_TGE_PROJECTS?.length > 0 },
+                    { name: 'APT 在 POST_TGE 中', pass: KAITO_CONFIG?.POST_TGE_PROJECTS?.includes('APT') }
+                ];
+                
+                const preCount = KAITO_CONFIG?.PRE_TGE_PROJECTS?.length || 0;
+                const postCount = KAITO_CONFIG?.POST_TGE_PROJECTS?.length || 0;
+                
+                const html = `
+                    ${checks.map(check => `
+                        <p class="${check.pass ? 'success' : 'error'}">
+                            ${check.pass ? '✅' : '❌'} ${check.name}
+                        </p>
+                    `).join('')}
+                    <p>PRE_TGE: ${preCount} 个项目</p>
+                    <p>POST_TGE: ${postCount} 个项目</p>
+                    <p>总计: ${preCount + postCount} 个项目</p>
+                `;
+                
+                result.innerHTML = html;
+                result.className = checks.every(c => c.pass) ? 'success' : 'error';
+                
+            } catch (error) {
+                result.innerHTML = `<p class="error">❌ 配置检查失败: ${error.message}</p>`;
+                console.error('配置检查错误:', error);
+            }
+        }
+
+        async function checkFiles() {
+            const result = document.getElementById('files-result');
+            result.innerHTML = '<p>检查中...</p>';
+            
+            try {
+                console.log('开始检查文件可访问性...');
+                
+                const files = [
+                    { name: 'kol.json', path: './kol.json' },
+                    { name: 'config.js', path: './config.js' },
+                    { name: 'production.html', path: './production.html' }
+                ];
+                
+                const results = [];
+                
+                for (const file of files) {
+                    try {
+                        const response = await fetch(file.path);
+                        const size = response.headers.get('Content-Length');
+                        results.push({
+                            name: file.name,
+                            status: response.status,
+                            ok: response.ok,
+                            size: size ? parseInt(size) : 0
+                        });
+                    } catch (error) {
+                        results.push({
+                            name: file.name,
+                            ok: false,
+                            error: error.message
+                        });
+                    }
+                }
+                
+                const html = results.map(r => `
+                    <p class="${r.ok ? 'success' : 'error'}">
+                        ${r.ok ? '✅' : '❌'} ${r.name}: ${r.status || 'ERROR'} 
+                        ${r.size ? `(${(r.size/1024/1024).toFixed(2)} MB)` : ''}
+                        ${r.error ? `- ${r.error}` : ''}
+                    </p>
+                `).join('');
+                
+                result.innerHTML = html;
+                result.className = results.every(r => r.ok) ? 'success' : 'error';
+                
+            } catch (error) {
+                result.innerHTML = `<p class="error">❌ 文件检查失败: ${error.message}</p>`;
+                console.error('文件检查错误:', error);
+            }
+        }
+
+        async function testDataLoading() {
+            const result = document.getElementById('data-result');
+            result.innerHTML = '<p>测试中...</p>';
+            
+            try {
+                console.log('开始测试数据加载...');
+                
+                const response = await fetch('./kol.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                kolJsonData = await response.json();
+                
+                const checks = [
+                    { name: '数据加载成功', pass: !!kolJsonData },
+                    { name: 'categories 结构存在', pass: !!kolJsonData?.categories },
+                    { name: 'pre_tge 数据存在', pass: !!kolJsonData?.categories?.pre_tge },
+                    { name: 'post_tge 数据存在', pass: !!kolJsonData?.categories?.post_tge },
+                    { name: 'APT 项目数据存在', pass: !!kolJsonData?.categories?.post_tge?.APT },
+                    { name: 'APT 7d 数据存在', pass: !!kolJsonData?.categories?.post_tge?.APT?.['7d'] }
+                ];
+                
+                const aptData = kolJsonData?.categories?.post_tge?.APT?.['7d'];
+                const preProjects = Object.keys(kolJsonData?.categories?.pre_tge || {}).length;
+                const postProjects = Object.keys(kolJsonData?.categories?.post_tge || {}).length;
+                
+                const html = `
+                    ${checks.map(check => `
+                        <p class="${check.pass ? 'success' : 'error'}">
+                            ${check.pass ? '✅' : '❌'} ${check.name}
+                        </p>
+                    `).join('')}
+                    <p>PRE_TGE 项目: ${preProjects}</p>
+                    <p>POST_TGE 项目: ${postProjects}</p>
+                    <p>APT 7d 数据: ${aptData ? aptData.length : 0} 条</p>
+                    <p>数据大小: ${(JSON.stringify(kolJsonData).length / 1024 / 1024).toFixed(2)} MB</p>
+                `;
+                
+                result.innerHTML = html;
+                result.className = checks.every(c => c.pass) ? 'success' : 'error';
+                
+            } catch (error) {
+                result.innerHTML = `<p class="error">❌ 数据加载失败: ${error.message}</p>`;
+                console.error('数据加载错误:', error);
+            }
+        }
+
+        function checkDOM() {
+            const result = document.getElementById('dom-result');
+            
+            try {
+                console.log('开始检查 DOM 元素...');
+                
+                // 检查生产页面的关键元素（如果是在生产页面运行）
+                const elements = [
+                    'category-select',
+                    'topic-select', 
+                    'duration-select',
+                    'top-n-select',
+                    'loading',
+                    'users-grid'
+                ];
+                
+                const checks = elements.map(id => ({
+                    name: `#${id} 元素`,
+                    pass: !!document.getElementById(id)
+                }));
+                
+                // 检查基本DOM状态
+                checks.push({ name: 'DOM 已就绪', pass: document.readyState === 'complete' });
+                checks.push({ name: '页面已加载', pass: window.location.href !== 'about:blank' });
+                
+                const html = checks.map(check => `
+                    <p class="${check.pass ? 'success' : 'warning'}">
+                        ${check.pass ? '✅' : '⚠️'} ${check.name}
+                    </p>
+                `).join('');
+                
+                result.innerHTML = html + '<p class="info">💡 如果某些元素不存在，可能是因为这是调试页面而非生产页面</p>';
+                
+            } catch (error) {
+                result.innerHTML = `<p class="error">❌ DOM 检查失败: ${error.message}</p>`;
+                console.error('DOM 检查错误:', error);
+            }
+        }
+
+        async function runFullDiagnosis() {
+            const result = document.getElementById('full-result');
+            result.innerHTML = '<p>正在运行完整诊断...</p>';
+            
+            try {
+                console.log('开始完整诊断...');
+                
+                // 运行所有检查
+                checkConfig();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await checkFiles();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await testDataLoading();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                checkDOM();
+                
+                // 诊断结果总结
+                const issues = [];
+                
+                if (typeof KAITO_CONFIG === 'undefined') {
+                    issues.push('❌ KAITO_CONFIG 未定义 - 这是主要问题！');
+                }
+                
+                if (!kolJsonData) {
+                    issues.push('❌ 无法加载 kol.json 数据');
+                }
+                
+                if (!kolJsonData?.categories?.post_tge?.APT?.['7d']) {
+                    issues.push('❌ 缺少默认 APT 7d 数据');
+                }
+                
+                const summary = issues.length === 0 
+                    ? '<p class="success">✅ 所有检查都通过！页面应该能正常加载。</p>'
+                    : `<p class="error">发现 ${issues.length} 个问题：</p><ul>${issues.map(issue => `<li>${issue}</li>`).join('')}</ul>`;
+                
+                const recommendations = `
+                    <h4>🔧 修复建议：</h4>
+                    <ol>
+                        <li>确保 production.html 中定义了 KAITO_CONFIG</li>
+                        <li>验证 kol.json 文件存在且可访问</li>
+                        <li>检查浏览器控制台是否有JavaScript错误</li>
+                        <li>尝试硬刷新页面 (Ctrl+F5 或 Cmd+Shift+R)</li>
+                        <li>确保所有文件都已正确部署</li>
+                    </ol>
+                `;
+                
+                result.innerHTML = summary + recommendations;
+                
+            } catch (error) {
+                result.innerHTML = `<p class="error">❌ 完整诊断失败: ${error.message}</p>`;
+                console.error('完整诊断错误:', error);
+            }
+        }
+
+        // 页面加载时自动运行检查
+        window.addEventListener('load', function() {
+            console.log('调试工具已加载');
+            logToConsole('INFO', '调试工具初始化完成');
+            setTimeout(() => {
+                checkConfig();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -106,3 +106,7 @@ jspm_packages/
 
 # TernJS port file
 .tern-port
+
+# Backup files
+kol_backup_*.json
+*_backup_*.json

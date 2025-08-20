@@ -262,9 +262,11 @@ async function collectProjectData(topicId, category) {
                 username: user.username || '',
                 rank: user.rank || (index + 1),
                 mindshare: user.mindshare || 0,
-                community_score: user.last_7_day_avg_llm_insightfulness_score_scaled || 0,
+                community_score: user.community_score || 0,
                 follower_count: user.follower_count || 0,
                 smart_follower_count: user.smart_follower_count || 0,
+                following_count: user.following_count || 0,
+                smart_following_count: user.smart_following_count || 0,
                 icon: user.icon || '',
                 bio: user.bio || '',
                 twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`
@@ -418,6 +420,8 @@ function organizeDataByUser(projectData, topicId, usersData, stats) {
                         bio: user.bio,
                         follower_count: user.follower_count,
                         smart_follower_count: user.smart_follower_count,
+                        following_count: user.following_count,
+                        smart_following_count: user.smart_following_count,
                         twitter_user_url: user.twitter_user_url,
                         projects: {} // topic_id -> 周期 -> {rank, mindshare, community_score}
                     };

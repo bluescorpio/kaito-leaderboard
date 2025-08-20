@@ -37,19 +37,6 @@
             z-index: 1000;
         }
 
-        /* 数据源指示器样式 */
-        .data-source-indicator {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
         .lang-btn {
             display: flex;
             align-items: center;
@@ -1491,11 +1478,6 @@
 </head>
 <body>
     <header class="app-header">
-        <!-- 数据源指示器 -->
-        <div class="data-source-indicator" id="data-source-indicator">
-            📊 数据源：正在检测...
-        </div>
-        
         <!-- 语言切换按钮 -->
         <div class="language-switcher">
             <button id="lang-btn" class="lang-btn" onclick="toggleLanguage()">
@@ -1639,7 +1621,7 @@
             </div>
 
             <div class="leaderboard-header">
-                <h3 id="leaderboard-title">APT 影响力排行榜</h3>
+                <h3 id="leaderboard-title">Kaito 影响力排行榜</h3>
                 <p class="subtitle" id="leaderboard-subtitle">Post TGE 项目 - 显示过去 7 天 的前 10 名影响者</p>
             </div>
 
@@ -2231,25 +2213,6 @@
         let currentData = [];
         let kolJsonData = null;
         
-        // 更新数据源指示器
-        function updateDataSourceIndicator(source) {
-            const indicator = document.getElementById('data-source-indicator');
-            
-            if (source === 'api') {
-                indicator.innerHTML = '🔗 数据源：实时API';
-                indicator.style.background = 'rgba(76, 175, 80, 0.3)';
-                indicator.style.borderColor = 'rgba(76, 175, 80, 0.5)';
-            } else if (source === 'local') {
-                indicator.innerHTML = '📁 数据源：本地文件';
-                indicator.style.background = 'rgba(255, 193, 7, 0.3)';
-                indicator.style.borderColor = 'rgba(255, 193, 7, 0.5)';
-            } else {
-                indicator.innerHTML = '❌ 数据源：无可用数据';
-                indicator.style.background = 'rgba(244, 67, 54, 0.3)';
-                indicator.style.borderColor = 'rgba(244, 67, 54, 0.5)';
-            }
-        }
-        
         // 本地存储的所有排名数据
         let allRankingData = {
             lastUpdate: null,
@@ -2340,17 +2303,125 @@
                     }
                 }
 
+                // 优先尝试从本地 kol.json 文件加载数据
+                console.log('尝试从本地 kol.json 文件加载数据...');
+                
+                if (loadingElement && loadingElement.style.display !== 'none') {
+                    loadingElement.innerHTML = '<div class="loading-spinner"></div><p>正在从本地文件加载数据...</p>';
+                }
+
+                try {
+                    await loadKolJsonData();
+                    
+                    if (kolJsonData && Object.keys(kolJsonData.categories).length > 0) {
+                        console.log('✅ 成功从 kol.json 加载数据，开始处理...');
+                        
+                        allRankingData.data = {};
+                        allRankingData.lastUpdate = Date.now();
+                        let totalKOLsFound = 0;
+
+                        // 处理 kol.json 中的数据
+                        const categories = Object.keys(kolJsonData.categories);
+                        
+                        for (const categoryKey of categories) {
+                            const projects = kolJsonData.categories[categoryKey];
+                            
+                            for (const [projectName, projectData] of Object.entries(projects)) {
+                                for (const [duration, users] of Object.entries(projectData)) {
+                                    if (Array.isArray(users) && users.length > 0) {
+                                        console.log(`处理 ${categoryKey}-${projectName}-${duration}: ${users.length} 个KOL`);
+                                        
+                                        users.forEach((user, index) => {
+                                            if (!user.username) return; // 跳过没有用户名的记录
+                                            
+                                            const username = user.username.toLowerCase();
+                                            
+                                            // 初始化用户数据结构
+                                            if (!allRankingData.data[username]) {
+                                                allRankingData.data[username] = {
+                                                    name: user.name || user.username,
+                                                    username: user.username,
+                                                    icon: user.icon || '',
+                                                    bio: user.bio || '',
+                                                    follower_count: user.follower_count || 0,
+                                                    following_count: user.following_count || 0,
+                                                    smart_follower_count: user.smart_follower_count || 0,
+                                                    smart_following_count: user.smart_following_count || 0,
+                                                    twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`,
+                                                    rankings: {},
+                                                    firstSeen: Date.now()
+                                                };
+                                                totalKOLsFound++;
+                                            } else {
+                                                // 更新用户基本信息（取最新的或非空值）
+                                                allRankingData.data[username].name = user.name || allRankingData.data[username].name;
+                                                allRankingData.data[username].icon = user.icon || allRankingData.data[username].icon;
+                                                allRankingData.data[username].bio = user.bio || allRankingData.data[username].bio;
+                                                allRankingData.data[username].follower_count = user.follower_count || allRankingData.data[username].follower_count;
+                                                allRankingData.data[username].following_count = user.following_count || allRankingData.data[username].following_count;
+                                                allRankingData.data[username].smart_follower_count = user.smart_follower_count || allRankingData.data[username].smart_follower_count;
+                                                allRankingData.data[username].smart_following_count = user.smart_following_count || allRankingData.data[username].smart_following_count;
+                                                allRankingData.data[username].twitter_user_url = user.twitter_user_url || allRankingData.data[username].twitter_user_url;
+                                            }
+
+                                            // 记录该项目该周期的排名信息
+                                            const key = `${categoryKey}_${projectName}_${duration}`;
+                                            allRankingData.data[username].rankings[key] = {
+                                                rank: parseInt(user.rank) || index + 1,
+                                                mindshare: user.mindshare || 0,
+                                                score: (user.mindshare || 0) * 100,
+                                                community_score: user.community_score || 0,
+                                                category: categoryKey,
+                                                project: projectName,
+                                                duration: duration,
+                                                timestamp: Date.now(),
+                                                // 保存完整的原始数据
+                                                rawData: {
+                                                    follower_count: user.follower_count,
+                                                    following_count: user.following_count,
+                                                    smart_follower_count: user.smart_follower_count,
+                                                    smart_following_count: user.smart_following_count,
+                                                    mindshare: user.mindshare,
+                                                    community_score: user.community_score,
+                                                    bio: user.bio,
+                                                    icon: user.icon
+                                                }
+                                            };
+                                        });
+                                    }
+                                }
+                            }
+                        }
+
+                        console.log(`✅ 从 kol.json 加载完成，共处理 ${totalKOLsFound} 个唯一KOL`);
+                        
+                        // 保存到本地缓存
+                        try {
+                            localStorage.setItem('allRankingData', JSON.stringify(allRankingData));
+                            console.log('✅ 数据已缓存到本地存储');
+                        } catch (error) {
+                            console.warn('⚠️ 无法缓存到本地存储:', error);
+                        }
+                        
+                        return; // 成功从本地文件加载，直接返回
+                    }
+                } catch (error) {
+                    console.warn('⚠️ 从 kol.json 加载数据失败:', error);
+                }
+
+                // 如果本地文件加载失败，则回退到API方式
+                console.log('📡 回退到API方式获取数据...');
+                
+                if (loadingElement && loadingElement.style.display !== 'none') {
+                    loadingElement.innerHTML = '<div class="loading-spinner"></div><p>正在从API获取数据...</p>';
+                }
+
                 // 获取所有项目和时间周期的数据
                 const durations = ['7d', '30d', '3m', '6m', '12m'];
                 const categories = ['post_tge', 'pre_tge'];
                 
                 allRankingData.data = {};
                 allRankingData.lastUpdate = Date.now();
-
-                // 显示加载进度
-                if (loadingElement && loadingElement.style.display !== 'none') {
-                    loadingElement.innerHTML = '<div class="loading-spinner"></div><p>正在获取全量排名数据...</p>';
-                }
 
                 let totalRequests = 0;
                 let completedRequests = 0;
@@ -2586,11 +2657,6 @@
                         </div>
 
                         <div class="stat-item">
-                            <span class="stat-label">${t['following']}</span>
-                            <span class="stat-value">${formatNumber(user.following_count)}</span>
-                        </div>
-
-                        <div class="stat-item">
                             <span class="stat-label">${t['smart-followers']}</span>
                             <span class="stat-value">${formatNumber(user.smart_follower_count)}</span>
                         </div>
@@ -2736,19 +2802,42 @@
 
                 console.log(`✅ API成功返回 ${users.length} 条数据`);
                 
+                // 调试：输出第一条数据的结构
+                if (users.length > 0) {
+                    console.log('📊 第一条API数据结构:', Object.keys(users[0]));
+                    console.log('📊 第一条完整数据:', users[0]);
+                }
+                
                 // 格式化数据
-                return users.slice(0, top_n).map((user, index) => ({
-                    name: user.name || 'Unknown User',
-                    username: user.username || '',
-                    rank: user.rank || (index + 1),
-                    mindshare: parseFloat(user.mindshare) || 0,
-                    community_score: parseFloat(user.last_7_day_avg_llm_insightfulness_score_scaled) || parseFloat(user.community_score) || 0,
-                    follower_count: parseInt(user.follower_count) || 0,
-                    smart_follower_count: parseInt(user.smart_follower_count) || 0,
-                    icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
-                    bio: user.bio || '',
-                    twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`
-                }));
+                return users.slice(0, top_n).map((user, index) => {
+                    // 尝试多种可能的字段名
+                    const followerCount = user.follower_count || user.total_followers || user.followers || 0;
+                    const smartFollowerCount = user.smart_follower_count || user.smart_followers || 0;
+                    const followingCount = user.following_count || user.total_following || user.following || 0;
+                    
+                    console.log(`调试用户数据 ${index + 1}:`, {
+                        name: user.name,
+                        follower_count: user.follower_count,
+                        total_followers: user.total_followers,
+                        followers: user.followers,
+                        smart_follower_count: user.smart_follower_count,
+                        计算后的followerCount: followerCount
+                    });
+                    
+                    return {
+                        name: user.name || 'Unknown User',
+                        username: user.username || '',
+                        rank: user.rank || (index + 1),
+                        mindshare: parseFloat(user.mindshare) || 0,
+                        community_score: parseFloat(user.last_7_day_avg_llm_insightfulness_score_scaled) || parseFloat(user.community_score) || 0,
+                        follower_count: parseInt(followerCount) || 0,
+                        smart_follower_count: parseInt(smartFollowerCount) || 0,
+                        following_count: parseInt(followingCount) || 0,
+                        icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
+                        bio: user.bio || '',
+                        twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`
+                    };
+                });
                 
             } catch (error) {
                 console.warn(`❌ API请求失败: ${error.message}`);

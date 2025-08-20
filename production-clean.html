@@ -1621,7 +1621,7 @@
             </div>
 
             <div class="leaderboard-header">
-                <h3 id="leaderboard-title">APT 影响力排行榜</h3>
+                <h3 id="leaderboard-title">Kaito 影响力排行榜</h3>
                 <p class="subtitle" id="leaderboard-subtitle">Post TGE 项目 - 显示过去 7 天 的前 10 名影响者</p>
             </div>
 
@@ -2550,11 +2550,6 @@
                         </div>
 
                         <div class="stat-item">
-                            <span class="stat-label">${t['following']}</span>
-                            <span class="stat-value">${formatNumber(user.following_count)}</span>
-                        </div>
-
-                        <div class="stat-item">
                             <span class="stat-label">${t['smart-followers']}</span>
                             <span class="stat-value">${formatNumber(user.smart_follower_count)}</span>
                         </div>
@@ -2698,19 +2693,33 @@
 
                 console.log(`✅ API成功返回 ${users.length} 条数据`);
                 
+                // 调试：输出第一条数据的结构
+                if (users.length > 0) {
+                    console.log('📊 第一条API数据结构:', Object.keys(users[0]));
+                    console.log('📊 第一条完整数据:', users[0]);
+                }
+                
                 // 格式化数据
-                return users.slice(0, top_n).map((user, index) => ({
-                    name: user.name || 'Unknown User',
-                    username: user.username || '',
-                    rank: user.rank || (index + 1),
-                    mindshare: parseFloat(user.mindshare) || 0,
-                    community_score: parseFloat(user.last_7_day_avg_llm_insightfulness_score_scaled) || parseFloat(user.community_score) || 0,
-                    follower_count: parseInt(user.follower_count) || 0,
-                    smart_follower_count: parseInt(user.smart_follower_count) || 0,
-                    icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
-                    bio: user.bio || '',
-                    twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`
-                }));
+                return users.slice(0, top_n).map((user, index) => {
+                    // 尝试多种可能的字段名
+                    const followerCount = user.follower_count || user.total_followers || user.followers || 0;
+                    const smartFollowerCount = user.smart_follower_count || user.smart_followers || 0;
+                    const followingCount = user.following_count || user.total_following || user.following || 0;
+                    
+                    return {
+                        name: user.name || 'Unknown User',
+                        username: user.username || '',
+                        rank: user.rank || (index + 1),
+                        mindshare: parseFloat(user.mindshare) || 0,
+                        community_score: parseFloat(user.last_7_day_avg_llm_insightfulness_score_scaled) || parseFloat(user.community_score) || 0,
+                        follower_count: parseInt(followerCount) || 0,
+                        smart_follower_count: parseInt(smartFollowerCount) || 0,
+                        following_count: parseInt(followingCount) || 0,
+                        icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`,
+                        bio: user.bio || '',
+                        twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`
+                    };
+                });
                 
             } catch (error) {
                 console.warn(`❌ API请求失败: ${error.message}`);

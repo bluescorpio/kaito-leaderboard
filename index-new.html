@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaito KOL 影响力排行榜 - 发现顶级意见领袖</title>
+    <meta name="description" content="实时查看各项目的KOL影响力排行榜，个人查询，ICT名单等功能，发现最具影响力的Web3意见领袖">
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 头部导航 */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 50px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 功能卡片 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .feature-description {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .feature-stats {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        /* 统计数据 */
+        .stats-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 50px;
+        }
+
+        .stats-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* 快速开始 */
+        .quick-start {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .quick-start h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .quick-start p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quick-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航头部 -->
+        <header class="header">
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item active">🏠 首页</a>
+                <a href="leaderboard.html" class="nav-item">📊 KOL排行榜</a>
+                <a href="search.html" class="nav-item">🔍 个人查询</a>
+                <a href="ict.html" class="nav-item">📋 ICT名单</a>
+                <a href="timeline.html" class="nav-item">⏰ 奖励时间线</a>
+                <a href="reports.html" class="nav-item">📈 投资研报</a>
+                <a href="database-demo.html" class="nav-item">🗄️ 数据库演示</a>
+            </nav>
+        </header>
+
+        <!-- 主要内容 -->
+        <main class="main-content">
+            <h1 class="hero-title">🚀 Kaito KOL 影响力排行榜</h1>
+            <p class="hero-description">
+                基于 Kaito AI 数据，实时追踪和分析 Web3 领域最具影响力的意见领袖。
+                发现顶级 KOL，洞察市场趋势，把握投资机会。
+            </p>
+
+            <!-- 功能模块 -->
+            <div class="features-grid">
+                <a href="leaderboard.html" class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h3 class="feature-title">KOL 排行榜</h3>
+                    <p class="feature-description">
+                        实时查看各项目的 KOL 影响力排名，支持多时间维度和项目分类筛选
+                    </p>
+                    <div class="feature-stats">99个项目 • 5个时间维度</div>
+                </a>
+
+                <a href="search.html" class="feature-card">
+                    <span class="feature-icon">🔍</span>
+                    <h3 class="feature-title">个人查询</h3>
+                    <p class="feature-description">
+                        输入 Twitter 用户名，查看个人在各项目中的影响力排名和详细数据
+                    </p>
+                    <div class="feature-stats">支持模糊搜索 • 详细排名分析</div>
+                </a>
+
+                <a href="ict.html" class="feature-card">
+                    <span class="feature-icon">📋</span>
+                    <h3 class="feature-title">ICT 名单</h3>
+                    <p class="feature-description">
+                        查看参与 ICT 项目的优质 KOL 名单，了解项目核心影响者
+                    </p>
+                    <div class="feature-stats">精选KOL • 实时数据</div>
+                </a>
+
+                <a href="timeline.html" class="feature-card">
+                    <span class="feature-icon">⏰</span>
+                    <h3 class="feature-title">奖励时间线</h3>
+                    <p class="feature-description">
+                        追踪各项目的重要时间节点和奖励发放计划
+                    </p>
+                    <div class="feature-stats">项目时间线 • 奖励提醒</div>
+                </a>
+
+                <a href="reports.html" class="feature-card">
+                    <span class="feature-icon">📈</span>
+                    <h3 class="feature-title">投资研报</h3>
+                    <p class="feature-description">
+                        基于 KOL 影响力数据生成的深度市场分析和投资建议
+                    </p>
+                    <div class="feature-stats">专业分析 • 数据驱动</div>
+                </a>
+
+                <a href="production.html" class="feature-card">
+                    <span class="feature-icon">🔧</span>
+                    <h3 class="feature-title">完整版本</h3>
+                    <p class="feature-description">
+                        访问单页面完整版本，包含所有功能模块
+                    </p>
+                    <div class="feature-stats">单页应用 • 完整功能</div>
+                </a>
+            </div>
+
+            <!-- 统计数据 -->
+            <div class="stats-section">
+                <h3 class="stats-title">📈 平台数据统计</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-projects">99</div>
+                        <div class="stat-label">覆盖项目</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-kols">10K+</div>
+                        <div class="stat-label">KOL 数量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="data-points">500K+</div>
+                        <div class="stat-label">数据点</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="update-frequency">6h</div>
+                        <div class="stat-label">更新频率</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 快速开始 -->
+            <div class="quick-start">
+                <h3>🎯 立即开始探索</h3>
+                <p>选择一个功能模块，开始发现最具影响力的 Web3 意见领袖</p>
+                <div class="quick-actions">
+                    <a href="leaderboard.html" class="quick-btn">📊 查看排行榜</a>
+                    <a href="search.html" class="quick-btn">🔍 搜索KOL</a>
+                    <a href="ict.html" class="quick-btn">📋 浏览ICT名单</a>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>© 2024 Kaito KOL 排行榜 • 数据来源：Kaito AI • 仅供参考，不构成投资建议</p>
+        </footer>
+    </div>
+
+    <script>
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            animateStats();
+            loadLatestStats();
+        });
+
+        // 统计数字动画
+        function animateStats() {
+            const stats = [
+                { id: 'total-projects', target: 99, suffix: '' },
+                { id: 'total-kols', target: 10, suffix: 'K+' },
+                { id: 'data-points', target: 500, suffix: 'K+' }
+            ];
+
+            stats.forEach(stat => {
+                const element = document.getElementById(stat.id);
+                if (!element) return;
+
+                let current = 0;
+                const increment = stat.target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= stat.target) {
+                        current = stat.target;
+                        clearInterval(timer);
+                    }
+                    element.textContent = Math.floor(current) + stat.suffix;
+                }, 30);
+            });
+        }
+
+        // 加载最新统计数据
+        async function loadLatestStats() {
+            try {
+                // 这里可以添加实际的API调用来获取最新统计数据
+                // 当前使用静态数据展示
+                console.log('统计数据已加载');
+            } catch (error) {
+                console.warn('加载统计数据失败:', error);
+            }
+        }
+
+        // 添加页面切换动画
+        document.querySelectorAll('a[href]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                // 如果是外部链接或锚点，不做处理
+                if (href.startsWith('http') || href.startsWith('#')) {
+                    return;
+                }
+                
+                // 添加页面切换效果
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奖励时间线 - Kaito KOL 影响力排行榜</title>
+    <meta name="description" content="查看各项目的重要时间节点和奖励发放计划">
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 头部导航 */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .page-description {
+            font-size: 16px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* 时间线样式 */
+        .timeline-container {
+            position: relative;
+            margin: 40px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 40px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: 60%;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 60%;
+            text-align: left;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #f1f1f1;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .timeline-date {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .timeline-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .timeline-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .timeline-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .timeline-tag {
+            background: #f8f9fa;
+            color: #667eea;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid #e9ecef;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 4px solid #667eea;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .timeline-item.completed .timeline-dot {
+            background: #667eea;
+            border-color: #667eea;
+        }
+
+        .timeline-item.active .timeline-dot {
+            background: #f093fb;
+            border-color: #f093fb;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(240, 147, 251, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(240, 147, 251, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(240, 147, 251, 0);
+            }
+        }
+
+        /* 状态标签 */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-active {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-upcoming {
+            background: #e2e3e5;
+            color: #495057;
+        }
+
+        /* 筛选器 */
+        .filters {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .filter-group select {
+            padding: 8px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background: white;
+            font-size: 14px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .timeline-line {
+                left: 30px;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: 60px;
+                margin-right: 0;
+                text-align: left;
+            }
+
+            .timeline-dot {
+                left: 30px;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航头部 -->
+        <header class="header">
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">🏠 首页</a>
+                <a href="leaderboard.html" class="nav-item">📊 KOL排行榜</a>
+                <a href="search.html" class="nav-item">🔍 个人查询</a>
+                <a href="ict.html" class="nav-item">📋 ICT名单</a>
+                <a href="timeline.html" class="nav-item active">⏰ 奖励时间线</a>
+                <a href="reports.html" class="nav-item">📈 投资研报</a>
+            </nav>
+        </header>
+
+        <!-- 主要内容 -->
+        <main class="main-content">
+            <h1 class="page-title">⏰ 奖励时间线</h1>
+            <p class="page-description">追踪各项目的重要时间节点和奖励发放计划，把握关键时机</p>
+
+            <!-- 筛选器 -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="category-filter">分类:</label>
+                    <select id="category-filter" onchange="filterTimeline()">
+                        <option value="all">全部</option>
+                        <option value="airdrop">空投奖励</option>
+                        <option value="staking">质押奖励</option>
+                        <option value="campaign">活动奖励</option>
+                        <option value="listing">上市时间</option>
+                        <option value="mainnet">主网上线</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="status-filter">状态:</label>
+                    <select id="status-filter" onchange="filterTimeline()">
+                        <option value="all">全部</option>
+                        <option value="completed">已完成</option>
+                        <option value="active">进行中</option>
+                        <option value="upcoming">即将到来</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="project-filter">项目:</label>
+                    <select id="project-filter" onchange="filterTimeline()">
+                        <option value="all">全部项目</option>
+                        <!-- 项目选项将动态生成 -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- 时间线 -->
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                <div id="timeline-content">
+                    <!-- 时间线内容将在这里动态生成 -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 时间线数据
+        const timelineData = [
+            {
+                id: 1,
+                date: '2024-12-31',
+                title: 'HUMA Protocol 空投快照',
+                description: '最终空投快照时间，确认所有符合条件的参与者名单',
+                category: 'airdrop',
+                project: 'HUMA',
+                status: 'upcoming',
+                tags: ['空投', '快照', '最终确认']
+            },
+            {
+                id: 2,
+                date: '2024-12-15',
+                title: 'Movement Labs 主网上线',
+                description: 'Movement Labs 主网正式上线，开启新的生态发展阶段',
+                category: 'mainnet',
+                project: 'Movement',
+                status: 'upcoming',
+                tags: ['主网', '上线', '里程碑']
+            },
+            {
+                id: 3,
+                date: '2024-11-30',
+                title: 'Grass Network 代币发放',
+                description: 'Grass Network 向所有符合条件的参与者发放代币奖励',
+                category: 'airdrop',
+                project: 'Grass',
+                status: 'active',
+                tags: ['代币', '发放', '奖励']
+            },
+            {
+                id: 4,
+                date: '2024-11-20',
+                title: 'Babylon 质押挖矿开启',
+                description: 'Babylon Protocol 正式开启质押挖矿，参与者可获得代币奖励',
+                category: 'staking',
+                project: 'Babylon',
+                status: 'active',
+                tags: ['质押', '挖矿', 'BTC 安全']
+            },
+            {
+                id: 5,
+                date: '2024-11-10',
+                title: 'Hyperliquid 测试网激励结束',
+                description: 'Hyperliquid 测试网激励计划正式结束，准备主网上线',
+                category: 'campaign',
+                project: 'Hyperliquid',
+                status: 'completed',
+                tags: ['测试网', '激励', '结束']
+            },
+            {
+                id: 6,
+                date: '2024-10-31',
+                title: 'Berachain 积分快照',
+                description: 'Berachain 对所有测试网参与者进行积分快照，为未来空投做准备',
+                category: 'airdrop',
+                project: 'Berachain',
+                status: 'completed',
+                tags: ['快照', '积分', '测试网']
+            },
+            {
+                id: 7,
+                date: '2024-10-15',
+                title: 'Story Protocol 内测开启',
+                description: 'Story Protocol 开启限量内测，邀请制参与IP资产协议测试',
+                category: 'campaign',
+                project: 'Story',
+                status: 'completed',
+                tags: ['内测', '邀请制', 'IP协议']
+            },
+            {
+                id: 8,
+                date: '2024-10-01',
+                title: 'Initia 验证者招募',
+                description: 'Initia 开始招募验证者，为主网上线做准备',
+                category: 'staking',
+                project: 'Initia',
+                status: 'completed',
+                tags: ['验证者', '招募', '主网准备']
+            },
+            {
+                id: 9,
+                date: '2025-01-15',
+                title: 'Monad 主网启动',
+                description: 'Monad 主网正式启动，高性能EVM链开始运行',
+                category: 'mainnet',
+                project: 'Monad',
+                status: 'upcoming',
+                tags: ['主网', '高性能', 'EVM']
+            },
+            {
+                id: 10,
+                date: '2025-02-01',
+                title: 'LayerZero 空投发放',
+                description: 'LayerZero 向符合条件的用户发放 ZRO 代币空投',
+                category: 'airdrop',
+                project: 'LayerZero',
+                status: 'upcoming',
+                tags: ['空投', 'ZRO', '跨链协议']
+            }
+        ];
+
+        let filteredData = [...timelineData];
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFilters();
+            renderTimeline();
+        });
+
+        // 初始化筛选器
+        function initializeFilters() {
+            const projectFilter = document.getElementById('project-filter');
+            
+            // 获取所有项目
+            const projects = [...new Set(timelineData.map(item => item.project))].sort();
+            
+            projects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.toLowerCase();
+                option.textContent = project;
+                projectFilter.appendChild(option);
+            });
+        }
+
+        // 筛选时间线
+        function filterTimeline() {
+            const categoryFilter = document.getElementById('category-filter').value;
+            const statusFilter = document.getElementById('status-filter').value;
+            const projectFilter = document.getElementById('project-filter').value;
+
+            filteredData = timelineData.filter(item => {
+                const categoryMatch = categoryFilter === 'all' || item.category === categoryFilter;
+                const statusMatch = statusFilter === 'all' || item.status === statusFilter;
+                const projectMatch = projectFilter === 'all' || item.project.toLowerCase() === projectFilter;
+                
+                return categoryMatch && statusMatch && projectMatch;
+            });
+
+            renderTimeline();
+        }
+
+        // 渲染时间线
+        function renderTimeline() {
+            const container = document.getElementById('timeline-content');
+            container.innerHTML = '';
+
+            // 按日期排序
+            const sortedData = [...filteredData].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sortedData.forEach(item => {
+                const timelineItem = createTimelineItem(item);
+                container.appendChild(timelineItem);
+            });
+        }
+
+        // 创建时间线项目
+        function createTimelineItem(item) {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = `timeline-item ${item.status}`;
+
+            const statusBadge = getStatusBadge(item.status);
+            const formattedDate = formatDate(item.date);
+            const categoryIcon = getCategoryIcon(item.category);
+
+            itemDiv.innerHTML = `
+                <div class="timeline-content">
+                    ${statusBadge}
+                    <div class="timeline-date">${categoryIcon} ${formattedDate}</div>
+                    <div class="timeline-title">${item.title}</div>
+                    <div class="timeline-description">${item.description}</div>
+                    <div class="timeline-tags">
+                        ${item.tags.map(tag => `<span class="timeline-tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="timeline-dot"></div>
+            `;
+
+            return itemDiv;
+        }
+
+        // 获取状态标签
+        function getStatusBadge(status) {
+            const badges = {
+                'completed': '<span class="status-badge status-completed">✅ 已完成</span>',
+                'active': '<span class="status-badge status-active">🟡 进行中</span>',
+                'upcoming': '<span class="status-badge status-upcoming">⏳ 即将到来</span>'
+            };
+            return badges[status] || '';
+        }
+
+        // 获取分类图标
+        function getCategoryIcon(category) {
+            const icons = {
+                'airdrop': '🪂',
+                'staking': '🔒',
+                'campaign': '🎯',
+                'listing': '📈',
+                'mainnet': '🚀'
+            };
+            return icons[category] || '📅';
+        }
+
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            
+            // 计算天数差
+            const diffTime = date - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                timeZone: 'Asia/Shanghai'
+            };
+            
+            const formattedDate = date.toLocaleDateString('zh-CN', options);
+            
+            if (diffDays > 0) {
+                return `${formattedDate} (还有 ${diffDays} 天)`;
+            } else if (diffDays === 0) {
+                return `${formattedDate} (今天)`;
+            } else {
+                return `${formattedDate} (${Math.abs(diffDays)} 天前)`;
+            }
+        }
+
+        // 自动更新时间线状态
+        function updateTimelineStatus() {
+            const now = new Date();
+            
+            timelineData.forEach(item => {
+                const itemDate = new Date(item.date);
+                const diffDays = Math.ceil((itemDate - now) / (1000 * 60 * 60 * 24));
+                
+                if (diffDays < -7) {
+                    item.status = 'completed';
+                } else if (diffDays >= -7 && diffDays <= 7) {
+                    item.status = 'active';
+                } else {
+                    item.status = 'upcoming';
+                }
+            });
+            
+            // 重新渲染
+            filterTimeline();
+        }
+
+        // 定期更新状态
+        setInterval(updateTimelineStatus, 24 * 60 * 60 * 1000); // 每天更新一次
+
+        // 初始状态更新
+        updateTimelineStatus();
+    </script>
+</body>
+</html>

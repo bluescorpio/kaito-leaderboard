@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT名单 - Kaito KOL 影响力排行榜</title>
+    <meta name="description" content="查看ICT项目相关的KOL名单和详细信息">
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 头部导航 */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .page-description {
+            font-size: 16px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* 统计信息 */
+        .stats-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* 搜索栏 */
+        .search-section {
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            display: block;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* ICT名单 */
+        .ict-list {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .ict-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ict-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .ict-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1px;
+            background: #f1f1f1;
+        }
+
+        .ict-item {
+            background: white;
+            padding: 20px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .ict-item:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+        }
+
+        .ict-item-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .ict-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e9ecef;
+        }
+
+        .ict-info h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .ict-info p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .ict-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .ict-stat {
+            text-align: center;
+        }
+
+        .ict-stat-value {
+            font-weight: 600;
+            color: #667eea;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .ict-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ict-item-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .ict-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航头部 -->
+        <header class="header">
+            <nav class="nav-menu">
+                <a href="index-new.html" class="nav-item">🏠 首页</a>
+                <a href="leaderboard.html" class="nav-item">📊 KOL排行榜</a>
+                <a href="search.html" class="nav-item">🔍 个人查询</a>
+                <a href="ict.html" class="nav-item active">📋 ICT名单</a>
+                <a href="timeline.html" class="nav-item">⏰ 奖励时间线</a>
+                <a href="reports.html" class="nav-item">📈 投资研报</a>
+                <a href="database-demo.html" class="nav-item">🗄️ 数据库演示</a>
+            </nav>
+        </header>
+
+        <!-- 主要内容 -->
+        <main class="main-content">
+            <h1 class="page-title">📋 ICT 名单</h1>
+            <p class="page-description">查看参与ICT项目的优质KOL名单和详细信息</p>
+
+            <!-- 统计信息 -->
+            <div class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-kols">-</div>
+                        <div class="stat-label">总KOL数量</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="verified-kols">-</div>
+                        <div class="stat-label">已验证账户</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avg-followers">-</div>
+                        <div class="stat-label">平均粉丝数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-followers">-</div>
+                        <div class="stat-label">总影响力</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 搜索栏 -->
+            <div class="search-section">
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    class="search-box" 
+                    placeholder="搜索KOL用户名或昵称..."
+                    oninput="filterKOLs()"
+                >
+            </div>
+
+            <!-- 加载状态 -->
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p>正在加载ICT名单...</p>
+            </div>
+
+            <!-- ICT名单 -->
+            <div id="ict-list" class="ict-list" style="display: none;">
+                <div class="ict-header">
+                    <span>ICT KOL 名单</span>
+                    <span class="ict-count" id="displayed-count">0 位KOL</span>
+                </div>
+                <div id="ict-content" class="ict-grid">
+                    <!-- ICT名单内容将在这里动态生成 -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 全局数据
+        let ictData = [];
+        let filteredData = [];
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadICTData();
+        });
+
+        // 从数据库加载ICT数据 (新增)
+        async function loadFromDatabase() {
+            try {
+                // 获取所有用户列表
+                const response = await fetch('/api/db/stats');
+                if (!response.ok) {
+                    throw new Error('数据库API请求失败');
+                }
+                
+                const result = await response.json();
+                if (result.success && result.data) {
+                    console.log(`🗄️ 数据库连接成功，用户总数: ${result.data.users}`);
+                    
+                    // 从数据库搜索ICT成员的详细信息
+                    const ictMembers = await Promise.all(
+                        ictUsernames.map(async (username) => {
+                            try {
+                                const searchResponse = await fetch(`/api/db/search?username=${encodeURIComponent(username)}`);
+                                if (searchResponse.ok) {
+                                    const searchResult = await searchResponse.json();
+                                    if (searchResult.success && searchResult.data) {
+                                        return {
+                                            username: searchResult.data.username,
+                                            name: searchResult.data.name,
+                                            icon: searchResult.data.icon,
+                                            bio: searchResult.data.bio,
+                                            follower_count: searchResult.data.follower_count,
+                                            smart_follower_count: searchResult.data.smart_follower_count,
+                                            following_count: searchResult.data.following_count,
+                                            rankings: searchResult.data.rankings || {}
+                                        };
+                                    }
+                                }
+                                return null;
+                            } catch (error) {
+                                console.warn(`无法从数据库获取用户 ${username}:`, error);
+                                return null;
+                            }
+                        })
+                    );
+                    
+                    const validMembers = ictMembers.filter(member => member !== null);
+                    console.log(`🗄️ 从数据库找到 ${validMembers.length} 个ICT用户的详细数据`);
+                    return validMembers;
+                }
+                
+                throw new Error('数据库返回无效数据');
+            } catch (error) {
+                console.warn('从数据库加载ICT数据失败:', error);
+                return [];
+            }
+        }
+
+        // 加载ICT数据
+        async function loadICTData() {
+            const loadingDiv = document.getElementById('loading');
+            const listDiv = document.getElementById('ict-list');
+            
+            try {
+                // 优先级1: 数据库 (新增)
+                ictData = await loadFromDatabase();
+                
+                if (ictData.length > 0) {
+                    console.log('🗄️ 使用数据库数据');
+                } else {
+                    // 优先级2: kol.json加载完整数据
+                    await loadFromKolJson();
+                    
+                    if (ictData.length === 0) {
+                        // 优先级3: 从ict.txt加载基础名单
+                        await loadFromICTFile();
+                    }
+                }
+                
+                // 显示数据
+                filteredData = [...ictData];
+                displayICTList();
+                updateStats();
+                
+                loadingDiv.style.display = 'none';
+                listDiv.style.display = 'block';
+                
+            } catch (error) {
+                console.error('加载ICT数据失败:', error);
+                loadingDiv.innerHTML = `
+                    <div style="color: #dc3545; text-align: center; padding: 20px;">
+                        <p>❌ 数据加载失败，请稍后重试</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 从kol.json加载完整数据
+        async function loadFromKolJson() {
+            try {
+                const response = await fetch('./kol.json');
+                if (!response.ok) {
+                    throw new Error('无法加载kol.json');
+                }
+                
+                const kolJsonData = await response.json();
+                
+                // 从ICT名单文件获取用户名列表
+                const ictResponse = await fetch('./ict.txt');
+                if (!ictResponse.ok) {
+                    throw new Error('无法加载ict.txt');
+                }
+                
+                const ictText = await ictResponse.text();
+                const ictUsernames = ictText.split('\n')
+                    .map(line => line.trim().toLowerCase())
+                    .filter(line => line.length > 0);
+
+                console.log(`加载了 ${ictUsernames.length} 个ICT用户名`);
+
+                // 从kol.json中提取ICT用户的详细数据
+                const ictUsersMap = new Map();
+                
+                for (const [categoryKey, categoryData] of Object.entries(kolJsonData.categories)) {
+                    for (const [projectKey, projectData] of Object.entries(categoryData)) {
+                        for (const [durationKey, durationData] of Object.entries(projectData)) {
+                            if (durationData && durationData.data && Array.isArray(durationData.data)) {
+                                durationData.data.forEach((user, index) => {
+                                    const username = user.username?.toLowerCase();
+                                    if (username && ictUsernames.includes(username)) {
+                                        if (!ictUsersMap.has(username)) {
+                                            ictUsersMap.set(username, {
+                                                name: user.name || user.username,
+                                                username: user.username,
+                                                icon: user.icon || '',
+                                                bio: user.bio || '',
+                                                follower_count: user.follower_count || 0,
+                                                following_count: user.following_count || 0,
+                                                smart_follower_count: user.smart_follower_count || 0,
+                                                twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`,
+                                                rankings: []
+                                            });
+                                        }
+                                        
+                                        // 添加排名记录
+                                        ictUsersMap.get(username).rankings.push({
+                                            project: projectKey,
+                                            category: categoryKey,
+                                            duration: durationKey,
+                                            rank: index + 1,
+                                            mindshare: user.mindshare || 0
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+
+                ictData = Array.from(ictUsersMap.values());
+                console.log(`从kol.json中找到 ${ictData.length} 个ICT用户的详细数据`);
+                
+            } catch (error) {
+                console.warn('从kol.json加载ICT数据失败:', error);
+                ictData = [];
+            }
+        }
+
+        // 从ict.txt加载基础名单
+        async function loadFromICTFile() {
+            try {
+                const response = await fetch('./ict.txt');
+                if (!response.ok) {
+                    throw new Error('无法加载ict.txt');
+                }
+                
+                const text = await response.text();
+                const usernames = text.split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0);
+
+                // 创建基础用户数据
+                ictData = usernames.map(username => ({
+                    name: username,
+                    username: username,
+                    icon: '',
+                    bio: '',
+                    follower_count: 0,
+                    following_count: 0,
+                    smart_follower_count: 0,
+                    twitter_user_url: `https://x.com/${username}`,
+                    rankings: []
+                }));
+
+                console.log(`从ict.txt加载了 ${ictData.length} 个基础用户数据`);
+                
+            } catch (error) {
+                console.error('从ict.txt加载数据失败:', error);
+                throw error;
+            }
+        }
+
+        // 显示ICT名单
+        function displayICTList() {
+            const container = document.getElementById('ict-content');
+            const countSpan = document.getElementById('displayed-count');
+            
+            container.innerHTML = '';
+            countSpan.textContent = `${filteredData.length} 位KOL`;
+            
+            filteredData.forEach(user => {
+                const item = createICTItem(user);
+                container.appendChild(item);
+            });
+        }
+
+        // 创建ICT条目
+        function createICTItem(user) {
+            const item = document.createElement('div');
+            item.className = 'ict-item';
+            
+            const avatar = user.icon ? 
+                `<img src="${user.icon}" alt="${user.name}" class="ict-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNFNUU3RUIiLz4KPHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBzdHlsZT0idHJhbnNmb3JtOiB0cmFuc2xhdGUoMTBweCwgMTBweCk7Ij4KPHBhdGggZD0iTTEwIDEwQzEyLjc2MTQgMTAgMTUgNy43NjE0MiAxNSA1QzE1IDIuMjM4NTggMTIuNzYxNCAwIDEwIDBDNy4yMzg1OCAwIDUgMi4yMzg1OCA1IDVDNSA3Ljc2MTQyIDcuMjM4NTggMTAgMTAgMTBaIiBmaWxsPSIjOUNBM0FGIi8+CjxwYXRoIGQ9Ik0xMCAxMkM0LjQ3NzE1IDEyIDAgMTYuNDc3MSAwIDIyVjI1SDE1VjI0SDE1VjIyQzE1IDE2LjQ3NzEgMTAuNTIyOSAxMiAxMCAxMloiIGZpbGw9IiM5Q0EzQUYiLz4KPC9zdmc+Cjwvc3ZnPgo='">` :
+                `<div class="ict-avatar" style="background: #e5e7eb; display: flex; align-items: center; justify-content: center; color: #9ca3af; font-size: 20px;">👤</div>`;
+            
+            item.innerHTML = `
+                <div class="ict-item-header">
+                    ${avatar}
+                    <div class="ict-info">
+                        <h3>${user.name}</h3>
+                        <p>@${user.username}</p>
+                    </div>
+                </div>
+                <div class="ict-stats">
+                    <div class="ict-stat">
+                        <span class="ict-stat-value">${formatNumber(user.follower_count)}</span>
+                        <span>粉丝数</span>
+                    </div>
+                    <div class="ict-stat">
+                        <span class="ict-stat-value">${formatNumber(user.smart_follower_count)}</span>
+                        <span>智能粉丝</span>
+                    </div>
+                    <div class="ict-stat">
+                        <span class="ict-stat-value">${user.rankings.length}</span>
+                        <span>上榜项目</span>
+                    </div>
+                </div>
+            `;
+            
+            // 点击跳转到Twitter
+            item.addEventListener('click', () => {
+                window.open(user.twitter_user_url, '_blank');
+            });
+            
+            return item;
+        }
+
+        // 更新统计信息
+        function updateStats() {
+            const totalKOLs = ictData.length;
+            const verifiedKOLs = ictData.filter(user => user.icon && user.icon.length > 0).length;
+            const totalFollowers = ictData.reduce((sum, user) => sum + (user.follower_count || 0), 0);
+            const avgFollowers = totalKOLs > 0 ? Math.round(totalFollowers / totalKOLs) : 0;
+            
+            document.getElementById('total-kols').textContent = totalKOLs;
+            document.getElementById('verified-kols').textContent = verifiedKOLs;
+            document.getElementById('avg-followers').textContent = formatNumber(avgFollowers);
+            document.getElementById('total-followers').textContent = formatNumber(totalFollowers);
+        }
+
+        // 过滤KOL
+        function filterKOLs() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                filteredData = [...ictData];
+            } else {
+                filteredData = ictData.filter(user => 
+                    user.name.toLowerCase().includes(searchTerm) ||
+                    user.username.toLowerCase().includes(searchTerm) ||
+                    (user.bio && user.bio.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            displayICTList();
+        }
+
+        // 格式化数字
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投资研报 - Kaito KOL 影响力排行榜</title>
+    <meta name="description" content="基于KOL影响力数据生成的深度市场分析和投资建议">
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 头部导航 */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .page-description {
+            font-size: 16px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* 研报分类 */
+        .reports-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .report-tab {
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #dee2e6;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .report-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* 研报列表 */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .report-type {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .report-date {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .report-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .report-summary {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .report-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metric-item {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .report-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .report-tag {
+            background: #f1f3f4;
+            color: #5f6368;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #dee2e6;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        /* 特色研报 */
+        .featured-report {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-report::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="10" cy="90" r="1" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+
+        .featured-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .featured-description {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .featured-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .featured-stat {
+            text-align: center;
+        }
+
+        .featured-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .featured-stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .report-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .featured-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .reports-nav {
+                gap: 5px;
+            }
+
+            .report-tab {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航头部 -->
+        <header class="header">
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">🏠 首页</a>
+                <a href="leaderboard.html" class="nav-item">📊 KOL排行榜</a>
+                <a href="search.html" class="nav-item">🔍 个人查询</a>
+                <a href="ict.html" class="nav-item">📋 ICT名单</a>
+                <a href="timeline.html" class="nav-item">⏰ 奖励时间线</a>
+                <a href="reports.html" class="nav-item active">📈 投资研报</a>
+            </nav>
+        </header>
+
+        <!-- 主要内容 -->
+        <main class="main-content">
+            <h1 class="page-title">📈 投资研报</h1>
+            <p class="page-description">基于 KOL 影响力数据生成的深度市场分析和投资建议</p>
+
+            <!-- 特色研报 -->
+            <div class="featured-report">
+                <div class="featured-content">
+                    <h2 class="featured-title">🌟 本周特色：Web3 KOL 影响力趋势报告</h2>
+                    <p class="featured-description">
+                        深度分析当前 Web3 领域最具影响力的 KOL 动态，识别新兴趋势和投资机会。
+                        基于 99 个项目的实时数据，为您提供最前沿的市场洞察。
+                    </p>
+                    <div class="featured-stats">
+                        <div class="featured-stat">
+                            <div class="featured-stat-value">15.3%</div>
+                            <div class="featured-stat-label">本周影响力增长</div>
+                        </div>
+                        <div class="featured-stat">
+                            <div class="featured-stat-value">12</div>
+                            <div class="featured-stat-label">新兴热门项目</div>
+                        </div>
+                        <div class="featured-stat">
+                            <div class="featured-stat-value">8.7M</div>
+                            <div class="featured-stat-label">总影响人数</div>
+                        </div>
+                        <div class="featured-stat">
+                            <div class="featured-stat-value">95%</div>
+                            <div class="featured-stat-label">预测准确率</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 研报分类 -->
+            <div class="reports-nav">
+                <div class="report-tab active" data-category="all" onclick="filterReports('all')">📊 全部报告</div>
+                <div class="report-tab" data-category="trend" onclick="filterReports('trend')">📈 趋势分析</div>
+                <div class="report-tab" data-category="project" onclick="filterReports('project')">🚀 项目研究</div>
+                <div class="report-tab" data-category="kol" onclick="filterReports('kol')">👥 KOL分析</div>
+                <div class="report-tab" data-category="market" onclick="filterReports('market')">🌍 市场洞察</div>
+            </div>
+
+            <!-- 研报列表 -->
+            <div class="reports-grid" id="reports-container">
+                <!-- 研报卡片将在这里动态生成 -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 研报数据
+        const reportsData = [
+            {
+                id: 1,
+                type: '趋势分析',
+                category: 'trend',
+                title: 'L2 生态 KOL 影响力激增：Arbitrum vs Optimism 竞争白热化',
+                summary: '深度分析 Layer 2 生态中 KOL 影响力的变化趋势，Arbitrum 和 Optimism 在社交媒体影响力方面的竞争日趋激烈...',
+                date: '2024-11-20',
+                metrics: {
+                    impact: '92.5',
+                    growth: '+28.3%',
+                    confidence: '89%'
+                },
+                tags: ['Layer2', 'Arbitrum', 'Optimism', '社交媒体'],
+                downloadUrl: '#',
+                previewUrl: '#'
+            },
+            {
+                id: 2,
+                type: '项目研究',
+                category: 'project',
+                title: 'Babylon Protocol 深度研报：比特币质押的新纪元',
+                summary: 'Babylon Protocol 通过创新的比特币质押机制，为比特币生态带来新的价值释放方式，分析其技术优势和投资价值...',
+                date: '2024-11-18',
+                metrics: {
+                    impact: '87.2',
+                    growth: '+45.7%',
+                    confidence: '93%'
+                },
+                tags: ['Bitcoin', 'Staking', 'DeFi', '创新协议'],
+                downloadUrl: '#',
+                previewUrl: '#'
+            },
+            {
+                id: 3,
+                type: 'KOL分析',
+                category: 'kol',
+                title: '顶级 Crypto KOL 影响力排行榜：谁在引领市场风向？',
+                summary: '基于多维度数据分析，识别当前最具影响力的 Crypto KOL，分析他们的观点如何影响市场走向和投资决策...',
+                date: '2024-11-15',
+                metrics: {
+                    impact: '95.8',
+                    growth: '+12.4%',
+                    confidence: '96%'
+                },
+                tags: ['KOL', '影响力', '市场分析', '投资决策'],
+                downloadUrl: '#',
+                previewUrl: '#'
+            },
+            {
+                id: 4,
+                type: '市场洞察',
+                category: 'market',
+                title: 'DeFi 2.0 时代：从流动性挖矿到可持续收益',
+                summary: 'DeFi 市场正在从单纯的流动性挖矿向更可持续的收益模式转变，分析新兴 DeFi 协议的创新机制和投资机会...',
+                date: '2024-11-12',
+                metrics: {
+                    impact: '78.9',
+                    growth: '+33.1%',
+                    confidence: '85%'
+                },
+                tags: ['DeFi', '可持续性', '收益', '协议创新'],
+                downloadUrl: '#',
+                previewUrl: '#'
+            },
+            {
+                id: 5,
+                type: '趋势分析',
+                category: 'trend',
+                title: 'GameFi 复苏信号：P2E 模式的进化与新机遇',
+                summary: 'GameFi 领域出现复苏迹象，新一代 P2E 游戏模式更加注重可持续性和用户体验，分析投资机会和风险...',
+                date: '2024-11-10',
+                metrics: {
+                    impact: '71.3',
+                    growth: '+52.8%',
+                    confidence: '81%'
+                },
+                tags: ['GameFi', 'P2E', '游戏', '可持续性'],
+                downloadUrl: '#',
+                previewUrl: '#'
+            },
+            {
+                id: 6,
+                type: '项目研究',
+                category: 'project',
+                title: 'Monad 技术解析：下一代高性能区块链的突破',
+                summary: 'Monad 通过并行化执行和创新共识机制，有望实现 10,000+ TPS 的性能突破，技术架构和生态发展分析...',
+                date: '2024-11-08',
+                metrics: {
+                    impact: '84.6',
+                    growth: '+67.2%',
+                    confidence: '91%'
+                },
+                tags: ['高性能', '并行化', 'TPS', '技术创新'],
+                downloadUrl: '#',
+                previewUrl: '#'
+            },
+            {
+                id: 7,
+                type: 'KOL分析',
+                category: 'kol',
+                title: '新兴 KOL 崛起：谁是下一个百万粉丝的加密意见领袖？',
+                summary: '识别和分析快速崛起的新兴 KOL，预测他们的影响力发展趋势和投资跟随价值...',
+                date: '2024-11-05',
+                metrics: {
+                    impact: '69.7',
+                    growth: '+89.4%',
+                    confidence: '76%'
+                },
+                tags: ['新兴KOL', '成长性', '预测', '影响力'],
+                downloadUrl: '#',
+                previewUrl: '#'
+            },
+            {
+                id: 8,
+                type: '市场洞察',
+                category: 'market',
+                title: 'RWA 赛道深度研究：现实世界资产上链的投资机遇',
+                summary: 'Real World Assets (RWA) 成为新热点，分析传统资产代币化的发展趋势和投资价值...',
+                date: '2024-11-02',
+                metrics: {
+                    impact: '76.4',
+                    growth: '+23.6%',
+                    confidence: '88%'
+                },
+                tags: ['RWA', '资产代币化', '传统金融', 'DeFi'],
+                downloadUrl: '#',
+                previewUrl: '#'
+            }
+        ];
+
+        let filteredReports = [...reportsData];
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderReports();
+        });
+
+        // 筛选研报
+        function filterReports(category) {
+            // 更新标签状态
+            document.querySelectorAll('.report-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-category="${category}"]`).classList.add('active');
+
+            // 筛选数据
+            if (category === 'all') {
+                filteredReports = [...reportsData];
+            } else {
+                filteredReports = reportsData.filter(report => report.category === category);
+            }
+
+            renderReports();
+        }
+
+        // 渲染研报列表
+        function renderReports() {
+            const container = document.getElementById('reports-container');
+            container.innerHTML = '';
+
+            filteredReports.forEach(report => {
+                const reportCard = createReportCard(report);
+                container.appendChild(reportCard);
+            });
+        }
+
+        // 创建研报卡片
+        function createReportCard(report) {
+            const card = document.createElement('div');
+            card.className = 'report-card';
+
+            const typeColor = getTypeColor(report.type);
+            
+            card.innerHTML = `
+                <div class="report-header">
+                    <span class="report-type" style="background: ${typeColor.bg}; color: ${typeColor.text};">
+                        ${report.type}
+                    </span>
+                    <span class="report-date">${formatDate(report.date)}</span>
+                </div>
+                <h3 class="report-title">${report.title}</h3>
+                <p class="report-summary">${report.summary}</p>
+                <div class="report-metrics">
+                    <div class="metric-item">
+                        <div class="metric-value">${report.metrics.impact}</div>
+                        <div class="metric-label">影响力指数</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">${report.metrics.growth}</div>
+                        <div class="metric-label">增长率</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">${report.metrics.confidence}</div>
+                        <div class="metric-label">置信度</div>
+                    </div>
+                </div>
+                <div class="report-tags">
+                    ${report.tags.map(tag => `<span class="report-tag">${tag}</span>`).join('')}
+                </div>
+                <div class="report-actions">
+                    <button class="action-btn btn-primary" onclick="openReport('${report.id}')">
+                        📖 阅读报告
+                    </button>
+                    <button class="action-btn btn-secondary" onclick="downloadReport('${report.id}')">
+                        📥 下载PDF
+                    </button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // 获取类型颜色
+        function getTypeColor(type) {
+            const colors = {
+                '趋势分析': { bg: '#e3f2fd', text: '#1976d2' },
+                '项目研究': { bg: '#f3e5f5', text: '#7b1fa2' },
+                'KOL分析': { bg: '#e8f5e8', text: '#388e3c' },
+                '市场洞察': { bg: '#fff3e0', text: '#f57c00' }
+            };
+            return colors[type] || { bg: '#f5f5f5', text: '#616161' };
+        }
+
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // 打开研报
+        function openReport(reportId) {
+            const report = reportsData.find(r => r.id == reportId);
+            if (report) {
+                // 这里可以打开研报详情页面或模态框
+                alert(`正在打开研报：${report.title}\n\n功能开发中，敬请期待！`);
+            }
+        }
+
+        // 下载研报
+        function downloadReport(reportId) {
+            const report = reportsData.find(r => r.id == reportId);
+            if (report) {
+                // 这里可以触发PDF下载
+                alert(`正在下载研报：${report.title}\n\n功能开发中，敬请期待！`);
+            }
+        }
+
+        // 添加卡片点击动画
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.report-card')) {
+                const card = e.target.closest('.report-card');
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 150);
+            }
+        });
+    </script>
+</body>
+</html>

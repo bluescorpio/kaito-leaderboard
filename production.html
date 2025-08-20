@@ -2732,6 +2732,68 @@
             });
         }
 
+        // 从数据库获取数据 (新增)
+        async function getDataFromDatabase(duration, topic_id, top_n) {
+            try {
+                const response = await fetch(`/api/db/leaderboard?project=${encodeURIComponent(topic_id)}&duration=${duration}&limit=${top_n}`);
+                
+                if (!response.ok) {
+                    throw new Error(`数据库API请求失败: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success && result.data && result.data.length > 0) {
+                    // 转换数据格式以匹配现有格式
+                    const transformedData = result.data.map(user => ({
+                        name: user.name,
+                        username: user.username,
+                        rank: user.rank.toString(),
+                        mindshare: user.mindshare,
+                        community_score: user.community_score,
+                        follower_count: user.follower_count,
+                        smart_follower_count: user.smart_follower_count,
+                        following_count: user.following_count,
+                        smart_following_count: user.smart_following_count,
+                        icon: user.icon,
+                        bio: user.bio,
+                        twitter_user_url: user.twitter_user_url
+                    }));
+                    
+                    console.log(`🗄️ 数据库查询成功: ${topic_id} (${duration}) - ${result.data.length} 条记录`);
+                    return transformedData;
+                } else {
+                    throw new Error('数据库返回空数据');
+                }
+            } catch (error) {
+                console.warn(`⚠️ 数据库查询失败: ${error.message}`);
+                return null;
+            }
+        }
+
+        // 数据库用户搜索 (新增)
+        async function searchUserInDatabase(username) {
+            try {
+                const response = await fetch(`/api/db/search?username=${encodeURIComponent(username)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`数据库查询失败: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    console.log(`🗄️ 数据库搜索成功: ${username}`);
+                    return result.data;
+                } else {
+                    throw new Error('数据库中未找到用户');
+                }
+            } catch (error) {
+                console.warn(`⚠️ 数据库搜索失败: ${error.message}`);
+                return null;
+            }
+        }
+
         // 加载 kol.json 数据
         async function loadKolJsonData() {
             if (kolJsonData) return kolJsonData;
@@ -2867,9 +2929,20 @@
             }
         }
 
-        // API优先+本地回退的数据获取函数（永不使用测试数据）
+        // 数据库优先+API回退+本地回退的数据获取函数
         async function fetchKaitoData(duration, topic_id, top_n) {
-            // 首先尝试API
+            // 优先级1: 数据库 (新增)
+            try {
+                const dbData = await getDataFromDatabase(duration, topic_id, top_n);
+                if (dbData && dbData.length > 0) {
+                    console.log(`🗄️ 使用数据库数据: ${dbData.length} 条记录`);
+                    return dbData;
+                }
+            } catch (error) {
+                console.warn('数据库获取失败，尝试API:', error.message);
+            }
+
+            // 优先级2: API
             try {
                 const apiData = await fetchFromAPI(duration, topic_id, top_n);
                 if (apiData && apiData.length > 0) {
@@ -2880,7 +2953,7 @@
                 console.warn('API获取失败，尝试使用本地数据:', error.message);
             }
             
-            // API失败，尝试本地数据
+            // 优先级3: 本地JSON文件
             try {
                 await loadKolJsonData();
                 
@@ -3250,6 +3323,18 @@
             searchBtn.disabled = true;
 
             try {
+                // 优先级1: 数据库查询 (新增)
+                loadingDiv.innerHTML = '<div class="loading-spinner"></div><p>正在从数据库查询...</p>';
+                
+                let userData = await searchUserInDatabase(username);
+                
+                if (userData) {
+                    console.log('🗄️ 使用数据库查询结果');
+                    displayUserResult(userData);
+                    return;
+                }
+
+                // 优先级2: 本地缓存查询
                 // 检查是否需要更新全量数据
                 if (!allRankingData.lastUpdate || 
                     (Date.now() - allRankingData.lastUpdate) > CACHE_EXPIRY ||
@@ -3262,7 +3347,7 @@
                 // 在本地数据中搜索用户
                 loadingDiv.innerHTML = '<div class="loading-spinner"></div><p>正在查询用户数据...</p>';
                 
-                const userData = searchUserInLocalData(username);
+                userData = searchUserInLocalData(username);
                 
                 if (userData) {
                     displayUserResult(userData);

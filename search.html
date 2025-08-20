@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人查询 - Kaito KOL 影响力排行榜</title>
+    <meta name="description" content="查询个人在各项目中的KOL影响力排名和详细数据">
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 头部导航 */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .page-description {
+            font-size: 16px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* 搜索区域 */
+        .search-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 搜索结果 */
+        .search-result {
+            display: none;
+        }
+
+        .user-profile {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f1f1;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #667eea;
+        }
+
+        .user-info h2 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .user-info p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .user-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* 排名详情 */
+        .rankings-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .rankings-header {
+            margin-bottom: 20px;
+        }
+
+        .rankings-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .ranking-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .ranking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .project-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .rank-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .ranking-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        /* 错误状态 */
+        .search-error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .search-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                min-width: auto;
+            }
+
+            .user-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .user-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .ranking-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .ranking-details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航头部 -->
+        <header class="header">
+            <nav class="nav-menu">
+                <a href="index-new.html" class="nav-item">🏠 首页</a>
+                <a href="leaderboard.html" class="nav-item">📊 KOL排行榜</a>
+                <a href="search.html" class="nav-item active">🔍 个人查询</a>
+                <a href="ict.html" class="nav-item">📋 ICT名单</a>
+                <a href="timeline.html" class="nav-item">⏰ 奖励时间线</a>
+                <a href="reports.html" class="nav-item">📈 投资研报</a>
+                <a href="database-demo.html" class="nav-item">🗄️ 数据库演示</a>
+            </nav>
+        </header>
+
+        <!-- 主要内容 -->
+        <main class="main-content">
+            <h1 class="page-title">🔍 个人 KOL 查询</h1>
+            <p class="page-description">输入Twitter用户名，查看在各项目中的影响力排名和详细数据</p>
+
+            <!-- 搜索区域 -->
+            <div class="search-section">
+                <form class="search-form" onsubmit="searchUser(event)">
+                    <input 
+                        type="text" 
+                        id="username-input" 
+                        class="search-input" 
+                        placeholder="输入 Twitter 用户名 (不含@符号)"
+                        required
+                    >
+                    <button type="submit" id="search-btn" class="search-btn">
+                        🔍 查询排名
+                    </button>
+                </form>
+            </div>
+
+            <!-- 加载状态 -->
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p>正在查询用户数据...</p>
+            </div>
+
+            <!-- 搜索结果 -->
+            <div id="search-result" class="search-result">
+                <!-- 用户档案 -->
+                <div class="user-profile">
+                    <div class="user-header">
+                        <img id="user-avatar" src="" alt="用户头像" class="user-avatar">
+                        <div class="user-info">
+                            <h2 id="user-name">用户名</h2>
+                            <p id="user-username">@username</p>
+                            <p id="user-bio">用户简介</p>
+                        </div>
+                    </div>
+                    <div class="user-stats" id="user-stats">
+                        <!-- 统计数据将在这里动态生成 -->
+                    </div>
+                </div>
+
+                <!-- 排名详情 -->
+                <div class="rankings-section">
+                    <div class="rankings-header">
+                        <h3>📊 各项目排名详情</h3>
+                        <p>以下是该用户在各个项目中的影响力排名</p>
+                    </div>
+                    <div id="rankings-content" class="rankings-grid">
+                        <!-- 排名详情将在这里动态生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 错误状态 -->
+            <div id="search-error" class="search-error">
+                <p>❌ 未找到该用户数据，请检查用户名是否正确</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 全局数据缓存
+        let allRankingData = { data: {}, lastUpdate: null };
+        const CACHE_EXPIRY = 6 * 60 * 60 * 1000; // 6小时缓存
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 支持回车键搜索
+            document.getElementById('username-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchUser(e);
+                }
+            });
+        });
+
+        // 搜索用户
+        async function searchUser(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username-input').value.trim();
+            if (!username) {
+                alert('请输入用户名');
+                return;
+            }
+
+            const loadingDiv = document.getElementById('loading');
+            const resultDiv = document.getElementById('search-result');
+            const errorDiv = document.getElementById('search-error');
+            const searchBtn = document.getElementById('search-btn');
+
+            // 重置状态
+            loadingDiv.style.display = 'block';
+            resultDiv.style.display = 'none';
+            errorDiv.style.display = 'none';
+            searchBtn.disabled = true;
+
+            try {
+                // 优先级1: 数据库查询 (新增)
+                loadingDiv.innerHTML = '<div class="loading-spinner"></div><p>正在从数据库查询...</p>';
+                
+                let userData = await searchUserInDatabase(username);
+                
+                if (userData) {
+                    console.log('🗄️ 使用数据库查询结果');
+                    displayUserResult(userData);
+                    return;
+                }
+
+                // 优先级2: 本地缓存查询
+                // 检查是否需要初始化数据
+                if (!allRankingData.lastUpdate || 
+                    (Date.now() - allRankingData.lastUpdate) > CACHE_EXPIRY ||
+                    Object.keys(allRankingData.data).length === 0) {
+                    
+                    loadingDiv.innerHTML = '<div class="loading-spinner"></div><p>首次使用，正在初始化数据...</p>';
+                    await fetchAndCacheAllRankings();
+                }
+
+                // 搜索用户数据
+                loadingDiv.innerHTML = '<div class="loading-spinner"></div><p>正在查询用户数据...</p>';
+                
+                userData = searchUserInLocalData(username);
+                
+                if (userData) {
+                    displayUserResult(userData);
+                    loadingDiv.style.display = 'none';
+                    resultDiv.style.display = 'block';
+                } else {
+                    loadingDiv.style.display = 'none';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('搜索用户时出错:', error);
+                loadingDiv.style.display = 'none';
+                errorDiv.innerHTML = '<p>❌ 查询出错，请稍后重试</p>';
+                errorDiv.style.display = 'block';
+            } finally {
+                searchBtn.disabled = false;
+                loadingDiv.innerHTML = '<div class="loading-spinner"></div><p>正在查询用户数据...</p>';
+            }
+        }
+
+        // 快速加载本地数据
+        async function fetchAndCacheAllRankings() {
+            try {
+                // 检查缓存
+                const cachedData = localStorage.getItem('allRankingData');
+                if (cachedData) {
+                    const parsed = JSON.parse(cachedData);
+                    if (parsed.lastUpdate && (Date.now() - parsed.lastUpdate) < CACHE_EXPIRY) {
+                        allRankingData = parsed;
+                        console.log('✅ 使用缓存数据');
+                        return;
+                    }
+                }
+
+                // 快速从本地JSON加载
+                console.log('🚀 从本地数据快速加载...');
+                await loadFromKolJsonFirst();
+                
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                throw error;
+            }
+        }
+
+        // 从数据库快速查询用户 (新增)
+        async function searchUserInDatabase(username) {
+            try {
+                const response = await fetch(`/api/db/search?username=${encodeURIComponent(username)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`数据库查询失败: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    console.log(`🗄️ 数据库查询成功: ${username}`);
+                    return result.data;
+                } else {
+                    throw new Error('数据库中未找到用户');
+                }
+            } catch (error) {
+                console.warn(`⚠️ 数据库查询失败: ${error.message}`);
+                return null;
+            }
+        }
+
+        // 从本地JSON快速加载
+        async function loadFromKolJsonFirst() {
+            try {
+                const response = await fetch('./kol.json');
+                if (!response.ok) {
+                    throw new Error('无法加载本地数据');
+                }
+                
+                const kolJsonData = await response.json();
+                
+                allRankingData.data = {};
+                allRankingData.lastUpdate = Date.now();
+
+                // 解析JSON数据
+                for (const [categoryKey, categoryData] of Object.entries(kolJsonData.categories)) {
+                    for (const [projectKey, projectData] of Object.entries(categoryData)) {
+                        for (const [durationKey, durationData] of Object.entries(projectData)) {
+                            if (durationData && durationData.data && Array.isArray(durationData.data)) {
+                                durationData.data.forEach((user, index) => {
+                                    const username = user.username?.toLowerCase();
+                                    if (!username) return;
+
+                                    // 初始化用户数据
+                                    if (!allRankingData.data[username]) {
+                                        allRankingData.data[username] = {
+                                            name: user.name || user.username,
+                                            username: user.username,
+                                            icon: user.icon || '',
+                                            bio: user.bio || '',
+                                            follower_count: user.follower_count || 0,
+                                            following_count: user.following_count || 0,
+                                            smart_follower_count: user.smart_follower_count || 0,
+                                            twitter_user_url: user.twitter_user_url || `https://x.com/${user.username}`,
+                                            rankings: {},
+                                            firstSeen: Date.now()
+                                        };
+                                    }
+
+                                    // 添加排名记录
+                                    const key = `${categoryKey}_${projectKey}_${durationKey}`;
+                                    allRankingData.data[username].rankings[key] = {
+                                        rank: index + 1,
+                                        mindshare: user.mindshare || 0,
+                                        score: (user.mindshare || 0) * 100,
+                                        category: categoryKey,
+                                        project: projectKey,
+                                        duration: durationKey,
+                                        timestamp: Date.now(),
+                                        rawData: user
+                                    };
+                                });
+                            }
+                        }
+                    }
+                }
+
+                const userCount = Object.keys(allRankingData.data).length;
+                console.log(`✅ 快速加载完成！加载了 ${userCount} 个用户的数据`);
+                
+                // 保存到缓存
+                localStorage.setItem('allRankingData', JSON.stringify(allRankingData));
+                
+            } catch (error) {
+                console.error('快速加载失败:', error);
+                throw error;
+            }
+        }
+
+        // 在本地数据中搜索用户
+        function searchUserInLocalData(username) {
+            const userKey = username.toLowerCase();
+            return allRankingData.data[userKey] || null;
+        }
+
+        // 显示用户搜索结果（更新以兼容数据库格式）
+        function displayUserResult(userData) {
+            // 更新用户档案
+            document.getElementById('user-avatar').src = userData.icon || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNFNUU3RUIiLz4KPHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBzdHlsZT0idHJhbnNmb3JtOiB0cmFuc2xhdGUoMTBweCwgMTBweCk7Ij4KPHBhdGggZD0iTTEwIDEwQzEyLjc2MTQgMTAgMTUgNy43NjE0MiAxNSA1QzE1IDIuMjM4NTggMTIuNzYxNCAwIDEwIDBDNy4yMzg1OCAwIDUgMi4yMzg1OCA1IDVDNSA3Ljc2MTQyIDcuMjM4NTggMTAgMTAgMTBaIiBmaWxsPSIjOUNBM0FGIi8+CjxwYXRoIGQ9Ik0xMCAxMkM0LjQ3NzE1IDEyIDAgMTYuNDc3MSAwIDIyVjI1SDE1VjI0SDE1VjIyQzE1IDE2LjQ3NzEgMTAuNTIyOSAxMiAxMCAxMloiIGZpbGw9IiM5Q0EzQUYiLz4KPC9zdmc+Cjwvc3ZnPgo=';
+            document.getElementById('user-name').textContent = userData.name;
+            document.getElementById('user-username').textContent = `@${userData.username}`;
+            document.getElementById('user-bio').textContent = userData.bio || '暂无简介';
+
+            // 更新统计数据
+            const statsContainer = document.getElementById('user-stats');
+            const rankingsCount = userData.rankings ? Object.keys(userData.rankings).length : 0;
+            
+            statsContainer.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${formatNumber(userData.follower_count || 0)}</div>
+                    <div class="stat-label">粉丝数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${formatNumber(userData.following_count || 0)}</div>
+                    <div class="stat-label">关注数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${formatNumber(userData.smart_follower_count || 0)}</div>
+                    <div class="stat-label">智能粉丝</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${rankingsCount}</div>
+                    <div class="stat-label">上榜项目</div>
+                </div>
+            `;
+
+            // 显示排名详情
+            displayRankings(userData.rankings || {});
+        }
+
+        // 显示排名详情（更新以兼容数据库格式）
+        function displayRankings(rankings) {
+            const container = document.getElementById('rankings-content');
+            container.innerHTML = '';
+
+            if (!rankings || Object.keys(rankings).length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">暂无排名数据</p>';
+                return;
+            }
+
+            // 数据库格式: { "project_name": { "7d": { rank, mindshare, community_score }, ... } }
+            // 本地格式: { "key": { category, project, rank, mindshare, community_score, duration } }
+            
+            // 统一处理两种格式
+            const projectGroups = {};
+            
+            if (typeof rankings === 'object') {
+                // 检测数据格式
+                const firstKey = Object.keys(rankings)[0];
+                const firstValue = rankings[firstKey];
+                
+                if (firstValue && typeof firstValue === 'object' && firstValue.duration) {
+                    // 本地JSON格式
+                    Object.entries(rankings).forEach(([key, ranking]) => {
+                        const projectKey = `${ranking.category}_${ranking.project}`;
+                        if (!projectGroups[projectKey]) {
+                            projectGroups[projectKey] = {
+                                category: ranking.category,
+                                project: ranking.project,
+                                rankings: []
+                            };
+                        }
+                        projectGroups[projectKey].rankings.push({...ranking, key});
+                    });
+                } else {
+                    // 数据库格式
+                    Object.entries(rankings).forEach(([project, durations]) => {
+                        if (durations && typeof durations === 'object') {
+                            const projectKey = project;
+                            projectGroups[projectKey] = {
+                                category: 'unknown', // 数据库格式不包含category
+                                project: project,
+                                rankings: []
+                            };
+                            
+                            Object.entries(durations).forEach(([duration, data]) => {
+                                if (data && typeof data === 'object') {
+                                    projectGroups[projectKey].rankings.push({
+                                        key: `${project}_${duration}`,
+                                        project: project,
+                                        duration: duration,
+                                        rank: data.rank,
+                                        mindshare: data.mindshare,
+                                        community_score: data.community_score
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+            // 为每个项目创建卡片
+            Object.values(projectGroups).forEach(group => {
+                const card = createRankingCard(group);
+                container.appendChild(card);
+            });
+        }
+
+        // 创建排名卡片
+        function createRankingCard(group) {
+            const card = document.createElement('div');
+            card.className = 'ranking-card';
+
+            // 找到最佳排名
+            const bestRanking = group.rankings.reduce((best, current) => 
+                current.rank < best.rank ? current : best
+            );
+
+            const durationNames = {
+                '7d': '7天',
+                '30d': '30天',
+                '3m': '3个月', 
+                '6m': '6个月',
+                '12m': '12个月'
+            };
+
+            card.innerHTML = `
+                <div class="ranking-header">
+                    <div class="project-name">
+                        ${group.project.toUpperCase()} 
+                        <span style="font-size: 14px; color: #666;">(${group.category === 'post_tge' ? 'Post TGE' : 'Pre TGE'})</span>
+                    </div>
+                    <div class="rank-badge">#${bestRanking.rank}</div>
+                </div>
+                <div class="ranking-details">
+                    ${group.rankings.map(ranking => `
+                        <div class="detail-item">
+                            <div class="detail-value">#${ranking.rank}</div>
+                            <div class="detail-label">${durationNames[ranking.duration]}</div>
+                        </div>
+                    `).join('')}
+                    <div class="detail-item">
+                        <div class="detail-value">${(bestRanking.score).toFixed(1)}%</div>
+                        <div class="detail-label">影响力分数</div>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // 格式化数字
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+    </script>
+</body>
+</html>

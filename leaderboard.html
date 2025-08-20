@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOL排行榜 - Kaito KOL 影响力排行榜</title>
+    <meta name="description" content="实时查看各项目的KOL影响力排行榜，发现顶级意见领袖">
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 头部导航 */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .page-description {
+            font-size: 16px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* 控制面板 */
+        .controls {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-group label {
+            font-weight: 500;
+            color: #495057;
+            min-width: 80px;
+        }
+
+        .control-group select, .control-group button {
+            padding: 8px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background: white;
+            font-size: 14px;
+        }
+
+        .control-group button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .control-group button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 排行榜样式 */
+        .leaderboard {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .leaderboard-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f1f1f1;
+            transition: background-color 0.2s ease;
+        }
+
+        .leaderboard-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            margin-right: 15px;
+            min-width: 40px;
+        }
+
+        .user-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e9ecef;
+        }
+
+        .user-details h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .user-details p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .control-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .control-group label {
+                min-width: auto;
+            }
+
+            .nav-menu {
+                gap: 5px;
+            }
+
+            .nav-item {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .user-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航头部 -->
+        <header class="header">
+            <nav class="nav-menu">
+                <a href="index-new.html" class="nav-item">🏠 首页</a>
+                <a href="leaderboard.html" class="nav-item active">📊 KOL排行榜</a>
+                <a href="search.html" class="nav-item">🔍 个人查询</a>
+                <a href="ict.html" class="nav-item">📋 ICT名单</a>
+                <a href="timeline.html" class="nav-item">⏰ 奖励时间线</a>
+                <a href="reports.html" class="nav-item">📈 投资研报</a>
+                <a href="database-demo.html" class="nav-item">🗄️ 数据库演示</a>
+            </nav>
+        </header>
+
+        <!-- 主要内容 -->
+        <main class="main-content">
+            <h1 class="page-title">📊 KOL 影响力排行榜</h1>
+            <p class="page-description">实时展示各项目的顶级KOL影响力排名，发现最具影响力的意见领袖</p>
+
+            <!-- 控制面板 -->
+            <div class="controls">
+                <div class="control-group">
+                    <label for="category-select">分类:</label>
+                    <select id="category-select">
+                        <option value="post_tge">Post TGE</option>
+                        <option value="pre_tge">Pre TGE</option>
+                    </select>
+
+                    <label for="topic-select">项目:</label>
+                    <select id="topic-select">
+                        <option value="apt">Aptos (APT)</option>
+                    </select>
+
+                    <label for="duration-select">时间:</label>
+                    <select id="duration-select">
+                        <option value="7d" selected>过去7天</option>
+                        <option value="30d">过去30天</option>
+                        <option value="3m">过去3个月</option>
+                        <option value="6m">过去6个月</option>
+                        <option value="12m">过去12个月</option>
+                    </select>
+
+                    <label for="top-n-select">显示:</label>
+                    <select id="top-n-select">
+                        <option value="10" selected>Top 10</option>
+                        <option value="25">Top 25</option>
+                        <option value="50">Top 50</option>
+                        <option value="100">Top 100</option>
+                    </select>
+
+                    <button onclick="loadData()">🔄 刷新数据</button>
+                </div>
+            </div>
+
+            <!-- 加载状态 -->
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p>正在加载排行榜数据...</p>
+            </div>
+
+            <!-- 排行榜 -->
+            <div id="leaderboard" class="leaderboard" style="display: none;">
+                <div class="leaderboard-header">
+                    <span id="leaderboard-title">KOL 排行榜</span>
+                </div>
+                <div id="leaderboard-content">
+                    <!-- 排行榜内容将在这里动态生成 -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 项目分类配置
+        const projectCategories = {
+            post_tge: {
+                name: "Post TGE",
+                topics: ["apt", "sui", "sei", "arb", "op", "polygon", "avax", "solana", "matic", "ftm", "atom", "dot", "ada", "near", "flow", "icp", "rose", "celo", "algo", "hbar", "egld", "one", "zil", "iotx", "ckb", "kda", "icx", "qtum", "waves", "nano", "iost", "ont", "vet", "theta", "tfuel", "bat", "ens", "lrc", "imx", "rndr", "chz", "sand", "mana", "gala", "axs", "slp", "chr", "alice", "tlm", "waxp", "enj", "audio", "rly", "tribe", "fei", "rai", "lusd", "frax", "ousd", "usdp", "gusd", "tusd", "usdn", "usdk", "eurs", "husd", "busd"]
+            },
+            pre_tge: {
+                name: "Pre TGE", 
+                topics: ["babylon", "grass", "hyperliquid", "monad", "berachain", "story", "movement", "initia", "ritual", "avail", "celestia", "dymension", "injective", "sei", "aptos", "sui", "linea", "scroll", "base", "blast", "mode", "arbitrum", "optimism", "polygon", "starknet", "taiko", "eigen", "ethena", "pendle", "renzo", "kelp", "puffer", "swell", "lido", "rocket", "frax", "mantle", "metis", "boba", "loopring", "immutable", "ronin", "harmony", "moonbeam", "moonriver", "astar", "shiden", "acala", "karura", "bifrost", "crust", "darwinia", "centrifuge", "kilt", "phala", "zeitgeist", "calamari", "basilisk", "robonomics", "gear", "vara", "aleph", "dock", "energy", "frequency", "hydra", "nodle", "origintrail", "subsocial", "unique", "watr", "xxnetwork"]
+            }
+        };
+
+        // 当前数据缓存
+        let currentData = null;
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeProjectSelects();
+            loadDataFast(); // 使用快速加载策略
+        });
+
+        // 初始化项目选择器
+        function initializeProjectSelects() {
+            const categorySelect = document.getElementById('category-select');
+            const topicSelect = document.getElementById('topic-select');
+            
+            categorySelect.addEventListener('change', function() {
+                updateTopicOptions();
+                loadData();
+            });
+            
+            updateTopicOptions();
+        }
+
+        // 更新项目选项
+        function updateTopicOptions() {
+            const category = document.getElementById('category-select').value;
+            const topicSelect = document.getElementById('topic-select');
+            
+            topicSelect.innerHTML = '';
+            
+            projectCategories[category].topics.forEach(topic => {
+                const option = document.createElement('option');
+                option.value = topic;
+                option.textContent = `${topic.toUpperCase()}`;
+                if (topic === 'apt') option.selected = true;
+                topicSelect.appendChild(option);
+            });
+        }
+
+        // 快速加载策略 - 显示默认数据
+        async function loadDataFast() {
+            // 设置默认选项
+            document.getElementById('category-select').value = 'post_tge';
+            document.getElementById('topic-select').value = 'apt';
+            document.getElementById('duration-select').value = '7d';
+            document.getElementById('top-n-select').value = '10';
+            
+            // 立即加载数据
+            await loadData();
+        }
+
+        // 加载数据
+        async function loadData() {
+            const category = document.getElementById('category-select').value;
+            const topic = document.getElementById('topic-select').value;
+            const duration = document.getElementById('duration-select').value;
+            const topN = parseInt(document.getElementById('top-n-select').value);
+
+            const loadingDiv = document.getElementById('loading');
+            const leaderboardDiv = document.getElementById('leaderboard');
+            
+            loadingDiv.style.display = 'block';
+            leaderboardDiv.style.display = 'none';
+
+            try {
+                const data = await fetchKaitoData(duration, topic, topN, category);
+                
+                if (data && data.length > 0) {
+                    displayLeaderboard(data, topic, duration, category);
+                    currentData = data;
+                } else {
+                    showError('暂无数据');
+                }
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                showError('数据加载失败，请稍后重试');
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        }
+
+        // 获取数据 - API优先，本地回退
+        async function fetchKaitoData(duration, topic_id, top_n, category) {
+            // 优先级1: 数据库 (新增)
+            try {
+                const dbData = await getDataFromDatabase(duration, topic_id, top_n);
+                if (dbData && dbData.data && dbData.data.length > 0) {
+                    console.log(`🗄️ 使用数据库数据: ${dbData.data.length} 条记录`);
+                    return dbData.data;
+                }
+            } catch (error) {
+                console.warn('数据库获取失败，尝试API:', error.message);
+            }
+
+            // 优先级2: API
+            try {
+                const apiData = await fetchFromAPI(duration, topic_id, top_n);
+                if (apiData && apiData.length > 0) {
+                    console.log(`✅ 使用API数据: ${apiData.length} 条记录`);
+                    return apiData;
+                }
+            } catch (error) {
+                console.warn('API获取失败，尝试使用本地数据:', error.message);
+            }
+            
+            // 优先级3: 本地JSON文件
+            try {
+                const jsonData = await getDataFromKolJson(duration, topic_id, top_n);
+                
+                if (jsonData && jsonData.length > 0) {
+                    console.log(`📁 使用本地数据: ${jsonData.length} 条记录`);
+                    return jsonData;
+                } else {
+                    throw new Error(`本地数据中没有找到 ${topic_id}/${duration} 的数据`);
+                }
+            } catch (error) {
+                console.error('本地数据获取失败:', error.message);
+                throw new Error(`无法获取数据: ${error.message}`);
+            }
+        }
+
+        // 从API获取数据
+        async function fetchFromAPI(duration, topic_id, top_n) {
+            const API_BASE_URL = 'https://api.kaito.ai/v2';
+            const API_ENDPOINT = `${API_BASE_URL}/leaderboard/${topic_id}`;
+            
+            const params = new URLSearchParams({
+                duration: duration,
+                top_n: top_n.toString()
+            });
+
+            const response = await fetch(`${API_ENDPOINT}?${params}`);
+            
+            if (!response.ok) {
+                throw new Error(`API请求失败: ${response.status}`);
+            }
+            
+            return await response.json();
+        }
+
+        // 从数据库API获取数据（新增）
+        async function getDataFromDatabase(duration, topic_id, top_n) {
+            try {
+                const response = await fetch(`/api/db/leaderboard?project=${encodeURIComponent(topic_id)}&duration=${duration}&limit=${top_n}`);
+                
+                if (!response.ok) {
+                    throw new Error(`数据库API请求失败: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success && result.data && result.data.length > 0) {
+                    // 转换数据格式以匹配现有格式
+                    const transformedData = {
+                        data: result.data.map(user => ({
+                            name: user.name,
+                            username: user.username,
+                            rank: user.rank.toString(),
+                            mindshare: user.mindshare,
+                            community_score: user.community_score,
+                            follower_count: user.follower_count,
+                            smart_follower_count: user.smart_follower_count,
+                            following_count: user.following_count,
+                            smart_following_count: user.smart_following_count,
+                            icon: user.icon,
+                            bio: user.bio,
+                            twitter_user_url: user.twitter_user_url
+                        }))
+                    };
+                    
+                    console.log(`✅ 数据库查询成功: ${topic_id} (${duration}) - ${result.data.length} 条记录`);
+                    return transformedData;
+                } else {
+                    throw new Error('数据库返回空数据');
+                }
+            } catch (error) {
+                console.warn(`⚠️ 数据库查询失败: ${error.message}`);
+                return null;
+            }
+        }
+
+        // 从本地JSON获取数据
+        async function getDataFromKolJson(duration, topic_id, top_n) {
+            // 如果还没有加载本地数据，先加载
+            if (!window.kolJsonData) {
+                const response = await fetch('./kol.json');
+                if (!response.ok) {
+                    throw new Error(`无法加载本地数据: ${response.status}`);
+                }
+                window.kolJsonData = await response.json();
+            }
+
+            const data = window.kolJsonData;
+            if (!data || !data.categories) {
+                return null;
+            }
+
+            // 确定分类
+            const category = projectCategories['post_tge'].topics.includes(topic_id) ? 'post_tge' : 'pre_tge';
+            
+            // 查找数据
+            if (data.categories[category] && 
+                data.categories[category][topic_id] && 
+                data.categories[category][topic_id][duration] &&
+                data.categories[category][topic_id][duration].data) {
+                
+                const results = data.categories[category][topic_id][duration].data;
+                return results.slice(0, top_n);
+            }
+            
+            return null;
+        }
+
+        // 显示排行榜
+        function displayLeaderboard(data, topic, duration, category) {
+            const leaderboardDiv = document.getElementById('leaderboard');
+            const contentDiv = document.getElementById('leaderboard-content');
+            const titleSpan = document.getElementById('leaderboard-title');
+            
+            // 更新标题
+            const durationText = {
+                '7d': '7天',
+                '30d': '30天', 
+                '3m': '3个月',
+                '6m': '6个月',
+                '12m': '12个月'
+            };
+            
+            titleSpan.textContent = `${topic.toUpperCase()} - 过去${durationText[duration]} - ${projectCategories[category].name}`;
+            
+            // 生成排行榜内容
+            contentDiv.innerHTML = '';
+            
+            data.forEach((user, index) => {
+                const item = createLeaderboardItem(user, index + 1);
+                contentDiv.appendChild(item);
+            });
+            
+            leaderboardDiv.style.display = 'block';
+        }
+
+        // 创建排行榜条目
+        function createLeaderboardItem(user, rank) {
+            const item = document.createElement('div');
+            item.className = 'leaderboard-item';
+            
+            const avatar = user.icon ? `<img src="${user.icon}" alt="${user.name}" class="user-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNFNUU3RUIiLz4KPHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBzdHlsZT0idHJhbnNmb3JtOiB0cmFuc2xhdGUoMTBweCwgMTBweCk7Ij4KPHBhdGggZD0iTTEwIDEwQzEyLjc2MTQgMTAgMTUgNy43NjE0MiAxNSA1QzE1IDIuMjM4NTggMTIuNzYxNCAwIDEwIDBDNy4yMzg1OCAwIDUgMi4yMzg1OCA1IDVDNSA3Ljc2MTQyIDcuMjM4NTggMTAgMTAgMTBaIiBmaWxsPSIjOUNBM0FGIi8+CjxwYXRoIGQ9Ik0xMCAxMkM0LjQ3NzE1IDEyIDAgMTYuNDc3MSAwIDIyVjI1SDE1VjI0SDE1VjIyQzE1IDE2LjQ3NzEgMTAuNTIyOSAxMiAxMCAxMloiIGZpbGw9IiM5Q0EzQUYiLz4KPC9zdmc+Cjwvc3ZnPgo='">` : `<div class="user-avatar" style="background: #e5e7eb; display: flex; align-items: center; justify-content: center; color: #9ca3af;">👤</div>`;
+            
+            item.innerHTML = `
+                <div class="rank">#${rank}</div>
+                <div class="user-info">
+                    ${avatar}
+                    <div class="user-details">
+                        <h3>${user.name || user.username}</h3>
+                        <p>@${user.username}</p>
+                    </div>
+                </div>
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">${(user.mindshare * 100).toFixed(2)}%</span>
+                        <span class="stat-label">影响力分数</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${formatNumber(user.follower_count || 0)}</span>
+                        <span class="stat-label">粉丝数</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${formatNumber(user.smart_follower_count || 0)}</span>
+                        <span class="stat-label">智能粉丝</span>
+                    </div>
+                </div>
+            `;
+            
+            return item;
+        }
+
+        // 格式化数字
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // 显示错误
+        function showError(message) {
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.innerHTML = `
+                <div style="color: #dc3545; text-align: center; padding: 20px;">
+                    <p>❌ ${message}</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1567,7 +1567,7 @@
                 <div class="control-group">
                     <label for="topic-select" data-i18n="project-token">项目/代币:</label>
                     <select id="topic-select" class="control-select">
-                        <option value="APT">APT</option>
+                        <option value="APT" selected>APT</option>
                         <option value="ARB">ARB</option>
                         <option value="BERA">BERA</option>
                         <option value="DYDX">DYDX</option>
@@ -1580,7 +1580,7 @@
                 <div class="control-group">
                     <label for="duration-select" data-i18n="time-range">时间范围:</label>
                     <select id="duration-select" class="control-select">
-                        <option value="7d">7 天</option>
+                        <option value="7d" selected>7 天</option>
                         <option value="30d">30 天</option>
                         <option value="3m">3 个月</option>
                         <option value="6m">6 个月</option>
@@ -1590,7 +1590,7 @@
                 <div class="control-group">
                     <label for="top-n-select" data-i18n="display-count">显示数量:</label>
                     <select id="top-n-select" class="control-select">
-                        <option value="10">Top 10</option>
+                        <option value="10" selected>Top 10</option>
                         <option value="25">Top 25</option>
                         <option value="50">Top 50</option>
                         <option value="100">Top 100</option>
@@ -2191,25 +2191,27 @@
         function updateTimeRangeOptions() {
             const durationSelect = document.getElementById('duration-select');
             const t = translations[currentLanguage];
+            const currentValue = durationSelect.value || '7d'; // 保持当前选择或默认7d
             
             durationSelect.innerHTML = `
-                <option value="7d">${t['days-7']}</option>
-                <option value="30d">${t['days-30']}</option>
-                <option value="3m">${t['months-3']}</option>
-                <option value="6m">${t['months-6']}</option>
-                <option value="12m">${t['months-12']}</option>
+                <option value="7d" ${currentValue === '7d' ? 'selected' : ''}>${t['days-7']}</option>
+                <option value="30d" ${currentValue === '30d' ? 'selected' : ''}>${t['days-30']}</option>
+                <option value="3m" ${currentValue === '3m' ? 'selected' : ''}>${t['months-3']}</option>
+                <option value="6m" ${currentValue === '6m' ? 'selected' : ''}>${t['months-6']}</option>
+                <option value="12m" ${currentValue === '12m' ? 'selected' : ''}>${t['months-12']}</option>
             `;
         }
 
         // 更新显示数量选项
         function updateDisplayCountOptions() {
             const topNSelect = document.getElementById('top-n-select');
+            const currentValue = topNSelect.value || '10'; // 保持当前选择或默认10
             
             topNSelect.innerHTML = `
-                <option value="10">Top 10</option>
-                <option value="25">Top 25</option>
-                <option value="50">Top 50</option>
-                <option value="100">Top 100</option>
+                <option value="10" ${currentValue === '10' ? 'selected' : ''}>Top 10</option>
+                <option value="25" ${currentValue === '25' ? 'selected' : ''}>Top 25</option>
+                <option value="50" ${currentValue === '50' ? 'selected' : ''}>Top 50</option>
+                <option value="100" ${currentValue === '100' ? 'selected' : ''}>Top 100</option>
             `;
         }
 
@@ -2831,6 +2833,8 @@
             const duration = document.getElementById('duration-select').value;
             const topN = parseInt(document.getElementById('top-n-select').value);
 
+            console.log(`🚀 快速加载开始 - 项目: ${topic}, 时间: ${duration}, 数量: ${topN}`);
+
             // 显示加载状态
             document.getElementById('loading').innerHTML = `
                 <div class="loading-spinner"></div>
@@ -2840,6 +2844,34 @@
             document.getElementById('users-grid').style.display = 'none';
 
             try {
+                // 对于默认参数（APT + 7d + 10），使用最快的加载策略
+                if (topic === 'APT' && duration === '7d' && topN === 10) {
+                    console.log('⚡ 检测到默认参数，使用超快速加载');
+                    
+                    // 立即尝试本地数据
+                    await loadKolJsonData();
+                    if (kolJsonData) {
+                        const localData = getDataFromKolJson(duration, topic, topN);
+                        if (localData && localData.length > 0) {
+                            console.log('✅ 超快速加载成功：使用本地数据');
+                            currentData = localData;
+                            renderUsers(currentData);
+                            updateLabels();
+                            
+                            // 立即隐藏加载状态
+                            document.getElementById('loading').style.display = 'none';
+                            document.getElementById('users-grid').style.display = 'block';
+                            
+                            // 后台静默更新API数据
+                            setTimeout(() => {
+                                console.log('🔄 后台静默更新：获取最新API数据...');
+                                updateWithAPIDataSilent(duration, topic, topN);
+                            }, 2000);
+                            return;
+                        }
+                    }
+                }
+
                 // 首先尝试本地数据（快速）
                 console.log('🚀 快速加载：尝试本地数据...');
                 await loadKolJsonData();
@@ -2869,6 +2901,20 @@
                 console.error('快速加载失败:', error);
                 // 退回到正常加载流程
                 await loadData();
+            }
+        }
+
+        // 后台静默更新API数据（不影响用户界面）
+        async function updateWithAPIDataSilent(duration, topic, topN) {
+            try {
+                const apiData = await fetchFromAPI(duration, topic, topN);
+                if (apiData && apiData.length > 0) {
+                    console.log('🔄 后台更新完成：获取到最新API数据');
+                    // 静默更新，不改变当前显示，只更新数据
+                    currentData = apiData;
+                }
+            } catch (error) {
+                console.log('后台更新失败，继续使用本地数据:', error.message);
             }
         }
 

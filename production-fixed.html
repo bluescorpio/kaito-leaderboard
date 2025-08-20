@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修复版本 - 增强错误处理</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error-message {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            margin: 20px 0;
+        }
+        .error-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .retry-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        .retry-button:hover {
+            background: #5a6fd8;
+        }
+        .status-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        .status-ok { color: #28a745; }
+        .status-error { color: #dc3545; }
+        .status-warning { color: #ffc107; }
+        .loading-panel {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: white; text-align: center; margin-bottom: 30px;">🚀 Kaito 排行榜（修复版）</h1>
+        
+        <div class="status-panel">
+            <h3>🔍 系统状态检查</h3>
+            <div id="status-checks"></div>
+            <button class="retry-button" onclick="runSystemCheck()">🔄 重新检查</button>
+        </div>
+
+        <div id="loading" class="loading-panel">
+            <div class="loading-spinner"></div>
+            <p>正在加载排行榜数据...</p>
+            <p style="font-size: 14px; color: #666;">如果长时间加载，请检查网络连接</p>
+        </div>
+
+        <div id="error-container" style="display: none;"></div>
+        <div id="data-container" style="display: none;"></div>
+    </div>
+
+    <script>
+        let isLoading = false;
+        let loadTimeout = null;
+
+        // 系统检查
+        async function runSystemCheck() {
+            const statusDiv = document.getElementById('status-checks');
+            statusDiv.innerHTML = '';
+
+            const checks = [
+                { name: 'API 连接', test: testAPIConnection },
+                { name: '本地数据', test: testLocalData },
+                { name: '网络状态', test: testNetworkStatus }
+            ];
+
+            for (const check of checks) {
+                const statusItem = document.createElement('div');
+                statusItem.className = 'status-item';
+                statusItem.innerHTML = `<span>${check.name}</span><span>⏳ 检查中...</span>`;
+                statusDiv.appendChild(statusItem);
+
+                try {
+                    const result = await check.test();
+                    statusItem.innerHTML = `<span>${check.name}</span><span class="status-ok">✅ ${result}</span>`;
+                } catch (error) {
+                    statusItem.innerHTML = `<span>${check.name}</span><span class="status-error">❌ ${error.message}</span>`;
+                }
+            }
+        }
+
+        async function testAPIConnection() {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+            try {
+                const response = await fetch('https://yaps.kaito.ai/api/kol/mindshare/top-leaderboard?duration=7d&topic_id=bitcoin&top_n=5&community_tier=tier1&customized_community=customized&community_yaps=true', {
+                    signal: controller.signal,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                clearTimeout(timeoutId);
+                
+                if (response.ok) {
+                    return 'API 响应正常';
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                clearTimeout(timeoutId);
+                if (error.name === 'AbortError') {
+                    throw new Error('连接超时');
+                }
+                throw new Error(error.message);
+            }
+        }
+
+        async function testLocalData() {
+            try {
+                const response = await fetch('./kol.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.categories) {
+                        return '本地数据可用';
+                    } else {
+                        throw new Error('数据格式异常');
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                throw new Error(error.message);
+            }
+        }
+
+        async function testNetworkStatus() {
+            if (navigator.onLine) {
+                try {
+                    // 测试基础连接
+                    const response = await fetch('https://httpbin.org/json', { 
+                        method: 'HEAD',
+                        signal: AbortSignal.timeout(5000)
+                    });
+                    return '网络连接正常';
+                } catch (error) {
+                    return '网络受限';
+                }
+            } else {
+                throw new Error('无网络连接');
+            }
+        }
+
+        // 增强的数据加载函数
+        async function loadDataWithTimeout() {
+            if (isLoading) return;
+            isLoading = true;
+
+            // 设置超时
+            loadTimeout = setTimeout(() => {
+                if (isLoading) {
+                    showTimeoutError();
+                }
+            }, 15000); // 15秒超时
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error-container').style.display = 'none';
+            document.getElementById('data-container').style.display = 'none';
+
+            try {
+                // 首先尝试 API
+                const data = await fetchWithRetry();
+                clearTimeout(loadTimeout);
+                isLoading = false;
+                showSuccess(data);
+            } catch (error) {
+                clearTimeout(loadTimeout);
+                isLoading = false;
+                showError(error.message);
+            }
+        }
+
+        async function fetchWithRetry(maxRetries = 2) {
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    console.log(`尝试第 ${attempt} 次加载数据...`);
+                    
+                    // 尝试 API
+                    try {
+                        const apiData = await fetchFromAPI();
+                        if (apiData && apiData.length > 0) {
+                            console.log('✅ API 数据加载成功');
+                            return apiData;
+                        }
+                    } catch (apiError) {
+                        console.warn('API 加载失败:', apiError.message);
+                    }
+
+                    // API 失败，尝试本地数据
+                    const localData = await fetchFromLocal();
+                    if (localData && localData.length > 0) {
+                        console.log('✅ 本地数据加载成功');
+                        return localData;
+                    }
+
+                    throw new Error('API 和本地数据都无法加载');
+
+                } catch (error) {
+                    console.error(`第 ${attempt} 次尝试失败:`, error.message);
+                    if (attempt === maxRetries) {
+                        throw error;
+                    }
+                    // 等待后重试
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                }
+            }
+        }
+
+        async function fetchFromAPI() {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+            try {
+                const params = new URLSearchParams({
+                    duration: '7d',
+                    topic_id: 'bitcoin',
+                    top_n: 20,
+                    community_tier: 'tier1',
+                    customized_community: 'customized',
+                    community_yaps: 'true'
+                });
+
+                const response = await fetch(`https://yaps.kaito.ai/api/kol/mindshare/top-leaderboard?${params}`, {
+                    signal: controller.signal,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error(`API请求失败: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                let users = Array.isArray(data) ? data : (data.data || []);
+                return users.slice(0, 20).map((user, index) => ({
+                    name: user.name || 'Unknown User',
+                    username: user.username || '',
+                    rank: user.rank || (index + 1),
+                    mindshare: parseFloat(user.mindshare) || 0,
+                    follower_count: parseInt(user.follower_count) || 0,
+                    smart_follower_count: parseInt(user.smart_follower_count) || 0,
+                    icon: user.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`
+                }));
+
+            } catch (error) {
+                clearTimeout(timeoutId);
+                throw error;
+            }
+        }
+
+        async function fetchFromLocal() {
+            const response = await fetch('./kol.json');
+            if (!response.ok) {
+                throw new Error(`无法加载本地数据: ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (!data.categories) {
+                throw new Error('本地数据格式异常');
+            }
+
+            // 尝试获取 Bitcoin 7天数据
+            const bitcoinData = data.categories?.post_tge?.bitcoin?.['7d'] || 
+                              data.categories?.pre_tge?.bitcoin?.['7d'] || 
+                              [];
+
+            return bitcoinData.slice(0, 20);
+        }
+
+        function showSuccess(data) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error-container').style.display = 'none';
+            
+            const container = document.getElementById('data-container');
+            container.innerHTML = `
+                <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                    <h2>🏆 Bitcoin 影响力排行榜 (7天)</h2>
+                    <p style="color: #666; margin-bottom: 20px;">成功加载 ${data.length} 条数据</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+                        ${data.map(user => `
+                            <div style="border: 1px solid #eee; padding: 15px; border-radius: 10px;">
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <img src="${user.icon}" alt="${user.name}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 16px;">${user.name}</h4>
+                                        <p style="margin: 0; color: #666; font-size: 14px;">@${user.username}</p>
+                                    </div>
+                                </div>
+                                <div style="font-size: 14px; color: #666;">
+                                    <div>排名: #${user.rank}</div>
+                                    <div>影响力分数: ${user.mindshare?.toFixed(2) || 'N/A'}</div>
+                                    <div>关注者: ${user.follower_count?.toLocaleString() || 'N/A'}</div>
+                                    <div>智能关注者: ${user.smart_follower_count?.toLocaleString() || 'N/A'}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            container.style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('data-container').style.display = 'none';
+            
+            const container = document.getElementById('error-container');
+            container.innerHTML = `
+                <div class="error-message">
+                    <div class="error-icon">⚠️</div>
+                    <h3>数据加载失败</h3>
+                    <p>${message}</p>
+                    <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                        可能的原因：<br>
+                        • API 服务暂时不可用<br>
+                        • 网络连接问题<br>
+                        • 本地数据文件缺失<br>
+                        • CORS 限制
+                    </p>
+                    <button class="retry-button" onclick="loadDataWithTimeout()">🔄 重试加载</button>
+                </div>
+            `;
+            container.style.display = 'block';
+        }
+
+        function showTimeoutError() {
+            showError('加载超时 - 请检查网络连接或稍后重试');
+        }
+
+        // 页面加载时自动执行
+        window.onload = function() {
+            console.log('🚀 排行榜修复版本已加载');
+            runSystemCheck();
+            setTimeout(() => {
+                loadDataWithTimeout();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>

@@ -1503,45 +1503,6 @@
                 </button>
             </div>
         </nav>
-
-        <!-- 打赏信息 -->
-        <div class="donation-section">
-            <h4 data-i18n="donation-title">💝 欢迎小额打赏</h4>
-            <div class="donation-addresses">
-                <div class="address-item">
-                    <div class="address-header">
-                        <span class="address-label" data-i18n="sol-address">SOL 地址：</span>
-                        <button class="qr-toggle-btn" onclick="toggleQRCode('sol-qr')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
-                    </div>
-                    <div class="address-content">
-                        <span class="address-value">97vJtSUYM2BpLTo8sLXzRAU9CZGBERFBAohuFLoXGwa2</span>
-                        <div id="sol-qr" class="qr-code-container" style="display: none;">
-                            <img src="images/sol.png" alt="SOL 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <div class="qr-error" style="display: none;">
-                                <p>收款码图片未找到</p>
-                                <small>请将 SOL 收款码保存为 images/sol.png</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="address-item">
-                    <div class="address-header">
-                        <span class="address-label" data-i18n="evm-address">EVM 地址：</span>
-                        <button class="qr-toggle-btn" onclick="toggleQRCode('evm-qr')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
-                    </div>
-                    <div class="address-content">
-                        <span class="address-value">0x90ea00E3c00606ee52ADD1c2468F83C927065584</span>
-                        <div id="evm-qr" class="qr-code-container" style="display: none;">
-                            <img src="images/evm.png" alt="EVM 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <div class="qr-error" style="display: none;">
-                                <p>收款码图片未找到</p>
-                                <small>请将 EVM 收款码保存为 images/evm.png</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </header>
 
     <main class="container">
@@ -1807,6 +1768,45 @@
                     <p data-i18n="assumptions-warning">⚠️ 仅基于假设的估算</p>
                 </div>
             </div>
+
+            <!-- 打赏信息 -->
+            <div class="donation-section">
+                <h4 data-i18n="donation-title">💝 欢迎小额打赏</h4>
+                <div class="donation-addresses">
+                    <div class="address-item">
+                        <div class="address-header">
+                            <span class="address-label" data-i18n="sol-address">SOL 地址：</span>
+                            <button class="qr-toggle-btn" onclick="toggleQRCode('sol-qr-kol')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
+                        </div>
+                        <div class="address-content">
+                            <span class="address-value">97vJtSUYM2BpLTo8sLXzRAU9CZGBERFBAohuFLoXGwa2</span>
+                            <div id="sol-qr-kol" class="qr-code-container" style="display: none;">
+                                <img src="images/sol.png" alt="SOL 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <div class="qr-error" style="display: none;">
+                                    <p>收款码图片未找到</p>
+                                    <small>请将 SOL 收款码保存为 images/sol.png</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="address-item">
+                        <div class="address-header">
+                            <span class="address-label" data-i18n="evm-address">EVM 地址：</span>
+                            <button class="qr-toggle-btn" onclick="toggleQRCode('evm-qr-kol')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
+                        </div>
+                        <div class="address-content">
+                            <span class="address-value">0x90ea00E3c00606ee52ADD1c2468F83C927065584</span>
+                            <div id="evm-qr-kol" class="qr-code-container" style="display: none;">
+                                <img src="images/evm.png" alt="EVM 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <div class="qr-error" style="display: none;">
+                                    <p>收款码图片未找到</p>
+                                    <small>请将 EVM 收款码保存为 images/evm.png</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- ICT 名单模块 -->
@@ -1843,6 +1843,45 @@
             <div id="ict-users-grid" class="users-grid" style="display: none;"></div>
             <div id="ict-error" class="search-error" style="display: none;">
                 <p data-i18n="ict-error">加载ICT名单失败，请检查ict.txt文件是否存在</p>
+            </div>
+
+            <!-- 打赏信息 -->
+            <div class="donation-section">
+                <h4 data-i18n="donation-title">💝 欢迎小额打赏</h4>
+                <div class="donation-addresses">
+                    <div class="address-item">
+                        <div class="address-header">
+                            <span class="address-label" data-i18n="sol-address">SOL 地址：</span>
+                            <button class="qr-toggle-btn" onclick="toggleQRCode('sol-qr-ict')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
+                        </div>
+                        <div class="address-content">
+                            <span class="address-value">97vJtSUYM2BpLTo8sLXzRAU9CZGBERFBAohuFLoXGwa2</span>
+                            <div id="sol-qr-ict" class="qr-code-container" style="display: none;">
+                                <img src="images/sol.png" alt="SOL 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <div class="qr-error" style="display: none;">
+                                    <p>收款码图片未找到</p>
+                                    <small>请将 SOL 收款码保存为 images/sol.png</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="address-item">
+                        <div class="address-header">
+                            <span class="address-label" data-i18n="evm-address">EVM 地址：</span>
+                            <button class="qr-toggle-btn" onclick="toggleQRCode('evm-qr-ict')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
+                        </div>
+                        <div class="address-content">
+                            <span class="address-value">0x90ea00E3c00606ee52ADD1c2468F83C927065584</span>
+                            <div id="evm-qr-ict" class="qr-code-container" style="display: none;">
+                                <img src="images/evm.png" alt="EVM 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <div class="qr-error" style="display: none;">
+                                    <p>收款码图片未找到</p>
+                                    <small>请将 EVM 收款码保存为 images/evm.png</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 

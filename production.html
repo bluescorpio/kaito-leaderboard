@@ -1452,6 +1452,106 @@
                 font-size: 0.8rem;
             }
         }
+
+        /* 捐赠部分样式 */
+        .crypto-addresses {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .crypto-item {
+            flex: 1;
+            min-width: 280px;
+            max-width: 400px;
+        }
+
+        .crypto-label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #34495e;
+            font-size: 1.1em;
+        }
+
+        .address-container {
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid #ddd;
+        }
+
+        .crypto-address {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 6px;
+            word-break: break-all;
+            color: #2c3e50;
+            border: 1px solid #e9ecef;
+        }
+
+        .qr-toggle {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+        }
+
+        .qr-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.6);
+        }
+
+        .qr-code {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .qr-code img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* 数据来源部分样式 */
+        .data-source-section {
+            text-align: center;
+            padding: 20px;
+            margin: 30px 0;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+        }
+
+        .data-source-section p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            .crypto-addresses {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .crypto-item {
+                min-width: auto;
+                max-width: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1505,51 +1605,6 @@
                 </button>
             </div>
         </nav>
-
-        <!-- 打赏信息 -->
-        <div class="donation-section">
-            <h4 data-i18n="donation-title">💝 欢迎小额打赏</h4>
-            <div class="donation-addresses">
-                <div class="address-item">
-                    <div class="address-header">
-                        <span class="address-label" data-i18n="sol-address">SOL 地址：</span>
-                        <button class="qr-toggle-btn" onclick="toggleQRCode('sol-qr')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
-                    </div>
-                    <div class="address-content">
-                        <span class="address-value">97vJtSUYM2BpLTo8sLXzRAU9CZGBERFBAohuFLoXGwa2</span>
-                        <div id="sol-qr" class="qr-code-container" style="display: none;">
-                            <img src="images/sol.png" alt="SOL 收款码" class="qr-code-img" 
-                                 onload="console.log('SOL QR码加载成功')" 
-                                 onerror="console.error('SOL QR码加载失败:', this.src); this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <div class="qr-error" style="display: none;">
-                                <p>收款码图片加载失败</p>
-                                <small>图片路径: images/sol.png</small>
-                                <small>请检查网络连接或联系管理员</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="address-item">
-                    <div class="address-header">
-                        <span class="address-label" data-i18n="evm-address">EVM 地址：</span>
-                        <button class="qr-toggle-btn" onclick="toggleQRCode('evm-qr')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码" data-i18n="show-qr">📱 显示收款码</button>
-                    </div>
-                    <div class="address-content">
-                        <span class="address-value">0x90ea00E3c00606ee52ADD1c2468F83C927065584</span>
-                        <div id="evm-qr" class="qr-code-container" style="display: none;">
-                            <img src="images/evm.png" alt="EVM 收款码" class="qr-code-img" 
-                                 onload="console.log('EVM QR码加载成功')" 
-                                 onerror="console.error('EVM QR码加载失败:', this.src); this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <div class="qr-error" style="display: none;">
-                                <p>收款码图片加载失败</p>
-                                <small>图片路径: images/evm.png</small>
-                                <small>请检查网络连接或联系管理员</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </header>
 
     <main class="container">
@@ -1616,6 +1671,38 @@
                 <p data-i18n="loading-text">正在加载排行榜数据...</p>
             </div>
             <div id="users-grid" class="users-grid" style="display: none;"></div>
+
+            <!-- 捐赠部分 -->
+            <div class="donation-section">
+                <h3 data-i18n="donation-title">💝 欢迎小额打赏</h3>
+                <div class="crypto-addresses">
+                    <div class="crypto-item">
+                        <div class="crypto-label" data-i18n="sol-address">SOL 地址：</div>
+                        <div class="address-container">
+                            <div class="crypto-address">49X84KW7ZV1mXyBEfhPkfKbEWxMT8N2MBNAbCGLyBhNs</div>
+                            <button class="qr-toggle" onclick="toggleQRCode('sol-qr-kol')" data-i18n="show-qr">📱 显示收款码</button>
+                            <div id="sol-qr-kol" class="qr-code" style="display: none;">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAACqCAYAAAA9dtJ2AAABQklEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8BtVQAAFN1Wz+AAAAABJRU5ErkJggg==" alt="SOL QR Code" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crypto-item">
+                        <div class="crypto-label" data-i18n="evm-address">EVM 地址：</div>
+                        <div class="address-container">
+                            <div class="crypto-address">0x8B8fF4eE0C984c2CCFb5d26dE5bc7D3c5CDd6F4A</div>
+                            <button class="qr-toggle" onclick="toggleQRCode('evm-qr-kol')" data-i18n="show-qr">📱 显示收款码</button>
+                            <div id="evm-qr-kol" class="qr-code" style="display: none;">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAACqCAYAAAA9dtJ2AAABQklEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8BtVQAAFN1Wz+AAAAABJRU5ErkJggg==" alt="EVM QR Code" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据来源部分 -->
+            <div class="data-source-section">
+                <p>数据来源: Kaito AI</p>
+            </div>
         </section>
 
         <!-- 个人搜索模块 -->
@@ -1654,6 +1741,38 @@
                 <div id="search-error" class="search-error" style="display: none;">
                     <p data-i18n="search-error">查询出错，请稍后重试</p>
                 </div>
+            </div>
+
+            <!-- 捐赠部分 -->
+            <div class="donation-section">
+                <h3 data-i18n="donation-title">💝 欢迎小额打赏</h3>
+                <div class="crypto-addresses">
+                    <div class="crypto-item">
+                        <div class="crypto-label" data-i18n="sol-address">SOL 地址：</div>
+                        <div class="address-container">
+                            <div class="crypto-address">49X84KW7ZV1mXyBEfhPkfKbEWxMT8N2MBNAbCGLyBhNs</div>
+                            <button class="qr-toggle" onclick="toggleQRCode('sol-qr-search')" data-i18n="show-qr">📱 显示收款码</button>
+                            <div id="sol-qr-search" class="qr-code" style="display: none;">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAACqCAYAAAA9dtJ2AAABQklEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8BtVQAAFN1Wz+AAAAABJRU5ErkJggg==" alt="SOL QR Code" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crypto-item">
+                        <div class="crypto-label" data-i18n="evm-address">EVM 地址：</div>
+                        <div class="address-container">
+                            <div class="crypto-address">0x8B8fF4eE0C984c2CCFb5d26dE5bc7D3c5CDd6F4A</div>
+                            <button class="qr-toggle" onclick="toggleQRCode('evm-qr-search')" data-i18n="show-qr">📱 显示收款码</button>
+                            <div id="evm-qr-search" class="qr-code" style="display: none;">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAACqCAYAAAA9dtJ2AAABQklEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8BtVQAAFN1Wz+AAAAABJRU5ErkJggg==" alt="EVM QR Code" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据来源部分 -->
+            <div class="data-source-section">
+                <p>数据来源: Kaito AI</p>
             </div>
         </section>
 
@@ -1853,6 +1972,38 @@
             <div id="ict-error" class="search-error" style="display: none;">
                 <p data-i18n="ict-error">加载ICT名单失败，请检查ict.txt文件是否存在</p>
             </div>
+
+            <!-- 捐赠部分 -->
+            <div class="donation-section">
+                <h3 data-i18n="donation-title">💝 欢迎小额打赏</h3>
+                <div class="crypto-addresses">
+                    <div class="crypto-item">
+                        <div class="crypto-label" data-i18n="sol-address">SOL 地址：</div>
+                        <div class="address-container">
+                            <div class="crypto-address">49X84KW7ZV1mXyBEfhPkfKbEWxMT8N2MBNAbCGLyBhNs</div>
+                            <button class="qr-toggle" onclick="toggleQRCode('sol-qr-ict')" data-i18n="show-qr">📱 显示收款码</button>
+                            <div id="sol-qr-ict" class="qr-code" style="display: none;">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAACqCAYAAAA9dtJ2AAABQklEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8BtVQAAFN1Wz+AAAAABJRU5ErkJggg==" alt="SOL QR Code" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crypto-item">
+                        <div class="crypto-label" data-i18n="evm-address">EVM 地址：</div>
+                        <div class="address-container">
+                            <div class="crypto-address">0x8B8fF4eE0C984c2CCFb5d26dE5bc7D3c5CDd6F4A</div>
+                            <button class="qr-toggle" onclick="toggleQRCode('evm-qr-ict')" data-i18n="show-qr">📱 显示收款码</button>
+                            <div id="evm-qr-ict" class="qr-code" style="display: none;">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAACqCAYAAAA9dtJ2AAABQklEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8BtVQAAFN1Wz+AAAAABJRU5ErkJggg==" alt="EVM QR Code" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据来源部分 -->
+            <div class="data-source-section">
+                <p>数据来源: Kaito AI</p>
+            </div>
         </section>
 
         <!-- 奖励时间线模块 -->
@@ -1866,6 +2017,38 @@
                 <div class="coming-soon-icon">🚧</div>
                 <h3 data-i18n="coming-soon">功能开发中</h3>
                 <p data-i18n="coming-soon-desc">奖励时间线功能正在开发中，敬请期待...</p>
+            </div>
+
+            <!-- 捐赠部分 -->
+            <div class="donation-section">
+                <h3 data-i18n="donation-title">💝 欢迎小额打赏</h3>
+                <div class="crypto-addresses">
+                    <div class="crypto-item">
+                        <div class="crypto-label" data-i18n="sol-address">SOL 地址：</div>
+                        <div class="address-container">
+                            <div class="crypto-address">49X84KW7ZV1mXyBEfhPkfKbEWxMT8N2MBNAbCGLyBhNs</div>
+                            <button class="qr-toggle" onclick="toggleQRCode('sol-qr-rewards')" data-i18n="show-qr">📱 显示收款码</button>
+                            <div id="sol-qr-rewards" class="qr-code" style="display: none;">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAACqCAYAAAA9dtJ2AAABQklEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8BtVQAAFN1Wz+AAAAABJRU5ErkJggg==" alt="SOL QR Code" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crypto-item">
+                        <div class="crypto-label" data-i18n="evm-address">EVM 地址：</div>
+                        <div class="address-container">
+                            <div class="crypto-address">0x8B8fF4eE0C984c2CCFb5d26dE5bc7D3c5CDd6F4A</div>
+                            <button class="qr-toggle" onclick="toggleQRCode('evm-qr-rewards')" data-i18n="show-qr">📱 显示收款码</button>
+                            <div id="evm-qr-rewards" class="qr-code" style="display: none;">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAACqCAYAAAA9dtJ2AAABQklEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8BtVQAAFN1Wz+AAAAABJRU5ErkJggg==" alt="EVM QR Code" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据来源部分 -->
+            <div class="data-source-section">
+                <p>数据来源: Kaito AI</p>
             </div>
         </section>
 
@@ -1881,6 +2064,38 @@
                 <div class="coming-soon-icon">🚧</div>
                 <h3 data-i18n="coming-soon">功能开发中</h3>
                 <p data-i18n="coming-soon-desc">投资研报功能正在开发中，敬请期待...</p>
+            </div>
+
+            <!-- 捐赠部分 -->
+            <div class="donation-section">
+                <h3 data-i18n="donation-title">💝 欢迎小额打赏</h3>
+                <div class="crypto-addresses">
+                    <div class="crypto-item">
+                        <div class="crypto-label" data-i18n="sol-address">SOL 地址：</div>
+                        <div class="address-container">
+                            <div class="crypto-address">49X84KW7ZV1mXyBEfhPkfKbEWxMT8N2MBNAbCGLyBhNs</div>
+                            <button class="qr-toggle" onclick="toggleQRCode('sol-qr-research')" data-i18n="show-qr">📱 显示收款码</button>
+                            <div id="sol-qr-research" class="qr-code" style="display: none;">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAACqCAYAAAA9dtJ2AAABQklEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8BtVQAAFN1Wz+AAAAABJRU5ErkJggg==" alt="SOL QR Code" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crypto-item">
+                        <div class="crypto-label" data-i18n="evm-address">EVM 地址：</div>
+                        <div class="address-container">
+                            <div class="crypto-address">0x8B8fF4eE0C984c2CCFb5d26dE5bc7D3c5CDd6F4A</div>
+                            <button class="qr-toggle" onclick="toggleQRCode('evm-qr-research')" data-i18n="show-qr">📱 显示收款码</button>
+                            <div id="evm-qr-research" class="qr-code" style="display: none;">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAACqCAYAAAA9dtJ2AAABQklEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8BtVQAAFN1Wz+AAAAABJRU5ErkJggg==" alt="EVM QR Code" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据来源部分 -->
+            <div class="data-source-section">
+                <p>数据来源: Kaito AI</p>
             </div>
         </section>
     </main>

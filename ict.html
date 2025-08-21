@@ -259,6 +259,164 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* 打赏区域样式 */
+        .donation-section {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .donation-section h4 {
+            color: #166534;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .donation-addresses {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .address-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            word-break: break-all;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .address-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .address-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .address-label {
+            font-weight: 600;
+            color: #166534;
+            font-size: 1rem;
+        }
+
+        .qr-toggle-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .qr-toggle-btn:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+        }
+
+        .address-value {
+            color: #1f2937;
+            font-size: 0.9rem;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            display: block;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .qr-code-container {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            border: 2px solid #22c55e;
+            margin-top: 8px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .qr-code-img {
+            max-width: 200px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .qr-error {
+            color: #dc2626;
+            font-size: 0.9rem;
+        }
+
+        .qr-error p {
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .qr-error small {
+            color: #6b7280;
+        }
+
+        /* 数据来源信息样式 */
+        .data-source-section {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .data-source-section h4 {
+            color: #1e40af;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .data-source-section p {
+            color: #374151;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .data-source-section a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .data-source-section a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             .container {
@@ -267,20 +425,32 @@
 
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
             }
 
             .ict-grid {
                 grid-template-columns: 1fr;
             }
 
-            .ict-item-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
             .ict-stats {
                 flex-direction: column;
                 gap: 10px;
+            }
+
+            .donation-section {
+                margin: 16px auto;
+                padding: 16px;
+            }
+
+            .address-header {
+                flex-direction: column;
+                gap: 8px;
+                align-items: stretch;
+            }
+
+            .qr-toggle-btn {
+                align-self: center;
+                padding: 10px 20px;
             }
         }
     </style>
@@ -354,6 +524,51 @@
                     <!-- ICT名单内容将在这里动态生成 -->
                 </div>
             </div>
+
+            <!-- 打赏信息 -->
+            <div class="donation-section">
+                <h4>💝 欢迎小额打赏</h4>
+                <div class="donation-addresses">
+                    <div class="address-item">
+                        <div class="address-header">
+                            <span class="address-label">SOL 地址：</span>
+                            <button class="qr-toggle-btn" onclick="toggleQRCode('sol-qr')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码">📱 显示收款码</button>
+                        </div>
+                        <div class="address-content">
+                            <span class="address-value">97vJtSUYM2BpLTo8sLXzRAU9CZGBERFBAohuFLoXGwa2</span>
+                            <div id="sol-qr" class="qr-code-container" style="display: none;">
+                                <img src="images/sol.png" alt="SOL 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <div class="qr-error" style="display: none;">
+                                    <p>收款码图片未找到</p>
+                                    <small>请将 SOL 收款码保存为 images/sol.png</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="address-item">
+                        <div class="address-header">
+                            <span class="address-label">EVM 地址：</span>
+                            <button class="qr-toggle-btn" onclick="toggleQRCode('evm-qr')" data-qr-text-show="📱 显示收款码" data-qr-text-hide="❌ 隐藏收款码">📱 显示收款码</button>
+                        </div>
+                        <div class="address-content">
+                            <span class="address-value">0x90ea00E3c00606ee52ADD1c2468F83C927065584</span>
+                            <div id="evm-qr" class="qr-code-container" style="display: none;">
+                                <img src="images/evm.png" alt="EVM 收款码" class="qr-code-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <div class="qr-error" style="display: none;">
+                                    <p>收款码图片未找到</p>
+                                    <small>请将 EVM 收款码保存为 images/evm.png</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据来源信息 -->
+            <div class="data-source-section">
+                <h4>📊 数据来源: Kaito AI</h4>
+                <p>本页面数据来源于 <a href="https://kaito.ai" target="_blank" rel="noopener noreferrer">Kaito AI</a> 平台，为您提供最新的 KOL 影响力数据和分析。</p>
+            </div>
         </main>
     </div>
 
@@ -361,11 +576,33 @@
         // 全局数据
         let ictData = [];
         let filteredData = [];
+        let ictUsernames = []; // 新增：ICT用户名列表
 
         // 页面初始化
         document.addEventListener('DOMContentLoaded', function() {
             loadICTData();
         });
+
+        // 加载ICT用户名列表
+        async function loadICTUsernames() {
+            try {
+                const response = await fetch('./ict.txt');
+                if (!response.ok) {
+                    throw new Error('无法加载ict.txt');
+                }
+                
+                const ictText = await response.text();
+                ictUsernames = ictText.split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0);
+                
+                console.log(`📋 加载了 ${ictUsernames.length} 个ICT用户名`);
+                return ictUsernames;
+            } catch (error) {
+                console.warn('加载ICT用户名失败:', error);
+                return [];
+            }
+        }
 
         // 从数据库加载ICT数据 (新增)
         async function loadFromDatabase() {
@@ -384,22 +621,36 @@
                     const ictMembers = await Promise.all(
                         ictUsernames.map(async (username) => {
                             try {
-                                const searchResponse = await fetch(`/api/db/search?username=${encodeURIComponent(username)}`);
-                                if (searchResponse.ok) {
-                                    const searchResult = await searchResponse.json();
-                                    if (searchResult.success && searchResult.data) {
-                                        return {
-                                            username: searchResult.data.username,
-                                            name: searchResult.data.name,
-                                            icon: searchResult.data.icon,
-                                            bio: searchResult.data.bio,
-                                            follower_count: searchResult.data.follower_count,
-                                            smart_follower_count: searchResult.data.smart_follower_count,
-                                            following_count: searchResult.data.following_count,
-                                            rankings: searchResult.data.rankings || {}
-                                        };
+                                // 尝试多种用户名格式进行搜索
+                                const searchQueries = [
+                                    username,
+                                    username.toLowerCase(),
+                                    username.toUpperCase(),
+                                    username.charAt(0).toUpperCase() + username.slice(1).toLowerCase()
+                                ];
+                                
+                                for (const query of searchQueries) {
+                                    const searchResponse = await fetch(`/api/db/search?username=${encodeURIComponent(query)}`);
+                                    if (searchResponse.ok) {
+                                        const searchResult = await searchResponse.json();
+                                        if (searchResult.success && searchResult.data) {
+                                            console.log(`🔍 找到用户: ${username} -> ${searchResult.data.username}`);
+                                            return {
+                                                username: searchResult.data.username,
+                                                name: searchResult.data.name,
+                                                icon: searchResult.data.icon,
+                                                bio: searchResult.data.bio,
+                                                follower_count: searchResult.data.follower_count,
+                                                smart_follower_count: searchResult.data.smart_follower_count,
+                                                following_count: searchResult.data.following_count,
+                                                twitter_user_url: searchResult.data.twitter_user_url || `https://x.com/${searchResult.data.username}`,
+                                                rankings: searchResult.data.rankings || []
+                                            };
+                                        }
                                     }
                                 }
+                                
+                                console.warn(`⚠️ 数据库中未找到用户: ${username}`);
                                 return null;
                             } catch (error) {
                                 console.warn(`无法从数据库获取用户 ${username}:`, error);
@@ -409,7 +660,7 @@
                     );
                     
                     const validMembers = ictMembers.filter(member => member !== null);
-                    console.log(`🗄️ 从数据库找到 ${validMembers.length} 个ICT用户的详细数据`);
+                    console.log(`🗄️ 从数据库找到 ${validMembers.length}/${ictUsernames.length} 个ICT用户的详细数据`);
                     return validMembers;
                 }
                 
@@ -426,6 +677,13 @@
             const listDiv = document.getElementById('ict-list');
             
             try {
+                // 首先加载ICT用户名列表
+                await loadICTUsernames();
+                
+                if (ictUsernames.length === 0) {
+                    throw new Error('无法加载ICT用户名列表');
+                }
+                
                 // 优先级1: 数据库 (新增)
                 ictData = await loadFromDatabase();
                 
@@ -453,9 +711,22 @@
                 console.error('加载ICT数据失败:', error);
                 loadingDiv.innerHTML = `
                     <div style="color: #dc3545; text-align: center; padding: 20px;">
-                        <p>❌ 数据加载失败，请稍后重试</p>
+                        <p>❌ 数据加载失败：${error.message}</p>
+                        <p>正在尝试加载基础数据...</p>
                     </div>
                 `;
+                
+                // 如果所有方法都失败，尝试显示基础信息
+                try {
+                    await loadFromICTFile();
+                    filteredData = [...ictData];
+                    displayICTList();
+                    updateStats();
+                    loadingDiv.style.display = 'none';
+                    listDiv.style.display = 'block';
+                } catch (fallbackError) {
+                    console.error('备用加载也失败:', fallbackError);
+                }
             }
         }
 
@@ -469,18 +740,12 @@
                 
                 const kolJsonData = await response.json();
                 
-                // 从ICT名单文件获取用户名列表
-                const ictResponse = await fetch('./ict.txt');
-                if (!ictResponse.ok) {
-                    throw new Error('无法加载ict.txt');
+                if (ictUsernames.length === 0) {
+                    console.warn('ICT用户名列表为空，无法从kol.json筛选数据');
+                    return;
                 }
-                
-                const ictText = await ictResponse.text();
-                const ictUsernames = ictText.split('\n')
-                    .map(line => line.trim().toLowerCase())
-                    .filter(line => line.length > 0);
 
-                console.log(`加载了 ${ictUsernames.length} 个ICT用户名`);
+                console.log(`📊 从kol.json筛选 ${ictUsernames.length} 个ICT用户的数据`);
 
                 // 从kol.json中提取ICT用户的详细数据
                 const ictUsersMap = new Map();
@@ -491,9 +756,14 @@
                             if (durationData && durationData.data && Array.isArray(durationData.data)) {
                                 durationData.data.forEach((user, index) => {
                                     const username = user.username?.toLowerCase();
-                                    if (username && ictUsernames.includes(username)) {
-                                        if (!ictUsersMap.has(username)) {
-                                            ictUsersMap.set(username, {
+                                    // 创建ICT用户名的小写版本进行比较
+                                    const ictUsernamesLower = ictUsernames.map(name => name.toLowerCase());
+                                    
+                                    if (username && ictUsernamesLower.includes(username)) {
+                                        // 使用原始用户名作为key
+                                        const originalUsername = user.username;
+                                        if (!ictUsersMap.has(originalUsername)) {
+                                            ictUsersMap.set(originalUsername, {
                                                 name: user.name || user.username,
                                                 username: user.username,
                                                 icon: user.icon || '',
@@ -507,7 +777,7 @@
                                         }
                                         
                                         // 添加排名记录
-                                        ictUsersMap.get(username).rankings.push({
+                                        ictUsersMap.get(originalUsername).rankings.push({
                                             project: projectKey,
                                             category: categoryKey,
                                             duration: durationKey,
@@ -657,6 +927,20 @@
                 return (num / 1000).toFixed(1) + 'K';
             }
             return num.toString();
+        }
+
+        // 切换二维码显示
+        function toggleQRCode(qrId) {
+            const qrContainer = document.getElementById(qrId);
+            const button = document.querySelector(`[onclick="toggleQRCode('${qrId}')"]`);
+            
+            if (qrContainer.style.display === 'none') {
+                qrContainer.style.display = 'block';
+                button.textContent = '❌ 隐藏收款码';
+            } else {
+                qrContainer.style.display = 'none';
+                button.textContent = '📱 显示收款码';
+            }
         }
     </script>
 </body>

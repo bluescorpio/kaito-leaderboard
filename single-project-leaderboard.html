@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaito KOL排行榜</title>
+    <style>
+        /* 样式定义 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .controls label {
+            margin-right: 10px;
+        }
+        .leaderboard {
+            list-style: none;
+            padding: 0;
+        }
+        .leaderboard li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .leaderboard li:nth-child(odd) {
+            background: #f9f9f9;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>KOL 排行榜</h1>
+        <div class="controls">
+            <div>
+                <label for="duration">时间范围:</label>
+                <select id="duration">
+                    <option value="7d" selected>最近7天</option>
+                    <option value="30d">最近30天</option>
+                    <option value="3m">最近3个月</option>
+                    <option value="6m">最近6个月</option>
+                    <option value="12m">最近12个月</option>
+                </select>
+            </div>
+            <div>
+                <label for="topN">显示数量:</label>
+                <select id="topN">
+                    <option value="5">Top 5</option>
+                    <option value="10" selected>Top 10</option>
+                    <option value="20">Top 20</option>
+                    <option value="50">Top 50</option>
+                </select>
+            </div>
+        </div>
+        <ul class="leaderboard" id="leaderboard">
+            <!-- 排行榜数据将动态插入 -->
+        </ul>
+        <p class="error" id="error" style="display: none;">无法加载数据，请稍后重试。</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const leaderboard = document.getElementById('leaderboard');
+            const errorElement = document.getElementById('error');
+            const durationSelect = document.getElementById('duration');
+            const topNSelect = document.getElementById('topN');
+
+            async function fetchLeaderboardData(duration, topN) {
+                const project = new URLSearchParams(window.location.search).get('project') || 'CAMP';
+                const apiUrl = `https://api.kaito.ai/v1/leaderboards/topics/${project}?type=kol&duration=${duration}&size=${topN}`;
+
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) {
+                        throw new Error('网络响应失败');
+                    }
+                    const data = await response.json();
+                    return data.data || [];
+                } catch (error) {
+                    console.error('数据加载失败:', error);
+                    return null;
+                }
+            }
+
+            function renderLeaderboard(data) {
+                leaderboard.innerHTML = '';
+                errorElement.style.display = 'none';
+
+                if (!data || data.length === 0) {
+                    errorElement.style.display = 'block';
+                    return;
+                }
+
+                data.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>#${index + 1} ${item.username || '未知用户'}</span>
+                        <span>影响力: ${(item.mindshare * 100).toFixed(2)}%</span>
+                    `;
+                    leaderboard.appendChild(li);
+                });
+            }
+
+            async function updateLeaderboard() {
+                const duration = durationSelect.value;
+                const topN = parseInt(topNSelect.value, 10);
+
+                leaderboard.innerHTML = '<li>加载中...</li>';
+                const data = await fetchLeaderboardData(duration, topN);
+                renderLeaderboard(data);
+            }
+
+            durationSelect.addEventListener('change', updateLeaderboard);
+            topNSelect.addEventListener('change', updateLeaderboard);
+
+            updateLeaderboard();
+        });
+    </script>
+</body>
+</html>
